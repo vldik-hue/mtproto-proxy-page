@@ -3,7 +3,8 @@ name: Update proxy page
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * *"
+    # GitHub cron использует UTC. 03:19 UTC = 06:19 при UTC+3.
+    - cron: "19 3 * * *"
 
 permissions:
   contents: write

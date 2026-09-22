@@ -13,7 +13,7 @@ from pathlib import Path
 
 COUNT = 5
 TIMEOUT = 2.5
-UA = "Mozilla/5.0 MTProtoProxyPage/1.0"
+UA = "Mozilla/5.0 MTProtoProxyPage/1.1"
 
 SOURCES = [
     "https://raw.githubusercontent.com/aviamastersgh/mtproto-free-russia/main/verified_proxies.txt",
@@ -55,7 +55,12 @@ def extract_links(text):
                 if key in seen:
                     continue
                 seen.add(key)
-                out.append({"url": url, "server": server, "port": port})
+                out.append({
+                    "url": url,
+                    "tg_url": "tg://proxy?" + urllib.parse.urlsplit(url).query,
+                    "server": server,
+                    "port": port,
+                })
             except Exception:
                 pass
     return out
@@ -101,7 +106,7 @@ def main():
         <div class="card">
           <div><b>Прокси {i}</b></div>
           <div class="small">{html.escape(p['server'])}:{p['port']} · {ms} мс</div>
-          <a class="btn" href="{html.escape(p['url'], quote=True)}">Подключить в Telegram</a>
+          <a class="btn" href="{html.escape(p['tg_url'], quote=True)}">Открыть в Telegram</a>
         </div>
         """)
 
@@ -127,7 +132,7 @@ def main():
   <h1>Свежие MTProto-прокси</h1>
   <div class="meta">Обновлено: {updated}</div>
   {''.join(cards)}
-  <div class="small" style="margin-top:20px">Публичные прокси могут перестать работать в любой момент. Страница обновляется ежедневно.</div>
+  <div class="small" style="margin-top:20px">Нажатие на кнопку пытается открыть Telegram напрямую. Браузер или система могут один раз попросить подтвердить открытие приложения.</div>
 </body>
 </html>"""
 

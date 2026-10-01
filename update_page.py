@@ -12,10 +12,11 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 COUNT = 5
-TIMEOUT = 2.5
-UA = "Mozilla/5.0 MTProtoProxyPage/1.1"
+TIMEOUT = 3.0
+UA = "Mozilla/5.0 MTProtoProxyPage/2.0"
 
-SOURCES = [
+PRIMARY_SOURCE = "https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"
+FALLBACK_SOURCES = [
     "https://raw.githubusercontent.com/aviamastersgh/mtproto-free-russia/main/verified_proxies.txt",
     "https://raw.githubusercontent.com/tgmtproxy/telegram-mtproto-proxy-list/main/proxies.txt",
 ]
@@ -60,58 +61,79 @@ def extract_links(text):
                     "tg_url": "tg://proxy?" + urllib.parse.urlsplit(url).query,
                     "server": server,
                     "port": port,
+                    "secret": secret,
                 })
             except Exception:
                 pass
     return out
 
-def check(p):
-    start = time.perf_counter()
-    try:
-        with socket.create_connection((p["server"], p["port"]), timeout=TIMEOUT):
-            return p, int((time.perf_counter() - start) * 1000)
-    except Exception:
-        return p, None
-
-def main():
-    items, seen = [], set()
-    for src in SOURCES:
+def check_twice(p):
+    timings = []
+    for attempt in range(2):
+        start = time.perf_counter()
         try:
-            txt = http_get(src)
-            for p in extract_links(txt):
-                key = (p["server"].lower(), p["port"], p["url"])
+            with socket.create_connection((p["server"], p["port"]), timeout=TIMEOUT):
+                timings.append(int((time.perf_counter() - start) * 1000))
+        except Exception:
+            return p, None
+        if attempt == 0:
+            time.sleep(0.35)
+    return p, round(sum(timings) / len(timings))
+
+def get_candidates():
+    try:
+        primary = extract_links(http_get(PRIMARY_SOURCE))
+        strict = [p for p in primary if p["port"] == 443 and p["secret"].lower().startswith("ee")]
+        if strict:
+            return strict, "FakeTLS / 443"
+        if primary:
+            return primary, "основной список"
+    except Exception as e:
+        print("primary source failed:", e)
+
+    merged, seen = [], set()
+    for src in FALLBACK_SOURCES:
+        try:
+            for p in extract_links(http_get(src)):
+                key = (p["server"].lower(), p["port"], p["secret"])
                 if key not in seen:
                     seen.add(key)
-                    items.append(p)
+                    merged.append(p)
         except Exception as e:
-            print("source failed:", src, e)
+            print("fallback source failed:", src, e)
+    return merged, "резервный список"
 
-    alive = []
-    with ThreadPoolExecutor(max_workers=24) as ex:
-        futures = [ex.submit(check, p) for p in items[:200]]
+def main():
+    items, mode = get_candidates()
+
+    probe = items[:60]
+    results = {}
+    with ThreadPoolExecutor(max_workers=12) as ex:
+        futures = {ex.submit(check_twice, p): i for i, p in enumerate(probe)}
         for f in as_completed(futures):
+            idx = futures[f]
             p, ms = f.result()
             if ms is not None:
-                alive.append((ms, p))
+                results[idx] = (p, ms)
 
-    alive.sort(key=lambda x: x[0])
-    chosen = alive[:COUNT]
+    # Сохраняем порядок основного источника: он ранжирован по устойчивости.
+    chosen = [results[i] for i in range(len(probe)) if i in results][:COUNT]
 
     tz = timezone(timedelta(hours=3))
     updated = datetime.now(tz).strftime("%d.%m.%Y %H:%M UTC+3")
 
     cards = []
-    for i, (ms, p) in enumerate(chosen, 1):
+    for i, (p, ms) in enumerate(chosen, 1):
         cards.append(f"""
         <div class="card">
           <div><b>Прокси {i}</b></div>
-          <div class="small">{html.escape(p['server'])}:{p['port']} · {ms} мс</div>
+          <div class="small">{html.escape(p['server'])}:{p['port']} · повторная проверка {ms} мс</div>
           <a class="btn" href="{html.escape(p['tg_url'], quote=True)}">Открыть в Telegram</a>
         </div>
         """)
 
     if not cards:
-        cards = ['<div class="card">Сейчас не удалось найти рабочие прокси. Попробуй позже.</div>']
+        cards = ['<div class="card">Сейчас не удалось найти прокси, прошедшие повторную проверку. Попробуй позже.</div>']
 
     page = f"""<!doctype html>
 <html lang="ru">
@@ -130,9 +152,9 @@ def main():
 </head>
 <body>
   <h1>Свежие MTProto-прокси</h1>
-  <div class="meta">Обновлено: {updated}</div>
+  <div class="meta">Обновлено: {updated} · режим: {html.escape(mode)}</div>
   {''.join(cards)}
-  <div class="small" style="margin-top:20px">Нажатие на кнопку пытается открыть Telegram напрямую. Браузер или система могут один раз попросить подтвердить открытие приложения.</div>
+  <div class="small" style="margin-top:20px">Приоритет: FakeTLS-прокси на порту 443 из списка для сетей с блокировками. Каждый выбранный адрес дополнительно проверяется два раза перед публикацией.</div>
 </body>
 </html>"""
 

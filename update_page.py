@@ -3,7 +3,7 @@
 
 import hashlib
 import html
-import re
+import json
 import socket
 import time
 import urllib.parse
@@ -14,59 +14,83 @@ from pathlib import Path
 
 COUNT = 5
 TIMEOUT = 3.0
-UA = "Mozilla/5.0 MTProtoProxyPage/2.1"
+MIN_UPTIME = 60.0
+UA = "Mozilla/5.0 MTProtoProxyPage/3.0"
+JSON_SOURCE = "https://zakky8.github.io/mtproto-proxy-pro/proxies.json"
 
-PRIMARY_SOURCE = "https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"
-FALLBACK_SOURCES = [
-    "https://raw.githubusercontent.com/aviamastersgh/mtproto-free-russia/main/verified_proxies.txt",
-    "https://raw.githubusercontent.com/tgmtproxy/telegram-mtproto-proxy-list/main/proxies.txt",
-]
 
-def http_get(url, timeout=20):
+def http_get(url, timeout=25):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8", errors="replace")
 
-def normalize_proxy_url(url):
-    url = url.strip().rstrip(".,);]>'\"")
-    if url.startswith("tg://proxy?"):
-        return "https://t.me/proxy?" + urllib.parse.urlsplit(url).query
-    if url.startswith("https://t.me/proxy?") or url.startswith("http://t.me/proxy?"):
-        return "https://t.me/proxy?" + urllib.parse.urlsplit(url).query
-    return None
 
-def extract_links(text):
-    pats = [
-        r'https?://t\.me/proxy\?[^\s<>"\']+',
-        r'tg://proxy\?[^\s<>"\']+',
-    ]
-    out, seen = [], set()
-    for pat in pats:
-        for m in re.finditer(pat, text, re.I):
-            url = normalize_proxy_url(m.group(0))
-            if not url:
-                continue
-            try:
-                q = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
-                server = q.get("server", [""])[0]
-                port = int(q.get("port", ["0"])[0])
-                secret = q.get("secret", [""])[0]
-                if not server or not port or not secret:
-                    continue
-                key = (server.lower(), port, secret)
-                if key in seen:
-                    continue
-                seen.add(key)
-                out.append({
-                    "url": url,
-                    "tg_url": "tg://proxy?" + urllib.parse.urlsplit(url).query,
-                    "server": server,
-                    "port": port,
-                    "secret": secret,
-                })
-            except Exception:
-                pass
-    return out
+def normalize_row(row):
+    server = str(row.get("server") or "").strip()
+    try:
+        port = int(row.get("port") or 0)
+    except Exception:
+        port = 0
+    secret = str(row.get("secret") or "").strip()
+    if not server or not port or not secret:
+        return None
+
+    reachable = row.get("reachable_from") or []
+    if isinstance(reachable, str):
+        reachable = [reachable]
+    reachable = [str(x).upper() for x in reachable]
+
+    status = str(row.get("status") or "").lower()
+    ptype = str(row.get("type") or "").lower()
+
+    try:
+        uptime = float(row.get("uptime_pct") or 0)
+    except Exception:
+        uptime = 0.0
+    try:
+        latency = float(row.get("latency_ms") or 999999)
+    except Exception:
+        latency = 999999.0
+
+    qs = urllib.parse.urlencode({"server": server, "port": port, "secret": secret})
+    return {
+        "server": server,
+        "port": port,
+        "secret": secret,
+        "reachable_from": reachable,
+        "status": status,
+        "type": ptype,
+        "uptime": uptime,
+        "source_latency": latency,
+        "tg_url": "tg://proxy?" + qs,
+    }
+
+
+def get_strict_candidates():
+    raw = json.loads(http_get(JSON_SOURCE))
+    rows = raw.get("proxies") if isinstance(raw, dict) else raw
+    if not isinstance(rows, list):
+        raise RuntimeError("Unexpected proxies.json format")
+
+    items = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        p = normalize_row(row)
+        if not p:
+            continue
+        if (
+            p["port"] == 443
+            and (p["secret"].lower().startswith("ee") or "faketls" in p["type"])
+            and p["status"] == "handshake_ok"
+            and "RU" in p["reachable_from"]
+            and p["uptime"] >= MIN_UPTIME
+        ):
+            items.append(p)
+
+    items.sort(key=lambda p: (-p["uptime"], p["source_latency"]))
+    return items
+
 
 def check_twice(p):
     timings = []
@@ -78,48 +102,25 @@ def check_twice(p):
         except Exception:
             return p, None
         if attempt == 0:
-            time.sleep(0.35)
+            time.sleep(0.4)
     return p, round(sum(timings) / len(timings))
 
-def get_candidates():
-    try:
-        primary = extract_links(http_get(PRIMARY_SOURCE))
-        strict = [p for p in primary if p["port"] == 443 and p["secret"].lower().startswith("ee")]
-        if strict:
-            return strict, "FakeTLS / 443"
-        if primary:
-            return primary, "основной список"
-    except Exception as e:
-        print("primary source failed:", e)
-
-    merged, seen = [], set()
-    for src in FALLBACK_SOURCES:
-        try:
-            for p in extract_links(http_get(src)):
-                key = (p["server"].lower(), p["port"], p["secret"])
-                if key not in seen:
-                    seen.add(key)
-                    merged.append(p)
-        except Exception as e:
-            print("fallback source failed:", src, e)
-    return merged, "резервный список"
 
 def proxy_id(p):
     raw = f"{p['server'].lower()}|{p['port']}|{p['secret']}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:8]
 
-def short_name(server):
-    if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", server):
-        parts = server.split(".")
-        return ".".join(parts[-2:])
-    return server[:24]
 
 def main():
-    items, mode = get_candidates()
+    try:
+        items = get_strict_candidates()
+    except Exception as e:
+        print("strict source failed:", e)
+        items = []
 
-    probe = items[:60]
+    probe = items[:40]
     results = {}
-    with ThreadPoolExecutor(max_workers=12) as ex:
+    with ThreadPoolExecutor(max_workers=10) as ex:
         futures = {ex.submit(check_twice, p): i for i, p in enumerate(probe)}
         for f in as_completed(futures):
             idx = futures[f]
@@ -135,24 +136,24 @@ def main():
     cards = []
     for i, (p, ms) in enumerate(chosen, 1):
         pid = proxy_id(p)
-        label = short_name(p["server"])
         cards.append(f"""
         <div class="card" data-proxy-id="{pid}">
           <div class="topline">
             <div><b>Прокси {i}</b> <span class="code">#{pid}</span></div>
             <div class="vote-status" id="status-{pid}"></div>
           </div>
-          <div class="small">{html.escape(p['server'])}:{p['port']} · повторная проверка {ms} мс</div>
+          <div class="small">{html.escape(p['server'])}:{p['port']}</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime {p['uptime']:.0f}% · повторный ping {ms} мс</div>
           <div class="actions">
             <a class="btn connect" href="{html.escape(p['tg_url'], quote=True)}">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('{pid}','good','{html.escape(label, quote=True)}')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('{pid}','bad','{html.escape(label, quote=True)}')">❌ Не работает</button>
+            <button class="btn good" onclick="rateProxy('{pid}','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('{pid}','bad')">❌ Не работает</button>
           </div>
         </div>
         """)
 
     if not cards:
-        cards = ['<div class="card">Сейчас не удалось найти прокси, прошедшие повторную проверку. Попробуй позже.</div>']
+        cards = ['<div class="card warning"><b>Строгих прокси сейчас нет.</b><br>Слабые варианты страница специально не показывает.</div>']
 
     page = f"""<!doctype html>
 <html lang="ru">
@@ -163,72 +164,49 @@ def main():
   <style>
     body{{font-family:Arial,sans-serif;max-width:720px;margin:0 auto;padding:24px;background:#f5f5f5;color:#222}}
     h1{{font-size:28px;margin-bottom:8px}}
-    .meta{{color:#666;margin-bottom:20px}}
+    .meta{{color:#666;margin-bottom:8px}}
+    .rule{{font-size:13px;color:#555;margin-bottom:20px;line-height:1.45}}
     .card{{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}}
+    .warning{{line-height:1.5}}
     .topline{{display:flex;justify-content:space-between;gap:12px;align-items:center}}
     .code{{font-size:12px;color:#777;font-weight:400}}
+    .small{{font-size:14px;color:#666;margin-top:5px}}
+    .quality{{font-size:13px;margin-top:7px}}
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}}
     .btn{{border:0;display:inline-block;padding:11px 14px;border-radius:10px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;cursor:pointer}}
-    .connect{{background:#229ed9}}
-    .good{{background:#2e9d53}}
-    .bad{{background:#c64747}}
-    .small{{font-size:14px;color:#666;margin-top:5px}}
+    .connect{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}}
     .vote-status{{font-size:12px;font-weight:700;white-space:nowrap}}
-    .saved-good{{color:#2e9d53}}
-    .saved-bad{{color:#c64747}}
+    .saved-good{{color:#2e9d53}} .saved-bad{{color:#c64747}}
     .note{{font-size:13px;color:#666;margin-top:20px;line-height:1.4}}
   </style>
 </head>
 <body>
   <h1>Свежие MTProto-прокси</h1>
-  <div class="meta">Обновлено: {updated} · режим: {html.escape(mode)}</div>
+  <div class="meta">Обновлено: {updated}</div>
+  <div class="rule">Показываются только кандидаты, прошедшие строгий фильтр: FakeTLS · порт 443 · handshake_ok · проверка доступности из RU · uptime ≥ 60% · двойная проверка перед публикацией.</div>
   {''.join(cards)}
-  <div class="note">Тестовый режим: кнопки «Работает / Не работает» сохраняют твою оценку прямо в браузере на этом устройстве. Позже подключим общую историю, чтобы рейтинг влиял на будущий отбор прокси.</div>
-
+  <div class="note">Если строгих вариантов меньше пяти, страница покажет меньше пяти. Лучше 1–2 сильных кандидата, чем пять формально доступных, но бесполезных.</div>
 <script>
 function keyFor(id) {{ return 'proxy-rating-' + id; }}
-
-function paint(id, value) {{
-  const el = document.getElementById('status-' + id);
-  if (!el) return;
-  if (value === 'good') {{
-    el.textContent = '✓ отмечен рабочим';
-    el.className = 'vote-status saved-good';
-  }} else if (value === 'bad') {{
-    el.textContent = '✕ отмечен нерабочим';
-    el.className = 'vote-status saved-bad';
-  }} else {{
-    el.textContent = '';
-    el.className = 'vote-status';
-  }}
+function paint(id,value) {{
+  const el=document.getElementById('status-'+id); if(!el)return;
+  if(value==='good'){{el.textContent='✓ отмечен рабочим';el.className='vote-status saved-good';}}
+  else if(value==='bad'){{el.textContent='✕ отмечен нерабочим';el.className='vote-status saved-bad';}}
 }}
-
-function rateProxy(id, value, label) {{
-  const item = {{
-    proxy_id: id,
-    result: value,
-    label: label,
-    saved_at: new Date().toISOString()
-  }};
-  localStorage.setItem(keyFor(id), JSON.stringify(item));
-  paint(id, value);
+function rateProxy(id,value) {{
+  localStorage.setItem(keyFor(id),JSON.stringify({{proxy_id:id,result:value,saved_at:new Date().toISOString()}}));
+  paint(id,value);
 }}
-
-document.querySelectorAll('[data-proxy-id]').forEach(card => {{
-  const id = card.dataset.proxyId;
-  try {{
-    const raw = localStorage.getItem(keyFor(id));
-    if (raw) {{
-      const item = JSON.parse(raw);
-      paint(id, item.result);
-    }}
-  }} catch (e) {{}}
+document.querySelectorAll('[data-proxy-id]').forEach(card=>{{
+  const id=card.dataset.proxyId;
+  try{{const raw=localStorage.getItem(keyFor(id));if(raw){{paint(id,JSON.parse(raw).result);}}}}catch(e){{}}
 }});
 </script>
 </body>
 </html>"""
 
     Path("index.html").write_text(page, encoding="utf-8")
+
 
 if __name__ == "__main__":
     main()

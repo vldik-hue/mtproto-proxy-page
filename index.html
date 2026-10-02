@@ -7,84 +7,107 @@
   <style>
     body{font-family:Arial,sans-serif;max-width:720px;margin:0 auto;padding:24px;background:#f5f5f5;color:#222}
     h1{font-size:28px;margin-bottom:8px}
-    .meta{color:#666;margin-bottom:20px}
+    .meta{color:#666;margin-bottom:8px}
+    .rule{font-size:13px;color:#555;margin-bottom:20px;line-height:1.45}
     .card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+    .warning{line-height:1.5}
     .topline{display:flex;justify-content:space-between;gap:12px;align-items:center}
     .code{font-size:12px;color:#777;font-weight:400}
+    .small{font-size:14px;color:#666;margin-top:5px}
+    .quality{font-size:13px;margin-top:7px}
     .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
     .btn{border:0;display:inline-block;padding:11px 14px;border-radius:10px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;cursor:pointer}
-    .connect{background:#229ed9}.good{background:#2e9d53}.bad{background:#c64747}
-    .small{font-size:14px;color:#666;margin-top:5px}
+    .connect{background:#229ed9} .good{background:#2e9d53} .bad{background:#c64747}
     .vote-status{font-size:12px;font-weight:700;white-space:nowrap}
-    .saved-good{color:#2e9d53}.saved-bad{color:#c64747}
+    .saved-good{color:#2e9d53} .saved-bad{color:#c64747}
     .note{font-size:13px;color:#666;margin-top:20px;line-height:1.4}
   </style>
 </head>
 <body>
   <h1>Свежие MTProto-прокси</h1>
-  <div class="meta">Пробная версия с оценкой прокси</div>
-
-  <div class="card" data-proxy-id="p1">
-    <div class="topline"><div><b>Прокси 1</b> <span class="code">#p1</span></div><div class="vote-status" id="status-p1"></div></div>
-    <div class="small">208.87.242.223:8443 · 55 мс</div>
-    <div class="actions">
-      <a class="btn connect" href="tg://proxy?server=208.87.242.223&port=8443&secret=EERighJJvXrFGRMCIMjdCQ">Открыть в Telegram</a>
-      <button class="btn good" onclick="rateProxy('p1','good','242.223')">✅ Работает</button>
-      <button class="btn bad" onclick="rateProxy('p1','bad','242.223')">❌ Не работает</button>
-    </div>
-  </div>
-
-  <div class="card" data-proxy-id="p2">
-    <div class="topline"><div><b>Прокси 2</b> <span class="code">#p2</span></div><div class="vote-status" id="status-p2"></div></div>
-    <div class="small">becarefull.bypased.info:8443 · 77 мс</div>
-    <div class="actions">
-      <a class="btn connect" href="tg://proxy?server=becarefull.bypased.info&port=8443&secret=1603010200010001fc030386e24c3add">Открыть в Telegram</a>
-      <button class="btn good" onclick="rateProxy('p2','good','becarefull')">✅ Работает</button>
-      <button class="btn bad" onclick="rateProxy('p2','bad','becarefull')">❌ Не работает</button>
-    </div>
-  </div>
-
-  <div class="card" data-proxy-id="p3">
-    <div class="topline"><div><b>Прокси 3</b> <span class="code">#p3</span></div><div class="vote-status" id="status-p3"></div></div>
-    <div class="small">ssh2.best-moz.info:22 · 83 мс</div>
-    <div class="actions">
-      <a class="btn connect" href="tg://proxy?server=ssh2.best-moz.info&port=22&secret=dd79e344818749bd7ac519130220c25d09">Открыть в Telegram</a>
-      <button class="btn good" onclick="rateProxy('p3','good','best-moz')">✅ Работает</button>
-      <button class="btn bad" onclick="rateProxy('p3','bad','best-moz')">❌ Не работает</button>
-    </div>
-  </div>
-
-  <div class="card" data-proxy-id="p4">
-    <div class="topline"><div><b>Прокси 4</b> <span class="code">#p4</span></div><div class="vote-status" id="status-p4"></div></div>
-    <div class="small">194.120.230.26:443 · 85 мс</div>
-    <div class="actions">
-      <a class="btn connect" href="tg://proxy?server=194.120.230.26&port=443&secret=3XnnAQIAAQAH8AMDhuJMOt0">Открыть в Telegram</a>
-      <button class="btn good" onclick="rateProxy('p4','good','230.26')">✅ Работает</button>
-      <button class="btn bad" onclick="rateProxy('p4','bad','230.26')">❌ Не работает</button>
-    </div>
-  </div>
-
-  <div class="card" data-proxy-id="p5">
-    <div class="topline"><div><b>Прокси 5</b> <span class="code">#p5</span></div><div class="vote-status" id="status-p5"></div></div>
-    <div class="small">194.120.230.37:443 · 86 мс</div>
-    <div class="actions">
-      <a class="btn connect" href="tg://proxy?server=194.120.230.37&port=443&secret=3XnnAQIAAQAH8AMDhuJMOt0">Открыть в Telegram</a>
-      <button class="btn good" onclick="rateProxy('p5','good','230.37')">✅ Работает</button>
-      <button class="btn bad" onclick="rateProxy('p5','bad','230.37')">❌ Не работает</button>
-    </div>
-  </div>
-
-  <div class="note">Тестовый режим: оценка сохраняется на этом устройстве в браузере. Нажал прокси → проверил в Telegram → вернулся сюда → отметил результат.</div>
-
+  <div class="meta">Обновлено: 02.10.2026 12:48 UTC+3</div>
+  <div class="rule">Показываются только кандидаты, прошедшие строгий фильтр: FakeTLS · порт 443 · handshake_ok · проверка доступности из RU · uptime ≥ 60% · двойная проверка перед публикацией.</div>
+  
+        <div class="card" data-proxy-id="72702d21">
+          <div class="topline">
+            <div><b>Прокси 1</b> <span class="code">#72702d21</span></div>
+            <div class="vote-status" id="status-72702d21"></div>
+          </div>
+          <div class="small">169.197.142.225:443</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 2 мс</div>
+          <div class="actions">
+            <a class="btn connect" href="tg://proxy?server=169.197.142.225&amp;port=443&amp;secret=ee32b920dffb51643028e2f6b878d4eac164697661722e6972">Открыть в Telegram</a>
+            <button class="btn good" onclick="rateProxy('72702d21','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('72702d21','bad')">❌ Не работает</button>
+          </div>
+        </div>
+        
+        <div class="card" data-proxy-id="0b0955bb">
+          <div class="topline">
+            <div><b>Прокси 2</b> <span class="code">#0b0955bb</span></div>
+            <div class="vote-status" id="status-0b0955bb"></div>
+          </div>
+          <div class="small">143.246.57.51:443</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 11 мс</div>
+          <div class="actions">
+            <a class="btn connect" href="tg://proxy?server=143.246.57.51&amp;port=443&amp;secret=eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d">Открыть в Telegram</a>
+            <button class="btn good" onclick="rateProxy('0b0955bb','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('0b0955bb','bad')">❌ Не работает</button>
+          </div>
+        </div>
+        
+        <div class="card" data-proxy-id="a24103f9">
+          <div class="topline">
+            <div><b>Прокси 3</b> <span class="code">#a24103f9</span></div>
+            <div class="vote-status" id="status-a24103f9"></div>
+          </div>
+          <div class="small">109.248.160.115:443</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 47 мс</div>
+          <div class="actions">
+            <a class="btn connect" href="tg://proxy?server=109.248.160.115&amp;port=443&amp;secret=eeb98c4468ede108c68dd40139ba31e8d57777772e636c6f7564666c6172652e636f6d">Открыть в Telegram</a>
+            <button class="btn good" onclick="rateProxy('a24103f9','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('a24103f9','bad')">❌ Не работает</button>
+          </div>
+        </div>
+        
+        <div class="card" data-proxy-id="f1e047d3">
+          <div class="topline">
+            <div><b>Прокси 4</b> <span class="code">#f1e047d3</span></div>
+            <div class="vote-status" id="status-f1e047d3"></div>
+          </div>
+          <div class="small">sabadkala.imalz.info:443</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 182 мс</div>
+          <div class="actions">
+            <a class="btn connect" href="tg://proxy?server=sabadkala.imalz.info&amp;port=443&amp;secret=ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d">Открыть в Telegram</a>
+            <button class="btn good" onclick="rateProxy('f1e047d3','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('f1e047d3','bad')">❌ Не работает</button>
+          </div>
+        </div>
+        
+        <div class="card" data-proxy-id="02fb05a2">
+          <div class="topline">
+            <div><b>Прокси 5</b> <span class="code">#02fb05a2</span></div>
+            <div class="vote-status" id="status-02fb05a2"></div>
+          </div>
+          <div class="small">daemi.net.masnavi.info:443</div>
+          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 201 мс</div>
+          <div class="actions">
+            <a class="btn connect" href="tg://proxy?server=daemi.net.masnavi.info&amp;port=443&amp;secret=ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d">Открыть в Telegram</a>
+            <button class="btn good" onclick="rateProxy('02fb05a2','good')">✅ Работает</button>
+            <button class="btn bad" onclick="rateProxy('02fb05a2','bad')">❌ Не работает</button>
+          </div>
+        </div>
+        
+  <div class="note">Если строгих вариантов меньше пяти, страница покажет меньше пяти. Лучше 1–2 сильных кандидата, чем пять формально доступных, но бесполезных.</div>
 <script>
-function keyFor(id){return 'proxy-rating-' + id;}
-function paint(id,value){
+function keyFor(id) { return 'proxy-rating-' + id; }
+function paint(id,value) {
   const el=document.getElementById('status-'+id); if(!el)return;
   if(value==='good'){el.textContent='✓ отмечен рабочим';el.className='vote-status saved-good';}
   else if(value==='bad'){el.textContent='✕ отмечен нерабочим';el.className='vote-status saved-bad';}
 }
-function rateProxy(id,value,label){
-  localStorage.setItem(keyFor(id),JSON.stringify({proxy_id:id,result:value,label:label,saved_at:new Date().toISOString()}));
+function rateProxy(id,value) {
+  localStorage.setItem(keyFor(id),JSON.stringify({proxy_id:id,result:value,saved_at:new Date().toISOString()}));
   paint(id,value);
 }
 document.querySelectorAll('[data-proxy-id]').forEach(card=>{

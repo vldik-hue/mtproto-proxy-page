@@ -12,6 +12,7 @@ TIMEOUT=3.0
 UA="Mozilla/5.0 MTProtoProxyPage/5.0"
 
 CONFIRMED=[
+    ("m.aysghfkzcxg.info",8443,"eeNEgYdJvXrFGRMCIMJdCQ","подтверждён пользователем 04.10.2026"),
     ("nngo.cc",443,"ddf390d9757cb92d87826bcef28a6e75ed","подтверждён раньше"),
     ("nnmm.me",443,"ddf390d9757cb92d87826bcef28a6e75ed","та же рабочая семья"),
     ("85.192.35.94",443,"ddf390d9757cb92d87826bcef28a6e75ed","та же рабочая семья"),

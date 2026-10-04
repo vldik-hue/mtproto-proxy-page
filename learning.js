@@ -97,3 +97,46 @@ export function loadFeedback(storage) {
 export function saveFeedback(storage, state) {
   storage.setItem("proxy-feedback-state", JSON.stringify(cloneState(state)));
 }
+
+
+function latestKindForId(state, id) {
+  const event = (state?.events ?? []).find(e => e.id === id);
+  return event?.kind ?? null;
+}
+
+export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now()) {
+  const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id) !== "bad");
+  const scored = eligible.map((candidate, index) => ({
+    candidate,
+    index,
+    score: candidateScore(candidate, feedbackState, nowMs),
+  }));
+
+  const exploit = scored
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+
+  const explore = scored
+    .filter(x => x.score <= 0)
+    .sort((a, b) => a.index - b.index);
+
+  const exploreSlots = size >= 5 && explore.length >= 2 ? Math.min(2, size) : Math.min(explore.length, size);
+  const exploitSlots = Math.max(0, size - exploreSlots);
+
+  const picked = [...exploit.slice(0, exploitSlots), ...explore.slice(0, exploreSlots)];
+  if (picked.length < size) {
+    const used = new Set(picked.map(x => x.candidate.id));
+    const remainder = [...exploit.slice(exploitSlots), ...explore.slice(exploreSlots)]
+      .filter(x => !used.has(x.candidate.id));
+    picked.push(...remainder.slice(0, size - picked.length));
+  }
+
+  return picked
+    .sort((a, b) => {
+      const aExplore = a.score <= 0;
+      const bExplore = b.score <= 0;
+      if (aExplore !== bExplore) return aExplore ? 1 : -1;
+      return b.score - a.score || a.index - b.index;
+    })
+    .map(x => x.candidate);
+}

@@ -199,6 +199,7 @@ def main():
     {''.join(cards)}
     <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
+    <div id="working-reserve" data-working-reserve style="display:none"></div>
     <div class="controls">
       <div class="controls-inner">
         <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ 10 не работают</button>
@@ -208,7 +209,7 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve }} from './learning.js';
 
     const BATCH_SIZE=10;
     const allCards=Array.from(document.querySelectorAll('[data-proxy-id]'));
@@ -298,6 +299,8 @@ def main():
     }}
 
     function renderBatch(){{
+      const reserveBox=document.getElementById('working-reserve');
+      if(reserveBox){{reserveBox.style.display='none';reserveBox.innerHTML='';}}
       allCards.forEach(c=>c.style.display='none');
       const selected=selectBatch(candidates,feedback,BATCH_SIZE,Date.now());
       if(!selected.length){{
@@ -322,35 +325,62 @@ def main():
 
     function rejectCurrentBatch(){{
       const visible=allCards.filter(c=>c.style.display!=='none');
-      for(const card of visible){{
-        const id=card.dataset.proxyId;
-        if(latestKind(id)==='good')continue;
-        const candidate=candidates.find(x=>x.id===id);
-        if(!candidate)continue;
-        if(latestKind(id)!=='bad'){{
-          feedback=recordFeedback(feedback,candidate,'bad',new Date().toISOString());
-        }}
-        localStorage.setItem('proxy-rating-'+id,'bad');
+      const ids=visible.map(c=>c.dataset.proxyId);
+      feedback=rejectBatch(feedback,candidates,ids,new Date().toISOString());
+      for(const id of ids){{
+        if(latestKind(id)==='bad') localStorage.setItem('proxy-rating-'+id,'bad');
       }}
       saveFeedback(localStorage,feedback);
       renderBatch();
       window.scrollTo({{top:0,behavior:'smooth'}});
     }}
 
+    function ageLabel(item){{
+      if(item.ageBand==='today')return 'сегодня';
+      if(item.ageBand==='yesterday')return 'вчера';
+      if(item.ageBand==='recent'){{
+        const days=Math.max(2,Math.floor((Date.now()-Date.parse(item.lastGoodAt))/86400000));
+        return days+' дн. назад';
+      }}
+      return 'давно';
+    }}
+
     function showWorking(){{
       allCards.forEach(c=>c.style.display='none');
-      const goods=allCards.filter(c=>latestKind(c.dataset.proxyId)==='good');
-      if(!goods.length){{
-        alert('Пока ни один прокси не отмечен рабочим.');
-        renderBatch();
+      const box=document.getElementById('working-reserve');
+      const catalog=Object.fromEntries(candidates.map(x=>[x.id,x]));
+      const reserve=workingReserve(feedback,catalog,Date.now());
+      if(!box)return;
+      if(!reserve.length){{
+        box.style.display='block';
+        box.innerHTML='<div class="card"><b>Пока нет подтверждённых рабочих прокси.</b></div>';
         return;
       }}
-      goods.forEach(c=>{{c.style.display='block';paint(c.dataset.proxyId,'good');}});
+      box.style.display='block';
+      box.innerHTML=reserve.map(item=>{{
+        const q=new URLSearchParams({{server:item.server,port:item.port,secret:item.secret||''}});
+        const link='tg://proxy?'+q.toString();
+        return '<div class="card" data-working-reserve-row>'+
+          '<div class="top"><div class="num">⭐</div><div class="host">'+item.server+':'+item.port+'</div><span class="status">✓ '+item.goodCount+'×</span></div>'+
+          '<div class="meta">'+item.source+' · работал: '+ageLabel(item)+'</div>'+
+          '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" onclick="confirmWorking(\''+item.id+'\')">✅ Подтвердить</button></div>'+
+          '</div>';
+      }}).join('');
+    }}
+
+    function confirmWorking(id){{
+      const candidate=candidates.find(x=>x.id===id);
+      if(!candidate)return;
+      feedback=recordFeedback(feedback,candidate,'good',new Date().toISOString());
+      saveFeedback(localStorage,feedback);
+      localStorage.setItem('proxy-rating-'+id,'good');
+      showWorking();
     }}
 
     window.markWorking=markWorking;
     window.rejectCurrentBatch=rejectCurrentBatch;
     window.showWorking=showWorking;
+    window.confirmWorking=confirmWorking;
     renderBatch();
     </script></body></html>'''
     Path("index.html").write_text(page,encoding="utf-8")

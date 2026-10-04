@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import hashlib, html, re, socket, time, urllib.parse, urllib.request
+import hashlib, html, json, re, socket, time, urllib.parse, urllib.request
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
@@ -115,6 +115,27 @@ def pid(p):return hashlib.sha256(f"{p['server']}|{p['port']}|{p['secret']}".enco
 
 def main():
     chosen=choose(verify(collect()),COUNT)
+
+    # Каталог нужен сборщику обратной связи: ID -> конкретный прокси.
+    catalog_path=Path("proxy_catalog.json")
+    try:
+        catalog=json.loads(catalog_path.read_text(encoding="utf-8")) if catalog_path.exists() else {"proxies":{}}
+    except Exception:
+        catalog={"proxies":{}}
+    if not isinstance(catalog,dict): catalog={"proxies":{}}
+    catalog.setdefault("proxies",{})
+    for p in chosen:
+        x=pid(p)
+        catalog["proxies"][x]={
+            "server":p["server"],"port":p["port"],"secret":p["secret"],
+            "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
+        }
+    # Ограничиваем историю последними 500 ID.
+    items=list(catalog["proxies"].items())
+    if len(items)>500:
+        items=sorted(items,key=lambda kv:kv[1].get("last_seen",""),reverse=True)[:500]
+        catalog["proxies"]=dict(items)
+    catalog_path.write_text(json.dumps(catalog,ensure_ascii=False,indent=2),encoding="utf-8")
     now=datetime.now(timezone(timedelta(hours=3))).strftime("%d.%m.%Y %H:%M UTC+3")
     cards=[]
     for i,p in enumerate(chosen,1):
@@ -125,8 +146,8 @@ def main():
         <div class="meta">тип {typ} · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
         <a class="btn open" href="{html.escape(p["tg"],quote=True)}">Открыть в Telegram</a>
-        <button class="btn good" onclick="rate('{x}','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rate('{x}','bad')">❌ Не работает</button>
+        <button class="btn good" onclick="rateAndSend('{x}','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('{x}','bad')">❌ Не работает</button>
         </div></div>''')
     if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
 
@@ -139,12 +160,23 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Показываем до 10 вариантов, чтобы быстро найти реально рабочую ветку.</div>
+    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ не только отмечают результат в браузере, но и открывают готовую команду обратной связи в Telegram — её нужно отправить в группу «Прокси ми».</div>
     {''.join(cards)}
     <script>
-    function rate(id,v){{localStorage.setItem('proxy-rating-'+id,v);paint(id,v)}}
-    function paint(id,v){{let e=document.getElementById('status-'+id);if(!e)return;e.textContent=v==='good'?'✓ рабочий':'✕ нерабочий';e.style.color=v==='good'?'#2e9d53':'#c64747'}}
-    document.querySelectorAll('[data-proxy-id]').forEach(c=>{{let id=c.dataset.proxyId,v=localStorage.getItem('proxy-rating-'+id);if(v)paint(id,v)}})
+    function rateAndSend(id,v){{
+      localStorage.setItem('proxy-rating-'+id,v);paint(id,v);
+      const cmd='/proxy_'+v+' '+id;
+      window.location.href='https://t.me/share/url?url=&text='+encodeURIComponent(cmd);
+    }}
+    function paint(id,v){{
+      let e=document.getElementById('status-'+id);if(!e)return;
+      e.textContent=v==='good'?'✓ рабочий':'✕ нерабочий';
+      e.style.color=v==='good'?'#2e9d53':'#c64747';
+    }}
+    document.querySelectorAll('[data-proxy-id]').forEach(c=>{{
+      let id=c.dataset.proxyId,v=localStorage.getItem('proxy-rating-'+id);
+      if(v){{paint(id,v); if(v==='bad') c.style.opacity='.45';}}
+    }})
     </script></body></html>'''
     Path("index.html").write_text(page,encoding="utf-8")
 

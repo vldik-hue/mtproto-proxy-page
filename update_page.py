@@ -11,15 +11,24 @@ COUNT=50
 TIMEOUT=3.0
 UA="Mozilla/5.0 MTProtoProxyPage/5.0"
 
-CONFIRMED=[("nngo.cc",443,"ddf390d9757cb92d87826bcef28a6e75ed","подтверждён раньше")]
-SOURCES=[
-    ("tgmtproxy hourly","https://raw.githubusercontent.com/tgmtproxy/telegram-mtproto-proxy-list/main/proxies.txt"),
-    ("shablin 4h","https://raw.githubusercontent.com/shablin/mtproto-proxy/main/data/valid_proxy.txt"),
-    ("Grim 12h","https://raw.githubusercontent.com/Grim1313/mtproto-for-telegram/master/all_proxies.txt"),
-    ("aviamasters RU","https://raw.githubusercontent.com/aviamastersgh/mtproto-free-russia/main/verified_proxies.txt"),
-    ("zakky RU","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
+CONFIRMED=[
+    ("nngo.cc",443,"ddf390d9757cb92d87826bcef28a6e75ed","подтверждён раньше"),
+    ("nnmm.me",443,"ddf390d9757cb92d87826bcef28a6e75ed","та же рабочая семья"),
+    ("85.192.35.94",443,"ddf390d9757cb92d87826bcef28a6e75ed","та же рабочая семья"),
 ]
-PREFERRED_PORTS={443,8443,2053,2083,2096}
+SOURCES=[
+    # Практический список именно для обхода блокировок в РФ.
+    ("Prihs RU curated","https://raw.githubusercontent.com/vpnsvpns/Prihs/main/README.md"),
+    # Реальная MTProto/FakeTLS-проверка, обновление каждый час.
+    ("tgmtproxy handshake","https://raw.githubusercontent.com/tgmtproxy/telegram-mtproto-proxy-list/main/proxies.txt"),
+    # Реальная MTProto handshake-проверка, отдельный независимый проект.
+    ("dubblebyte handshake","https://raw.githubusercontent.com/dubblebyte/free-mtproto-proxies/main/all_proxies.txt"),
+    # Российский агрегатор: публикует только подтверждённые соединения.
+    ("aviamasters RU verified","https://raw.githubusercontent.com/aviamastersgh/mtproto-free-russia/main/verified_proxies.txt"),
+    # Список с проверкой из России через внешние точки и FakeTLS handshake.
+    ("zakky RU resilient","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
+]
+PREFERRED_PORTS={443,853,8443,9443,2053,2083,2096,25565}
 
 def get(url,timeout=25):
     req=urllib.request.Request(url,headers={"User-Agent":UA,"Cache-Control":"no-cache"})
@@ -159,7 +168,7 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Страница работает автономно, даже когда Telegram не подключается. Проверяй текущую десятку: если никто не заработал — одним нажатием помечай всю десятку нерабочей и сразу переходи дальше. Если один заработал — нажми «✅ Работает» только напротив него.</div>
+    <div class="lead">Обновлено: {now}<br>Страница работает автономно, даже когда Telegram не подключается. Источники теперь только усиленные: российский практический список, два списка с реальным MTProto-handshake и два RU-ориентированных verified/resilience-источника. Проверяй десятку: если никто не заработал — одним нажатием отправляй её в брак.</div>
     {''.join(cards)}
     <div class="sendbox">
       <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>

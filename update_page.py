@@ -166,29 +166,29 @@ def main():
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>MTProto — быстрый перебор</title><style>
     *{{box-sizing:border-box}}
-    body{{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:16px 16px 120px;background:#f3f5f7;color:#202124}}
-    h1{{font-size:26px;margin:4px 0 6px}}
-    .lead{{color:#5f6368;line-height:1.45;font-size:14px;margin-bottom:12px}}
-    .progress{{background:#fff;border-radius:12px;padding:11px 13px;margin:12px 0;font-weight:700;box-shadow:0 1px 6px #0001}}
-    .card{{background:#fff;border-radius:14px;padding:13px 14px;margin:10px 0;box-shadow:0 2px 10px #0001}}
-    .top{{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center}}
-    .num{{font-weight:800;color:#777}}
-    .host{{font-weight:800;overflow-wrap:anywhere}}
-    .status{{font-size:12px;font-weight:800;white-space:nowrap}}
-    .meta{{font-size:12px;color:#777;margin:6px 0 0 52px;overflow-wrap:anywhere}}
-    .actions{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}}
-    .btn{{border:0;border-radius:10px;padding:12px 10px;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;text-align:center;font-size:14px}}
+    body{{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:10px 10px 108px;background:#f3f5f7;color:#202124}}
+    h1{{font-size:20px;margin:2px 0 4px}}
+    .lead{{color:#5f6368;line-height:1.3;font-size:12px;margin-bottom:8px}}
+    .progress{{background:#fff;border-radius:10px;padding:7px 9px;margin:8px 0;font-weight:700;font-size:12px;box-shadow:0 1px 5px #0001}}
+    .card{{background:#fff;border-radius:10px;padding:8px 9px;margin:6px 0;box-shadow:0 1px 6px #0001}}
+    .top{{display:grid;grid-template-columns:30px 1fr auto;gap:5px;align-items:center}}
+    .num{{font-weight:800;color:#777;font-size:12px}}
+    .host{{font-weight:800;overflow-wrap:anywhere;font-size:13px;line-height:1.15}}
+    .status{{font-size:10px;font-weight:800;white-space:nowrap}}
+    .meta{{font-size:10px;color:#777;margin:3px 0 0 35px;overflow-wrap:anywhere;line-height:1.15}}
+    .actions{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px}}
+    .btn{{border:0;border-radius:8px;padding:8px 7px;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;text-align:center;font-size:12px;line-height:1.1}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}}
-    .controls{{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;padding:10px 12px 12px;z-index:20;box-shadow:0 -4px 18px #0002}}
-    .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:8px}}
-    .sendhint{{font-size:12px;color:#666;margin-top:8px;line-height:1.35}}
-    .sourcebox{{font-size:12px;color:#666;background:#fff;border-radius:12px;padding:10px 12px;margin-top:12px;line-height:1.4}}
+    .controls{{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;padding:7px 9px 8px;z-index:20;box-shadow:0 -3px 12px #0002}}
+    .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:5px}}
+    .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
+    .sourcebox{{font-size:10px;color:#666;background:#fff;border-radius:10px;padding:7px 8px;margin-top:8px;line-height:1.2}}
     @media(max-width:520px){{
-      body{{padding:12px 10px 125px}}
-      h1{{font-size:22px}}
+      body{{padding:8px 7px 105px}}
+      h1{{font-size:18px}}
       .actions{{grid-template-columns:1fr 1fr}}
-      .meta{{margin-left:0}}
-      .top{{grid-template-columns:36px 1fr auto}}
+      .meta{{margin-left:0;font-size:9px}}
+      .top{{grid-template-columns:28px 1fr auto}}
       .controls-inner{{grid-template-columns:1fr}}
     }}
     </style></head><body>

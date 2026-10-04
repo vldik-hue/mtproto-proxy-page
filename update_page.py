@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-COUNT=50
+COUNT=200
 TIMEOUT=3.0
 UA="Mozilla/5.0 MTProtoProxyPage/5.0"
 
@@ -150,7 +150,7 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}">
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
@@ -194,7 +194,7 @@ def main():
     }}
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
-    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов. Проверяй только кнопку «▶ Проверить». Если вся десятка мёртвая — одним нажатием отправляем её в брак. Если один заработал — нажми «✅ Работает» только на нём.</div>
+    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: источник, порт и тип рабочего прокси получают больший вес и похожие варианты поднимаются выше.</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
@@ -212,7 +212,7 @@ def main():
     function markWorking(id){{
       const card=document.querySelector('[data-proxy-id="'+id+'"]');
       const prev=localStorage.getItem('proxy-rating-'+id);
-      if(prev!=='good' && card) bumpSource(card.dataset.source||'','good');
+      if(prev!=='good' && card) bumpCardStats(card,'good');
       localStorage.setItem('proxy-rating-'+id,'good');
       paint(id,'good');
     }}
@@ -221,21 +221,30 @@ def main():
       e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
       e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
     }}
-    function sourceKey(source){{return 'proxy-source-stats-'+source;}}
-    function getSourceStats(source){{
-      try{{return JSON.parse(localStorage.getItem(sourceKey(source))||'{{"good":0,"bad":0}}');}}
+    function statKey(group,value){{return 'proxy-stat-'+group+'-'+value;}}
+    function getStat(group,value){{
+      try{{return JSON.parse(localStorage.getItem(statKey(group,value))||'{{"good":0,"bad":0}}');}}
       catch(e){{return {{good:0,bad:0}};}}
     }}
-    function bumpSource(source,kind){{
-      const s=getSourceStats(source);
+    function bumpStat(group,value,kind){{
+      const s=getStat(group,value);
       s[kind]=(s[kind]||0)+1;
-      localStorage.setItem(sourceKey(source),JSON.stringify(s));
+      localStorage.setItem(statKey(group,value),JSON.stringify(s));
+    }}
+    function bumpCardStats(card,kind){{
+      bumpStat('source',card.dataset.source||'',kind);
+      bumpStat('port',card.dataset.port||'',kind);
+      bumpStat('kind',card.dataset.kind||'',kind);
+    }}
+    function oneScore(group,value){{
+      const s=getStat(group,value), total=(s.good||0)+(s.bad||0);
+      if(!total) return 0;
+      return ((s.good||0)*3-(s.bad||0))/total;
     }}
     function sourceScore(card){{
-      const s=getSourceStats(card.dataset.source||'');
-      const total=(s.good||0)+(s.bad||0);
-      if(!total) return 0;
-      return ((s.good||0)-(s.bad||0))/total;
+      return oneScore('source',card.dataset.source||'')*3
+           + oneScore('port',card.dataset.port||'')*2
+           + oneScore('kind',card.dataset.kind||'');
     }}
     function eligibleCards(){{
       return Array.from(document.querySelectorAll('[data-proxy-id]'))
@@ -244,7 +253,7 @@ def main():
     }}
     function updateSourceSummary(){{
       const sources=[...new Set(Array.from(document.querySelectorAll('[data-proxy-id]')).map(c=>c.dataset.source||''))];
-      const rows=sources.map(src=>{{const s=getSourceStats(src);return [src,s.good||0,s.bad||0];}})
+      const rows=sources.map(src=>{{const s=getStat('source',src);return [src,s.good||0,s.bad||0];}})
         .filter(r=>r[1]+r[2]>0)
         .sort((a,b)=>(b[2]-b[1])-(a[2]-a[1]));
       const el=document.getElementById('source-summary');
@@ -284,7 +293,7 @@ def main():
         const prev=localStorage.getItem('proxy-rating-'+id);
         // Никогда не перезаписываем уже подтверждённый рабочий прокси.
         if(prev==='good') return;
-        if(prev!=='bad') bumpSource(c.dataset.source||'','bad');
+        if(prev!=='bad') bumpCardStats(c,'bad');
         localStorage.setItem('proxy-rating-'+id,'bad');
       }});
       const eligible=eligibleCards();

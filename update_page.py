@@ -146,6 +146,7 @@ def main():
         items=sorted(items,key=lambda kv:kv[1].get("last_seen",""),reverse=True)[:500]
         catalog["proxies"]=dict(items)
     catalog_path.write_text(json.dumps(catalog,ensure_ascii=False,indent=2),encoding="utf-8")
+    generated_iso=datetime.now(timezone.utc).isoformat()
     now=datetime.now(timezone(timedelta(hours=3))).strftime("%d.%m.%Y %H:%M UTC+3")
     cards=[]
     for i,p in enumerate(chosen,1):
@@ -209,9 +210,10 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus }} from './learning.js';
 
     const BATCH_SIZE=10;
+    const GENERATED_AT='{generated_iso}';
     const allCards=Array.from(document.querySelectorAll('[data-proxy-id]'));
     const candidates=allCards.map(card=>({{
       id:card.dataset.proxyId||'',
@@ -304,8 +306,10 @@ def main():
       allCards.forEach(c=>c.style.display='none');
       const selected=selectBatch(candidates,feedback,BATCH_SIZE,Date.now());
       if(!selected.length){{
+        const status=poolStatus(candidates,feedback,GENERATED_AT,Date.now());
+        const next=new Date(status.nextRefreshAt).toLocaleTimeString('ru-RU',{{hour:'2-digit',minute:'2-digit'}});
         const pr=document.getElementById('progress');
-        if(pr)pr.textContent='Все загруженные прокси отбракованы. Ждём новый пул.';
+        if(pr)pr.textContent='Все кандидаты этого пула проверены · отбраковано '+status.rejected+' · Следующее автообновление около '+next;
         updateLearnSummary();
         updateSourceSummary();
         return;

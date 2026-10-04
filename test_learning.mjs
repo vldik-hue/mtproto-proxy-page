@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   recencyWeight,
   recordFeedback,
+  selectBatch,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -43,3 +44,32 @@ for (let i = 0; i < 510; i++) {
 assert.equal(state.events.length, 500, "event history must be capped at 500");
 
 console.log("learning tests OK");
+
+
+const candidates = Array.from({ length: 20 }, (_, i) => ({
+  id: "c" + i,
+  source: i < 8 ? "known-good" : "new-source-" + i,
+  port: i < 8 ? "8443" : String(9000 + i),
+  kind: i < 8 ? "ee" : "other",
+  domain: i < 8 ? "known.example" : "new" + i + ".example",
+  secret: i < 8 ? "known-secret" : "s" + i,
+}));
+
+let rankedState = { events: [], stats: {} };
+for (let i = 0; i < 8; i++) {
+  rankedState = recordFeedback(rankedState, candidates[i], "good", "2026-10-04T17:50:00Z");
+}
+rankedState = recordFeedback(rankedState, candidates[19], "bad", "2026-10-04T17:55:00Z");
+
+const batch = selectBatch(candidates, rankedState, 10, now);
+assert.equal(batch.length, 10, "batch must contain 10 candidates");
+assert.equal(batch.filter(x => x.source === "known-good").length, 8, "expected 8 exploitation candidates");
+assert.equal(batch.filter(x => x.source !== "known-good").length, 2, "expected 2 exploration candidates");
+assert.ok(!batch.some(x => x.id === "c19"), "known bad candidate must not reappear");
+
+const goodTopState = recordFeedback(rankedState, candidates[0], "good", "2026-10-04T17:59:00Z");
+const batch2 = selectBatch(candidates, goodTopState, 10, now);
+assert.equal(batch2[0].id, "c0", "exact confirmed good should rank first");
+assert.equal(batch2.filter(x => x.source !== "known-good").length, 2, "good exact match must not consume exploration slots");
+
+console.log("batch selection tests OK");

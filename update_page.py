@@ -160,13 +160,12 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ не только отмечают результат в браузере, но и открывают готовую команду обратной связи в Telegram — её нужно отправить в группу «Прокси ми».</div>
+    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ теперь отправляют результат нашему Telegram-боту. При первом использовании Telegram может попросить нажать Start; дальше оценка попадёт в общую историю автоматически.</div>
     {''.join(cards)}
     <script>
     function rateAndSend(id,v){{
       localStorage.setItem('proxy-rating-'+id,v);paint(id,v);
-      const cmd='/proxy_'+v+' '+id;
-      window.location.href='https://t.me/share/url?url=&text='+encodeURIComponent(cmd);
+      window.location.href='https://t.me/my_mtproxy_helper_bot?start='+v+'_'+id;
     }}
     function paint(id,v){{
       let e=document.getElementById('status-'+id);if(!e)return;

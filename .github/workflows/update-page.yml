@@ -2,6 +2,10 @@ name: Update proxy page
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "update_page.py"
+      - ".github/workflows/update-page.yml"
   schedule:
     # GitHub cron использует UTC. 03:19 UTC = 06:19 при UTC+3.
     - cron: "19 3 * * *"

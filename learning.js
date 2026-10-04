@@ -140,3 +140,66 @@ export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.n
     })
     .map(x => x.candidate);
 }
+
+
+export function rejectBatch(state, candidates, ids, atIso = new Date().toISOString()) {
+  let next = cloneState(state);
+  const byId = new Map(candidates.map(c => [c.id, c]));
+  for (const id of ids) {
+    const latest = (next.events ?? []).find(e => e.id === id);
+    if (latest?.kind === "good") continue;
+    const candidate = byId.get(id);
+    if (!candidate) continue;
+    if (latest?.kind !== "bad") {
+      next = recordFeedback(next, candidate, "bad", atIso);
+    }
+  }
+  return next;
+}
+
+function ageBandFor(isoTime, nowMs = Date.now()) {
+  const age = Math.max(0, nowMs - Date.parse(isoTime));
+  const DAY = 24 * 60 * 60 * 1000;
+  if (age < DAY) return "today";
+  if (age < 2 * DAY) return "yesterday";
+  if (age <= 7 * DAY) return "recent";
+  return "stale";
+}
+
+export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Date.now()) {
+  const events = feedbackState?.events ?? [];
+  const latestById = new Map();
+  for (const event of events) {
+    if (!latestById.has(event.id)) latestById.set(event.id, event);
+  }
+
+  const goodEventsById = new Map();
+  for (const event of events) {
+    if (event.kind !== "good") continue;
+    if (!goodEventsById.has(event.id)) goodEventsById.set(event.id, []);
+    goodEventsById.get(event.id).push(event);
+  }
+
+  const out = [];
+  for (const [id, goodEvents] of goodEventsById.entries()) {
+    if (latestById.get(id)?.kind !== "good") continue;
+    const latestGood = goodEvents.reduce((best, e) => Date.parse(e.at) > Date.parse(best.at) ? e : best);
+    const catalog = candidateCatalog[id] ?? {};
+    out.push({
+      id,
+      server: catalog.server ?? latestGood.server ?? "",
+      port: String(catalog.port ?? latestGood.port ?? ""),
+      source: catalog.source ?? latestGood.source ?? "",
+      lastGoodAt: latestGood.at,
+      goodCount: goodEvents.length,
+      ageBand: ageBandFor(latestGood.at, nowMs),
+    });
+  }
+
+  out.sort((a, b) =>
+    Date.parse(b.lastGoodAt) - Date.parse(a.lastGoodAt) ||
+    b.goodCount - a.goodCount ||
+    a.id.localeCompare(b.id)
+  );
+  return out;
+}

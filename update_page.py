@@ -202,7 +202,7 @@ def main():
         <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
         <button class="btn working" onclick="showWorking()">⭐ Рабочие</button>
       </div>
-      <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Всё запоминается на этом устройстве.</div>
+      <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. Всё запоминается на этом устройстве.</div>
     </div>
     <script>
     let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
@@ -280,6 +280,8 @@ def main():
       visible.forEach(c=>{{
         const id=c.dataset.proxyId;
         const prev=localStorage.getItem('proxy-rating-'+id);
+        // Никогда не перезаписываем уже подтверждённый рабочий прокси.
+        if(prev==='good') return;
         if(prev!=='bad') bumpSource(c.dataset.source||'','bad');
         localStorage.setItem('proxy-rating-'+id,'bad');
       }});

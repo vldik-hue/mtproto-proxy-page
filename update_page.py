@@ -146,8 +146,7 @@ def main():
         <div class="meta">тип {typ} · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
         <a class="btn open" href="{html.escape(p["tg"],quote=True)}">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateLocal('{x}','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateLocal('{x}','bad')">❌ Не работает</button>
+        <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
         </div></div>''')
     if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
 
@@ -160,19 +159,19 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Страница теперь работает автономно, даже когда Telegram не подключается. Загружаем до 50 кандидатов. Отмечай ✅/❌ прямо здесь, а кнопкой «Следующие 10» переходи к новой десятке. Нерабочие запоминаются в браузере и больше не показываются.</div>
+    <div class="lead">Обновлено: {now}<br>Страница работает автономно, даже когда Telegram не подключается. Проверяй текущую десятку: если никто не заработал — одним нажатием помечай всю десятку нерабочей и сразу переходи дальше. Если один заработал — нажми «✅ Работает» только напротив него.</div>
     {''.join(cards)}
     <div class="sendbox">
-      <button class="btn sendall" onclick="nextBatch()">➡️ Следующие 10</button>
+      <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
       <button class="btn sendall" onclick="showWorking()">⭐ Показать рабочие</button>
-      <div class="sendhint">Связь с ботом для перебора больше не нужна. Результаты хранятся на этом устройстве.</div>
+      <div class="sendhint">Если ни один не заработал — один раз нажми «Вся десятка не работает». Если какой-то заработал — нажми только «✅ Работает» напротив него.</div>
     </div>
     <script>
     let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
     const BATCH_SIZE=10;
-    function rateLocal(id,v){{
-      localStorage.setItem('proxy-rating-'+id,v);
-      renderBatch();
+    function markWorking(id){{
+      localStorage.setItem('proxy-rating-'+id,'good');
+      paint(id,'good');
     }}
     function paint(id,v){{
       let e=document.getElementById('status-'+id);if(!e)return;
@@ -194,10 +193,15 @@ def main():
       }});
       localStorage.setItem('proxy-batch-start',String(batchStart));
     }}
-    function nextBatch(){{
+    function rejectCurrentBatch(){{
+      const visible=Array.from(document.querySelectorAll('[data-proxy-id]')).filter(c=>c.style.display!=='none');
+      if(!visible.length) return;
+      visible.forEach(c=>localStorage.setItem('proxy-rating-'+c.dataset.proxyId,'bad'));
       const eligible=eligibleCards();
-      if(!eligible.length) return;
-      batchStart += BATCH_SIZE;
+      if(!eligible.length){{
+        renderBatch();
+        return;
+      }}
       if(batchStart>=eligible.length) batchStart=0;
       renderBatch();
       window.scrollTo({{top:0,behavior:'smooth'}});

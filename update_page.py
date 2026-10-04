@@ -140,14 +140,14 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}">
         <div class="top"><b>Прокси {i}</b><span id="status-{x}" class="status"></span></div>
         <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
         <div class="meta">тип {typ} · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
         <a class="btn open" href="{html.escape(p["tg"],quote=True)}">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('{x}','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('{x}','bad')">❌ Не работает</button>
+        <button class="btn good" onclick="rateLocal('{x}','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateLocal('{x}','bad')">❌ Не работает</button>
         </div></div>''')
     if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
 
@@ -160,12 +160,28 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ теперь отправляют результат нашему Telegram-боту. При первом использовании Telegram может попросить нажать Start; дальше оценка попадёт в общую историю автоматически.</div>
+    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ только отмечают результат на странице. После проверки нажми «Отправить результаты» — вся текущая пачка уйдёт боту одной отправкой.</div>
     {''.join(cards)}
+    <div class="sendbox">
+      <button class="btn sendall" onclick="sendResults()">📤 Отправить результаты</button>
+      <div class="sendhint">Сначала отметь прокси кнопками ✅/❌, потом один раз отправь весь результат.</div>
+    </div>
     <script>
-    function rateAndSend(id,v){{
+    const BATCH_ID="{batch_id}";
+    function rateLocal(id,v){{
       localStorage.setItem('proxy-rating-'+id,v);paint(id,v);
-      window.location.href='https://t.me/my_mtproxy_helper_bot?start='+v+'_'+id;
+    }}
+    function sendResults(){{
+      let goodMask=0,badMask=0,count=0;
+      document.querySelectorAll('[data-proxy-id]').forEach(c=>{{
+        const id=c.dataset.proxyId, idx=parseInt(c.dataset.index||'0',10);
+        const v=localStorage.getItem('proxy-rating-'+id);
+        if(v==='good'){{goodMask|=(1<<idx);count++;}}
+        if(v==='bad'){{badMask|=(1<<idx);count++;}}
+      }});
+      if(!count){{alert('Сначала отметь хотя бы один прокси.');return;}}
+      const payload='report_'+BATCH_ID+'_'+goodMask.toString(16)+'_'+badMask.toString(16);
+      window.location.href='https://t.me/my_mtproxy_helper_bot?start='+payload;
     }}
     function paint(id,v){{
       let e=document.getElementById('status-'+id);if(!e)return;

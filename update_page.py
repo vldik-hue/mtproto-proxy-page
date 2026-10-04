@@ -179,7 +179,7 @@ def main():
     .meta{{font-size:10px;color:#777;margin:3px 0 0 35px;overflow-wrap:anywhere;line-height:1.15}}
     .actions{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px}}
     .btn{{border:0;border-radius:8px;padding:8px 7px;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;text-align:center;font-size:12px;line-height:1.1}}
-    .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}}
+    .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}} .refresh{{background:#555;display:block;max-width:760px;margin:6px auto 0}}
     .controls{{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;padding:7px 9px 8px;z-index:20;box-shadow:0 -3px 12px #0002}}
     .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:5px}}
     .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
@@ -203,7 +203,8 @@ def main():
         <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
         <button class="btn working" onclick="showWorking()">⭐ Рабочие</button>
       </div>
-      <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. Всё запоминается на этом устройстве.</div>
+      <a class="btn refresh" href="https://github.com/vldik-hue/mtproto-proxy-page/actions/workflows/update-page.yml" target="_blank" rel="noopener">🔄 Новый пул сейчас</a>
+      <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script>
     let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);

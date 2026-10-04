@@ -5,6 +5,7 @@ import {
   selectBatch,
   workingReserve,
   rejectBatch,
+  poolStatus,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -103,3 +104,21 @@ assert.equal(reserve[0].goodCount, 2, "repeat confirmations must be counted");
 assert.equal(reserve.find(x => x.id === "working-old").ageBand, "stale", "working entries older than 7 days remain but are stale");
 
 console.log("working reserve tests OK");
+
+
+const poolCandidates = [
+  { id: "p1", source: "s", port: "443", kind: "ee", domain: "a", secret: "x" },
+  { id: "p2", source: "s", port: "8443", kind: "ee", domain: "b", secret: "y" },
+];
+let exhaustedState = { events: [], stats: {} };
+exhaustedState = recordFeedback(exhaustedState, poolCandidates[0], "bad", "2026-10-04T17:00:00Z");
+exhaustedState = recordFeedback(exhaustedState, poolCandidates[1], "bad", "2026-10-04T17:01:00Z");
+const generatedAt = "2026-10-04T16:19:00Z";
+const status = poolStatus(poolCandidates, exhaustedState, generatedAt, now);
+assert.equal(status.exhausted, true, "all rejected pool must be exhausted");
+assert.equal(status.eligible, 0);
+assert.equal(status.rejected, 2);
+assert.equal(status.nextRefreshAt, "2026-10-04T18:19:00.000Z", "next refresh should be two hours after generated pool");
+assert.equal(selectBatch(poolCandidates, exhaustedState, 10, now).length, 0, "exhausted pool must not recycle rejected candidates");
+
+console.log("pool status tests OK");

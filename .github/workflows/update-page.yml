@@ -6,6 +6,8 @@ on:
     paths:
       - "update_page.py"
       - "test_ui.py"
+      - "learning.js"
+      - "test_learning.mjs"
       - ".github/workflows/update-page.yml"
   schedule:
     # Новый пул каждые 2 часа.
@@ -26,6 +28,9 @@ jobs:
 
       - name: Test UI
         run: python3 test_ui.py
+
+      - name: Test learning
+        run: node test_learning.mjs
 
       - name: Commit fresh page
         run: |

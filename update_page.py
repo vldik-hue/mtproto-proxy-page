@@ -146,6 +146,7 @@ def main():
         items=sorted(items,key=lambda kv:kv[1].get("last_seen",""),reverse=True)[:500]
         catalog["proxies"]=dict(items)
     catalog_path.write_text(json.dumps(catalog,ensure_ascii=False,indent=2),encoding="utf-8")
+    generated_iso=datetime.now(timezone.utc).isoformat()
     now=datetime.now(timezone(timedelta(hours=3))).strftime("%d.%m.%Y %H:%M UTC+3")
     cards=[]
     for i,p in enumerate(chosen,1):
@@ -199,6 +200,7 @@ def main():
     {''.join(cards)}
     <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
+    <div id="working-reserve" data-working-reserve style="display:none"></div>
     <div class="controls">
       <div class="controls-inner">
         <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ 10 не работают</button>
@@ -207,158 +209,185 @@ def main():
       </div>
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
-    <script>
-    let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
+    <script type="module">
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus }} from './learning.js';
+
     const BATCH_SIZE=10;
-    function markWorking(id){{
-      const card=document.querySelector('[data-proxy-id="'+id+'"]');
-      const prev=localStorage.getItem('proxy-rating-'+id);
-      if(prev!=='good' && card) bumpCardStats(card,'good');
-      localStorage.setItem('proxy-rating-'+id,'good');
-      paint(id,'good');
+    const GENERATED_AT='{generated_iso}';
+    const allCards=Array.from(document.querySelectorAll('[data-proxy-id]'));
+    const candidates=allCards.map(card=>({{
+      id:card.dataset.proxyId||'',
+      server:card.dataset.server||'',
+      port:card.dataset.port||'',
+      source:card.dataset.source||'',
+      domain:card.dataset.domain||'',
+      secret:card.dataset.secret||'',
+      kind:card.dataset.kind||''
+    }}));
+    let feedback=loadFeedback(localStorage);
+
+    function latestKind(id){{
+      const e=(feedback.events||[]).find(x=>x.id===id);
+      return e?e.kind:'';
     }}
+
+    let migrated=false;
+    for(const card of allCards){{
+      const id=card.dataset.proxyId;
+      const legacy=localStorage.getItem('proxy-rating-'+id);
+      if((legacy==='good'||legacy==='bad') && !latestKind(id)){{
+        const candidate=candidates.find(x=>x.id===id);
+        if(candidate){{
+          feedback=recordFeedback(feedback,candidate,legacy,new Date().toISOString());
+          migrated=true;
+        }}
+      }}
+    }}
+    if(migrated) saveFeedback(localStorage,feedback);
+
     function paint(id,v){{
-      let e=document.getElementById('status-'+id);if(!e)return;
+      const e=document.getElementById('status-'+id);
+      if(!e)return;
       e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
       e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
     }}
-    function statKey(group,value){{return 'proxy-stat-'+group+'-'+value;}}
-    function getStat(group,value){{
-      try{{return JSON.parse(localStorage.getItem(statKey(group,value))||'{{"good":0,"bad":0}}');}}
-      catch(e){{return {{good:0,bad:0}};}}
+
+    function markWorking(id){{
+      const candidate=candidates.find(x=>x.id===id);
+      if(!candidate)return;
+      if(latestKind(id)!=='good'){{
+        feedback=recordFeedback(feedback,candidate,'good',new Date().toISOString());
+        saveFeedback(localStorage,feedback);
+      }}
+      localStorage.setItem('proxy-rating-'+id,'good');
+      paint(id,'good');
+      renderBatch();
     }}
-    function bumpStat(group,value,kind){{
-      if(!value) return;
-      const s=getStat(group,value);
-      s[kind]=(s[kind]||0)+1;
-      localStorage.setItem(statKey(group,value),JSON.stringify(s));
-    }}
-    function rememberEvent(card,kind){{
-      let events=[];
-      try{{events=JSON.parse(localStorage.getItem('proxy-feedback-events')||'[]');}}catch(e){{events=[];}}
-      events.unshift({{
-        at:new Date().toISOString(), kind,
-        id:card.dataset.proxyId||'', server:card.dataset.server||'',
-        port:card.dataset.port||'', source:card.dataset.source||'',
-        domain:card.dataset.domain||'', secret:card.dataset.secret||''
-      }});
-      localStorage.setItem('proxy-feedback-events',JSON.stringify(events.slice(0,500)));
-    }}
-    function bumpCardStats(card,kind){{
-      bumpStat('source',card.dataset.source||'',kind);
-      bumpStat('port',card.dataset.port||'',kind);
-      bumpStat('kind',card.dataset.kind||'',kind);
-      bumpStat('domain',card.dataset.domain||'',kind);
-      bumpStat('secret',card.dataset.secret||'',kind);
-      rememberEvent(card,kind);
-    }}
-    function oneScore(group,value){{
-      const s=getStat(group,value), total=(s.good||0)+(s.bad||0);
-      if(!total) return 0;
-      return ((s.good||0)*4-(s.bad||0)*1.25)/Math.max(1,total);
-    }}
-    function sourceScore(card){{
-      const rating=localStorage.getItem('proxy-rating-'+card.dataset.proxyId);
-      let score=0;
-      if(rating==='good') score+=1000;
-      score += oneScore('secret',card.dataset.secret||'')*8;
-      score += oneScore('domain',card.dataset.domain||'')*5;
-      score += oneScore('source',card.dataset.source||'')*4;
-      score += oneScore('port',card.dataset.port||'')*3;
-      score += oneScore('kind',card.dataset.kind||'')*2;
-      return score;
-    }}
-    function eligibleCards(){{
-      return Array.from(document.querySelectorAll('[data-proxy-id]'))
-        .filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)!=='bad')
-        .sort((a,b)=>sourceScore(b)-sourceScore(a));
-    }}
+
     function updateLearnSummary(){{
-      let events=[];
-      try{{events=JSON.parse(localStorage.getItem('proxy-feedback-events')||'[]');}}catch(e){{events=[];}}
-      const good=events.filter(e=>e.kind==='good');
-      const bad=events.filter(e=>e.kind==='bad');
+      const good=(feedback.events||[]).filter(e=>e.kind==='good');
+      const bad=(feedback.events||[]).filter(e=>e.kind==='bad');
       const el=document.getElementById('learn-summary');
-      if(!el) return;
+      if(!el)return;
       if(!good.length){{
         el.textContent='Обучение: подтверждённых рабочих пока нет · отбраковано '+bad.length;
         return;
       }}
-      const ports={{}}, sources={{}}, domains={{}};
+      const ports={{}},sources={{}},domains={{}};
       good.forEach(e=>{{
         ports[e.port]=(ports[e.port]||0)+1;
         sources[e.source]=(sources[e.source]||0)+1;
         domains[e.domain]=(domains[e.domain]||0)+1;
       }});
       const top=o=>Object.entries(o).sort((a,b)=>b[1]-a[1])[0];
-      const p=top(ports), s=top(sources), d=top(domains);
+      const p=top(ports),s=top(sources),d=top(domains);
       el.innerHTML='<b>Обучение:</b> рабочих '+good.length+' · плохих '+bad.length+
         (p?' · лучший порт '+p[0]:'')+
         (s?' · источник '+s[0]:'')+
         (d?' · семья '+d[0]:'');
     }}
+
     function updateSourceSummary(){{
-      const sources=[...new Set(Array.from(document.querySelectorAll('[data-proxy-id]')).map(c=>c.dataset.source||''))];
-      const rows=sources.map(src=>{{const s=getStat('source',src);return [src,s.good||0,s.bad||0];}})
-        .filter(r=>r[1]+r[2]>0)
-        .sort((a,b)=>(b[2]-b[1])-(a[2]-a[1]));
+      const rows=[];
+      for(const [key,stat] of Object.entries(feedback.stats||{{}})){{
+        if(!key.startsWith('source:'))continue;
+        rows.push([key.slice(7),stat.good||0,stat.bad||0]);
+      }}
+      rows.sort((a,b)=>(b[1]-b[2])-(a[1]-a[2]));
       const el=document.getElementById('source-summary');
-      if(!el) return;
+      if(!el)return;
       if(!rows.length){{el.textContent='Статистика по источникам появится после первых оценок.';return;}}
       el.innerHTML='<b>Локально по источникам:</b> '+rows.map(r=>r[0]+': ✅ '+r[1]+' / ❌ '+r[2]).join(' · ');
     }}
+
     function renderBatch(){{
-      const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
-      all.forEach(c=>c.style.display='none');
-      const eligible=eligibleCards();
-      if(!eligible.length){{
+      const reserveBox=document.getElementById('working-reserve');
+      if(reserveBox){{reserveBox.style.display='none';reserveBox.innerHTML='';}}
+      allCards.forEach(c=>c.style.display='none');
+      const selected=selectBatch(candidates,feedback,BATCH_SIZE,Date.now());
+      if(!selected.length){{
+        const status=poolStatus(candidates,feedback,GENERATED_AT,Date.now());
+        const next=new Date(status.nextRefreshAt).toLocaleTimeString('ru-RU',{{hour:'2-digit',minute:'2-digit'}});
         const pr=document.getElementById('progress');
-        if(pr) pr.textContent='Все загруженные прокси отбракованы. Ждём новый пул.';
+        if(pr)pr.textContent='Все кандидаты этого пула проверены · отбраковано '+status.rejected+' · Следующее автообновление около '+next;
+        updateLearnSummary();
+        updateSourceSummary();
         return;
       }}
-      if(batchStart>=eligible.length) batchStart=0;
-      eligible.slice(batchStart,batchStart+BATCH_SIZE).forEach(c=>{{
+      const ids=new Set(selected.map(x=>x.id));
+      allCards.filter(c=>ids.has(c.dataset.proxyId)).forEach(c=>{{
         c.style.display='block';
-        paint(c.dataset.proxyId,localStorage.getItem('proxy-rating-'+c.dataset.proxyId)||'');
+        paint(c.dataset.proxyId,latestKind(c.dataset.proxyId));
       }});
-      localStorage.setItem('proxy-batch-start',String(batchStart));
-      const badCount=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='bad').length;
-      const goodCount=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='good').length;
-      const shown=Math.min(BATCH_SIZE,Math.max(0,eligible.length-batchStart));
-      const batchNo=Math.floor(batchStart/BATCH_SIZE)+1;
-      const totalBatches=Math.max(1,Math.ceil(eligible.length/BATCH_SIZE));
+      const badIds=new Set((feedback.events||[]).filter(e=>e.kind==='bad').map(e=>e.id));
+      const goodIds=new Set((feedback.events||[]).filter(e=>e.kind==='good').map(e=>e.id));
       const pr=document.getElementById('progress');
-      if(pr) pr.textContent='Пачка '+batchNo+' из '+totalBatches+' · сейчас '+shown+' · отбраковано '+badCount+' · рабочих '+goodCount;
+      if(pr)pr.textContent='Сейчас '+selected.length+' · отбраковано '+badIds.size+' · рабочих '+goodIds.size+' · 8 лучших + 2 новых';
       updateLearnSummary();
       updateSourceSummary();
     }}
+
     function rejectCurrentBatch(){{
-      const visible=Array.from(document.querySelectorAll('[data-proxy-id]')).filter(c=>c.style.display!=='none');
-      if(!visible.length) return;
-      visible.forEach(c=>{{
-        const id=c.dataset.proxyId;
-        const prev=localStorage.getItem('proxy-rating-'+id);
-        // Никогда не перезаписываем уже подтверждённый рабочий прокси.
-        if(prev==='good') return;
-        if(prev!=='bad') bumpCardStats(c,'bad');
-        localStorage.setItem('proxy-rating-'+id,'bad');
-      }});
-      const eligible=eligibleCards();
-      if(!eligible.length){{
-        renderBatch();
-        return;
+      const visible=allCards.filter(c=>c.style.display!=='none');
+      const ids=visible.map(c=>c.dataset.proxyId);
+      feedback=rejectBatch(feedback,candidates,ids,new Date().toISOString());
+      for(const id of ids){{
+        if(latestKind(id)==='bad') localStorage.setItem('proxy-rating-'+id,'bad');
       }}
-      if(batchStart>=eligible.length) batchStart=0;
+      saveFeedback(localStorage,feedback);
       renderBatch();
       window.scrollTo({{top:0,behavior:'smooth'}});
     }}
-    function showWorking(){{
-      const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
-      all.forEach(c=>c.style.display='none');
-      const goods=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='good');
-      if(!goods.length){{alert('Пока ни один прокси не отмечен рабочим.');renderBatch();return;}}
-      goods.forEach(c=>{{c.style.display='block';paint(c.dataset.proxyId,'good');}});
+
+    function ageLabel(item){{
+      if(item.ageBand==='today')return 'сегодня';
+      if(item.ageBand==='yesterday')return 'вчера';
+      if(item.ageBand==='recent'){{
+        const days=Math.max(2,Math.floor((Date.now()-Date.parse(item.lastGoodAt))/86400000));
+        return days+' дн. назад';
+      }}
+      return 'давно';
     }}
+
+    function showWorking(){{
+      allCards.forEach(c=>c.style.display='none');
+      const box=document.getElementById('working-reserve');
+      const catalog=Object.fromEntries(candidates.map(x=>[x.id,x]));
+      const reserve=workingReserve(feedback,catalog,Date.now());
+      if(!box)return;
+      if(!reserve.length){{
+        box.style.display='block';
+        box.innerHTML='<div class="card"><b>Пока нет подтверждённых рабочих прокси.</b></div>';
+        return;
+      }}
+      box.style.display='block';
+      box.innerHTML=reserve.map(item=>{{
+        const q=new URLSearchParams({{server:item.server,port:item.port,secret:item.secret||''}});
+        const link='tg://proxy?'+q.toString();
+        return '<div class="card" data-working-reserve-row>'+
+          '<div class="top"><div class="num">⭐</div><div class="host">'+item.server+':'+item.port+'</div><span class="status">✓ '+item.goodCount+'×</span></div>'+
+          '<div class="meta">'+item.source+' · работал: '+ageLabel(item)+'</div>'+
+          '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" data-confirm-id="'+item.id+'">✅ Подтвердить</button></div>'+
+          '</div>';
+      }}).join('');
+      box.querySelectorAll('[data-confirm-id]').forEach(btn=>{{
+        btn.addEventListener('click',()=>confirmWorking(btn.dataset.confirmId));
+      }});
+    }}
+
+    function confirmWorking(id){{
+      const candidate=candidates.find(x=>x.id===id);
+      if(!candidate)return;
+      feedback=recordFeedback(feedback,candidate,'good',new Date().toISOString());
+      saveFeedback(localStorage,feedback);
+      localStorage.setItem('proxy-rating-'+id,'good');
+      showWorking();
+    }}
+
+    window.markWorking=markWorking;
+    window.rejectCurrentBatch=rejectCurrentBatch;
+    window.showWorking=showWorking;
+    window.confirmWorking=confirmWorking;
     renderBatch();
     </script></body></html>'''
     Path("index.html").write_text(page,encoding="utf-8")

@@ -367,9 +367,12 @@ def main():
         return '<div class="card" data-working-reserve-row>'+
           '<div class="top"><div class="num">⭐</div><div class="host">'+item.server+':'+item.port+'</div><span class="status">✓ '+item.goodCount+'×</span></div>'+
           '<div class="meta">'+item.source+' · работал: '+ageLabel(item)+'</div>'+
-          '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" onclick="confirmWorking(\''+item.id+'\')">✅ Подтвердить</button></div>'+
+          '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" data-confirm-id="'+item.id+'">✅ Подтвердить</button></div>'+
           '</div>';
       }}).join('');
+      box.querySelectorAll('[data-confirm-id]').forEach(btn=>{{
+        btn.addEventListener('click',()=>confirmWorking(btn.dataset.confirmId));
+      }});
     }}
 
     function confirmWorking(id){{

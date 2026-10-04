@@ -150,31 +150,59 @@ def main():
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
         cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}">
-        <div class="top"><b>Прокси {i}</b><span id="status-{x}" class="status"></span></div>
-        <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
-        <div class="meta">тип {typ} · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="top">
+          <div class="num">#{i}</div>
+          <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
+          <span id="status-{x}" class="status"></span>
+        </div>
+        <div class="meta">{typ.upper()} · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
-        <a class="btn open" href="{html.escape(p["tg"],quote=True)}">Открыть в Telegram</a>
-        <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
-        </div></div>''')
+          <a class="btn open" href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
+          <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
+        </div>
+        </div>''')
     if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
 
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>MTProto прокси</title><style>
-    body{{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:22px;background:#f5f5f5;color:#222}}
-    h1{{margin-bottom:8px}} .lead{{color:#555;line-height:1.45}}
-    .card{{background:white;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #0001}}
-    .top{{display:flex;justify-content:space-between}} .host{{margin-top:6px;font-weight:700}} .meta{{font-size:13px;color:#666;margin-top:5px}}
-    .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
-    .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
-    </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Страница работает автономно, даже когда Telegram не подключается. Источники теперь только усиленные: российский практический список, два списка с реальным MTProto-handshake и два RU-ориентированных verified/resilience-источника. Проверяй десятку: если никто не заработал — одним нажатием отправляй её в брак.</div>
+    <title>MTProto — быстрый перебор</title><style>
+    *{{box-sizing:border-box}}
+    body{{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:16px 16px 120px;background:#f3f5f7;color:#202124}}
+    h1{{font-size:26px;margin:4px 0 6px}}
+    .lead{{color:#5f6368;line-height:1.45;font-size:14px;margin-bottom:12px}}
+    .progress{{background:#fff;border-radius:12px;padding:11px 13px;margin:12px 0;font-weight:700;box-shadow:0 1px 6px #0001}}
+    .card{{background:#fff;border-radius:14px;padding:13px 14px;margin:10px 0;box-shadow:0 2px 10px #0001}}
+    .top{{display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center}}
+    .num{{font-weight:800;color:#777}}
+    .host{{font-weight:800;overflow-wrap:anywhere}}
+    .status{{font-size:12px;font-weight:800;white-space:nowrap}}
+    .meta{{font-size:12px;color:#777;margin:6px 0 0 52px;overflow-wrap:anywhere}}
+    .actions{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}}
+    .btn{{border:0;border-radius:10px;padding:12px 10px;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;text-align:center;font-size:14px}}
+    .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}}
+    .controls{{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;padding:10px 12px 12px;z-index:20;box-shadow:0 -4px 18px #0002}}
+    .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:8px}}
+    .sendhint{{font-size:12px;color:#666;margin-top:8px;line-height:1.35}}
+    .sourcebox{{font-size:12px;color:#666;background:#fff;border-radius:12px;padding:10px 12px;margin-top:12px;line-height:1.4}}
+    @media(max-width:520px){{
+      body{{padding:12px 10px 125px}}
+      h1{{font-size:22px}}
+      .actions{{grid-template-columns:1fr 1fr}}
+      .meta{{margin-left:0}}
+      .top{{grid-template-columns:36px 1fr auto}}
+      .controls-inner{{grid-template-columns:1fr}}
+    }}
+    </style></head><body>
+    <h1>MTProto — быстрый перебор</h1>
+    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов. Проверяй только кнопку «▶ Проверить». Если вся десятка мёртвая — одним нажатием отправляем её в брак. Если один заработал — нажми «✅ Работает» только на нём.</div>
+    <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
-    <div class="sendbox">
-      <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
-      <button class="btn sendall" onclick="showWorking()">⭐ Показать рабочие</button>
-      <div class="sendhint">Если ни один не заработал — один раз нажми «Вся десятка не работает». Если какой-то заработал — нажми только «✅ Работает» напротив него.</div>
-      <div class="sendhint" id="source-summary"></div>
+    <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
+    <div class="controls">
+      <div class="controls-inner">
+        <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
+        <button class="btn working" onclick="showWorking()">⭐ Рабочие</button>
+      </div>
+      <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Всё запоминается на этом устройстве.</div>
     </div>
     <script>
     let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
@@ -226,13 +254,24 @@ def main():
       const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
       all.forEach(c=>c.style.display='none');
       const eligible=eligibleCards();
-      if(!eligible.length){{alert('Все загруженные прокси отмечены нерабочими. Нужен новый пул.');return;}}
+      if(!eligible.length){{
+        const pr=document.getElementById('progress');
+        if(pr) pr.textContent='Все загруженные прокси отбракованы. Ждём новый пул.';
+        return;
+      }}
       if(batchStart>=eligible.length) batchStart=0;
       eligible.slice(batchStart,batchStart+BATCH_SIZE).forEach(c=>{{
         c.style.display='block';
         paint(c.dataset.proxyId,localStorage.getItem('proxy-rating-'+c.dataset.proxyId)||'');
       }});
       localStorage.setItem('proxy-batch-start',String(batchStart));
+      const badCount=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='bad').length;
+      const goodCount=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='good').length;
+      const shown=Math.min(BATCH_SIZE,Math.max(0,eligible.length-batchStart));
+      const batchNo=Math.floor(batchStart/BATCH_SIZE)+1;
+      const totalBatches=Math.max(1,Math.ceil(eligible.length/BATCH_SIZE));
+      const pr=document.getElementById('progress');
+      if(pr) pr.textContent='Пачка '+batchNo+' из '+totalBatches+' · сейчас '+shown+' · отбраковано '+badCount+' · рабочих '+goodCount;
       updateSourceSummary();
     }}
     function rejectCurrentBatch(){{

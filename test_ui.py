@@ -20,3 +20,8 @@ print("UI control layout OK")
 assert 'id="working-reserve"' in html, "working reserve container must exist"
 assert 'data-working-reserve' in html, "working reserve rows need a stable hook"
 print("working reserve UI hooks OK")
+
+
+assert 'Все кандидаты этого пула проверены' in html, "stable exhausted-pool copy must exist"
+assert 'Следующее автообновление' in html, "exhausted state must show next refresh guidance"
+print("exhausted pool UI copy OK")

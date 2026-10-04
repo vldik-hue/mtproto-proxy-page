@@ -15,3 +15,8 @@ assert controls.count('class="btn ') == 3, "bottom panel must have exactly three
 assert 'class="btn refresh"' not in html.replace(controls, ""), "refresh control must live inside controls-inner"
 
 print("UI control layout OK")
+
+
+assert 'id="working-reserve"' in html, "working reserve container must exist"
+assert 'data-working-reserve' in html, "working reserve rows need a stable hook"
+print("working reserve UI hooks OK")

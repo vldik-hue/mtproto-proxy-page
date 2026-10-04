@@ -204,3 +204,25 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
   );
   return out;
 }
+
+
+export function poolStatus(candidates, feedbackState, generatedAt, nowMs = Date.now()) {
+  const latestById = new Map();
+  for (const event of feedbackState?.events ?? []) {
+    if (!latestById.has(event.id)) latestById.set(event.id, event.kind);
+  }
+  let rejected = 0;
+  let eligible = 0;
+  for (const candidate of candidates) {
+    if (latestById.get(candidate.id) === "bad") rejected += 1;
+    else eligible += 1;
+  }
+  const generatedMs = Date.parse(generatedAt);
+  const nextRefreshAt = new Date((Number.isFinite(generatedMs) ? generatedMs : nowMs) + 2 * 60 * 60 * 1000).toISOString();
+  return {
+    eligible,
+    rejected,
+    nextRefreshAt,
+    exhausted: candidates.length > 0 && eligible === 0,
+  };
+}

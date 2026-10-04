@@ -179,9 +179,9 @@ def main():
     .meta{{font-size:10px;color:#777;margin:3px 0 0 35px;overflow-wrap:anywhere;line-height:1.15}}
     .actions{{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px}}
     .btn{{border:0;border-radius:8px;padding:8px 7px;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;text-align:center;font-size:12px;line-height:1.1}}
-    .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}} .refresh{{background:#555;display:block;max-width:760px;margin:6px auto 0}}
+    .open{{background:#229ed9}} .good{{background:#2e9d53}} .badbatch{{background:#c64747}} .working{{background:#6b55c9}} .refresh{{background:#555;display:flex;align-items:center;justify-content:center}}
     .controls{{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #ddd;padding:7px 9px 8px;z-index:20;box-shadow:0 -3px 12px #0002}}
-    .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:2fr 1fr;gap:5px}}
+    .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}}
     .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
     .sourcebox{{font-size:10px;color:#666;background:#fff;border-radius:10px;padding:7px 8px;margin-top:8px;line-height:1.2}}
     @media(max-width:520px){{
@@ -190,7 +190,7 @@ def main():
       .actions{{grid-template-columns:1fr 1fr}}
       .meta{{margin-left:0;font-size:9px}}
       .top{{grid-template-columns:28px 1fr auto}}
-      .controls-inner{{grid-template-columns:1fr}}
+      .controls-inner{{grid-template-columns:repeat(3,1fr)}}
     }}
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
@@ -201,10 +201,10 @@ def main():
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
     <div class="controls">
       <div class="controls-inner">
-        <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
+        <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ 10 не работают</button>
         <button class="btn working" onclick="showWorking()">⭐ Рабочие</button>
+        <a class="btn refresh" href="https://github.com/vldik-hue/mtproto-proxy-page/actions/workflows/update-page.yml" target="_blank" rel="noopener">🔄 Новый пул</a>
       </div>
-      <a class="btn refresh" href="https://github.com/vldik-hue/mtproto-proxy-page/actions/workflows/update-page.yml" target="_blank" rel="noopener">🔄 Новый пул сейчас</a>
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script>

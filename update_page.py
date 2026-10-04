@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-COUNT=10
+COUNT=50
 TIMEOUT=3.0
 UA="Mozilla/5.0 MTProtoProxyPage/5.0"
 
@@ -160,38 +160,56 @@ def main():
     .actions{{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}} .btn{{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}}
     .open{{background:#229ed9}} .good{{background:#2e9d53}} .bad{{background:#c64747}} .status{{font-size:12px;font-weight:700}}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: {now}<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ только отмечают результат на странице. После проверки нажми «Отправить результаты» — вся текущая пачка уйдёт боту одной отправкой.</div>
+    <div class="lead">Обновлено: {now}<br>Страница теперь работает автономно, даже когда Telegram не подключается. Загружаем до 50 кандидатов. Отмечай ✅/❌ прямо здесь, а кнопкой «Следующие 10» переходи к новой десятке. Нерабочие запоминаются в браузере и больше не показываются.</div>
     {''.join(cards)}
     <div class="sendbox">
-      <button class="btn sendall" onclick="sendResults()">📤 Отправить результаты</button>
-      <div class="sendhint">Сначала отметь прокси кнопками ✅/❌, потом один раз отправь весь результат.</div>
+      <button class="btn sendall" onclick="nextBatch()">➡️ Следующие 10</button>
+      <button class="btn sendall" onclick="showWorking()">⭐ Показать рабочие</button>
+      <div class="sendhint">Связь с ботом для перебора больше не нужна. Результаты хранятся на этом устройстве.</div>
     </div>
     <script>
-    const BATCH_ID="{batch_id}";
+    let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
+    const BATCH_SIZE=10;
     function rateLocal(id,v){{
-      localStorage.setItem('proxy-rating-'+id,v);paint(id,v);
-    }}
-    function sendResults(){{
-      let goodMask=0,badMask=0,count=0;
-      document.querySelectorAll('[data-proxy-id]').forEach(c=>{{
-        const id=c.dataset.proxyId, idx=parseInt(c.dataset.index||'0',10);
-        const v=localStorage.getItem('proxy-rating-'+id);
-        if(v==='good'){{goodMask|=(1<<idx);count++;}}
-        if(v==='bad'){{badMask|=(1<<idx);count++;}}
-      }});
-      if(!count){{alert('Сначала отметь хотя бы один прокси.');return;}}
-      const payload='report_'+BATCH_ID+'_'+goodMask.toString(16)+'_'+badMask.toString(16);
-      window.location.href='https://t.me/my_mtproxy_helper_bot?start='+payload;
+      localStorage.setItem('proxy-rating-'+id,v);
+      renderBatch();
     }}
     function paint(id,v){{
       let e=document.getElementById('status-'+id);if(!e)return;
-      e.textContent=v==='good'?'✓ рабочий':'✕ нерабочий';
-      e.style.color=v==='good'?'#2e9d53':'#c64747';
+      e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
+      e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
     }}
-    document.querySelectorAll('[data-proxy-id]').forEach(c=>{{
-      let id=c.dataset.proxyId,v=localStorage.getItem('proxy-rating-'+id);
-      if(v){{paint(id,v); if(v==='bad') c.style.opacity='.45';}}
-    }})
+    function eligibleCards(){{
+      return Array.from(document.querySelectorAll('[data-proxy-id]')).filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)!=='bad');
+    }}
+    function renderBatch(){{
+      const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
+      all.forEach(c=>c.style.display='none');
+      const eligible=eligibleCards();
+      if(!eligible.length){{alert('Все загруженные прокси отмечены нерабочими. Нужен новый пул.');return;}}
+      if(batchStart>=eligible.length) batchStart=0;
+      eligible.slice(batchStart,batchStart+BATCH_SIZE).forEach(c=>{{
+        c.style.display='block';
+        paint(c.dataset.proxyId,localStorage.getItem('proxy-rating-'+c.dataset.proxyId)||'');
+      }});
+      localStorage.setItem('proxy-batch-start',String(batchStart));
+    }}
+    function nextBatch(){{
+      const eligible=eligibleCards();
+      if(!eligible.length) return;
+      batchStart += BATCH_SIZE;
+      if(batchStart>=eligible.length) batchStart=0;
+      renderBatch();
+      window.scrollTo({{top:0,behavior:'smooth'}});
+    }}
+    function showWorking(){{
+      const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
+      all.forEach(c=>c.style.display='none');
+      const goods=all.filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)==='good');
+      if(!goods.length){{alert('Пока ни один прокси не отмечен рабочим.');renderBatch();return;}}
+      goods.forEach(c=>{{c.style.display='block';paint(c.dataset.proxyId,'good');}});
+    }}
+    renderBatch();
     </script></body></html>'''
     Path("index.html").write_text(page,encoding="utf-8")
 

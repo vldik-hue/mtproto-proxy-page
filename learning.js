@@ -190,6 +190,7 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
       server: catalog.server ?? latestGood.server ?? "",
       port: String(catalog.port ?? latestGood.port ?? ""),
       source: catalog.source ?? latestGood.source ?? "",
+      secret: catalog.secret ?? latestGood.secret ?? "",
       lastGoodAt: latestGood.at,
       goodCount: goodEvents.length,
       ageBand: ageBandFor(latestGood.at, nowMs),

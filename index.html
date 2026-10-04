@@ -1,120 +1,56 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Свежие MTProto прокси</title>
-  <style>
-    body{font-family:Arial,sans-serif;max-width:720px;margin:0 auto;padding:24px;background:#f5f5f5;color:#222}
-    h1{font-size:28px;margin-bottom:8px}
-    .meta{color:#666;margin-bottom:8px}
-    .rule{font-size:13px;color:#555;margin-bottom:20px;line-height:1.45}
-    .card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-    .warning{line-height:1.5}
-    .topline{display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .code{font-size:12px;color:#777;font-weight:400}
-    .small{font-size:14px;color:#666;margin-top:5px}
-    .quality{font-size:13px;margin-top:7px}
-    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-    .btn{border:0;display:inline-block;padding:11px 14px;border-radius:10px;color:#fff;text-decoration:none;font-weight:700;font-size:14px;cursor:pointer}
-    .connect{background:#229ed9} .good{background:#2e9d53} .bad{background:#c64747}
-    .vote-status{font-size:12px;font-weight:700;white-space:nowrap}
-    .saved-good{color:#2e9d53} .saved-bad{color:#c64747}
-    .note{font-size:13px;color:#666;margin-top:20px;line-height:1.4}
-  </style>
-</head>
-<body>
-  <h1>Свежие MTProto-прокси</h1>
-  <div class="meta">Обновлено: 04.10.2026 12:50 UTC+3</div>
-  <div class="rule">Показываются только кандидаты, прошедшие строгий фильтр: FakeTLS · порт 443 · handshake_ok · проверка доступности из RU · uptime ≥ 60% · двойная проверка перед публикацией.</div>
-  
-        <div class="card" data-proxy-id="edb1212a">
-          <div class="topline">
-            <div><b>Прокси 1</b> <span class="code">#edb1212a</span></div>
-            <div class="vote-status" id="status-edb1212a"></div>
-          </div>
-          <div class="small">t.meow-meow-fast.site:443</div>
-          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 49 мс</div>
-          <div class="actions">
-            <a class="btn connect" href="tg://proxy?server=t.meow-meow-fast.site&amp;port=443&amp;secret=eeaea279c83d92a4c4fa8a780bf10b8c4b742e6d656f772d6d656f772d666173742e73697465">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('edb1212a','good')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('edb1212a','bad')">❌ Не работает</button>
-          </div>
-        </div>
-        
-        <div class="card" data-proxy-id="0b0955bb">
-          <div class="topline">
-            <div><b>Прокси 2</b> <span class="code">#0b0955bb</span></div>
-            <div class="vote-status" id="status-0b0955bb"></div>
-          </div>
-          <div class="small">143.246.57.51:443</div>
-          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 52 мс</div>
-          <div class="actions">
-            <a class="btn connect" href="tg://proxy?server=143.246.57.51&amp;port=443&amp;secret=eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('0b0955bb','good')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('0b0955bb','bad')">❌ Не работает</button>
-          </div>
-        </div>
-        
-        <div class="card" data-proxy-id="5fa76c7f">
-          <div class="topline">
-            <div><b>Прокси 3</b> <span class="code">#5fa76c7f</span></div>
-            <div class="vote-status" id="status-5fa76c7f"></div>
-          </div>
-          <div class="small">95.170.13.27:443</div>
-          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 116 мс</div>
-          <div class="actions">
-            <a class="btn connect" href="tg://proxy?server=95.170.13.27&amp;port=443&amp;secret=ee4df606d31cf1e4b98716ab6cdaa6255e626973636f7474692e79656b74616e65742e636f6d">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('5fa76c7f','good')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('5fa76c7f','bad')">❌ Не работает</button>
-          </div>
-        </div>
-        
-        <div class="card" data-proxy-id="fa7a592a">
-          <div class="topline">
-            <div><b>Прокси 4</b> <span class="code">#fa7a592a</span></div>
-            <div class="vote-status" id="status-fa7a592a"></div>
-          </div>
-          <div class="small">134.209.88.105:443</div>
-          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 103 мс</div>
-          <div class="actions">
-            <a class="btn connect" href="tg://proxy?server=134.209.88.105&amp;port=443&amp;secret=eec80ff604fa45408f1d152624d3bffcf26b65746161626f6e6c696e652e636f6d">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('fa7a592a','good')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('fa7a592a','bad')">❌ Не работает</button>
-          </div>
-        </div>
-        
-        <div class="card" data-proxy-id="f27672f2">
-          <div class="topline">
-            <div><b>Прокси 5</b> <span class="code">#f27672f2</span></div>
-            <div class="vote-status" id="status-f27672f2"></div>
-          </div>
-          <div class="small">edge.ehtemal.info:443</div>
-          <div class="quality">RU ✓ · handshake ✓ · uptime 100% · повторный ping 160 мс</div>
-          <div class="actions">
-            <a class="btn connect" href="tg://proxy?server=edge.ehtemal.info&amp;port=443&amp;secret=ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d">Открыть в Telegram</a>
-            <button class="btn good" onclick="rateProxy('f27672f2','good')">✅ Работает</button>
-            <button class="btn bad" onclick="rateProxy('f27672f2','bad')">❌ Не работает</button>
-          </div>
-        </div>
-        
-  <div class="note">Если строгих вариантов меньше пяти, страница покажет меньше пяти. Лучше 1–2 сильных кандидата, чем пять формально доступных, но бесполезных.</div>
-<script>
-function keyFor(id) { return 'proxy-rating-' + id; }
-function paint(id,value) {
-  const el=document.getElementById('status-'+id); if(!el)return;
-  if(value==='good'){el.textContent='✓ отмечен рабочим';el.className='vote-status saved-good';}
-  else if(value==='bad'){el.textContent='✕ отмечен нерабочим';el.className='vote-status saved-bad';}
-}
-function rateProxy(id,value) {
-  localStorage.setItem(keyFor(id),JSON.stringify({proxy_id:id,result:value,saved_at:new Date().toISOString()}));
-  paint(id,value);
-}
-document.querySelectorAll('[data-proxy-id]').forEach(card=>{
-  const id=card.dataset.proxyId;
-  try{const raw=localStorage.getItem(keyFor(id));if(raw){paint(id,JSON.parse(raw).result);}}catch(e){}
-});
-</script>
-<!-- force-pages-rebuild-2026-10-04 -->
-</body>
-</html>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MTProto прокси</title><style>
+    body{font-family:Arial,sans-serif;max-width:720px;margin:auto;padding:24px;background:#f5f5f5;color:#222}
+    .card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #0001}
+    .top{display:flex;justify-content:space-between} .small{color:#666;margin-top:5px} .quality{font-size:13px;margin-top:6px}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px} .btn{border:0;border-radius:10px;padding:11px 14px;color:white;font-weight:700;text-decoration:none}
+    .open{background:#229ed9} .good{background:#2e9d53} .bad{background:#c64747} .status{font-size:12px;font-weight:700}
+    </style></head><body>
+    <h1>Свежие MTProto-прокси</h1><div>Обновлено: 04.10.2026 18:13 UTC+3</div>
+    <p>Приоритет: подтверждённые у тебя → RU/handshake/uptime → резерв. Разрешены и dd, и ee. Повторы разрешены.</p>
+    <div class="card" data-proxy-id="edb1212a">
+        <div class="top"><b>Прокси 1</b><span id="status-edb1212a" class="status"></span></div>
+        <div class="small">t.meow-meow-fast.site:443 · 56 мс</div>
+        <div class="quality">RU-проверка</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=t.meow-meow-fast.site&amp;port=443&amp;secret=eeaea279c83d92a4c4fa8a780bf10b8c4b742e6d656f772d6d656f772d666173742e73697465">Открыть в Telegram</a>
+        <button class="btn good" onclick="rate('edb1212a','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rate('edb1212a','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="0b0955bb">
+        <div class="top"><b>Прокси 2</b><span id="status-0b0955bb" class="status"></span></div>
+        <div class="small">143.246.57.51:443 · 60 мс</div>
+        <div class="quality">RU-проверка</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=143.246.57.51&amp;port=443&amp;secret=eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d">Открыть в Telegram</a>
+        <button class="btn good" onclick="rate('0b0955bb','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rate('0b0955bb','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="80050a03">
+        <div class="top"><b>Прокси 3</b><span id="status-80050a03" class="status"></span></div>
+        <div class="small">31.57.108.82:443 · 84 мс</div>
+        <div class="quality">RU-проверка</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=31.57.108.82&amp;port=443&amp;secret=ee9a6c795e4161815cd4f24cfc8033b5de6d2e6265626f6f2e7275">Открыть в Telegram</a>
+        <button class="btn good" onclick="rate('80050a03','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rate('80050a03','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="56ae4192">
+        <div class="top"><b>Прокси 4</b><span id="status-56ae4192" class="status"></span></div>
+        <div class="small">genuismind.info:443 · 135 мс</div>
+        <div class="quality">RU-проверка</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=genuismind.info&amp;port=443&amp;secret=ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d">Открыть в Telegram</a>
+        <button class="btn good" onclick="rate('56ae4192','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rate('56ae4192','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="df90ad87">
+        <div class="top"><b>Прокси 5</b><span id="status-df90ad87" class="status"></span></div>
+        <div class="small">kharazmi-abo-reyhan-bironi-va-dakheli.basalam.info:443 · 1760 мс</div>
+        <div class="quality">RU-проверка</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=kharazmi-abo-reyhan-bironi-va-dakheli.basalam.info&amp;port=443&amp;secret=ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d">Открыть в Telegram</a>
+        <button class="btn good" onclick="rate('df90ad87','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rate('df90ad87','bad')">❌ Не работает</button>
+        </div></div>
+    <script>
+    function rate(id,v){localStorage.setItem('proxy-rating-'+id,v);paint(id,v)}
+    function paint(id,v){let e=document.getElementById('status-'+id);if(!e)return;e.textContent=v==='good'?'✓ рабочий':'✕ нерабочий';e.style.color=v==='good'?'#2e9d53':'#c64747'}
+    document.querySelectorAll('[data-proxy-id]').forEach(c=>{let id=c.dataset.proxyId,v=localStorage.getItem('proxy-rating-'+id);if(v)paint(id,v)})
+    </script></body></html>

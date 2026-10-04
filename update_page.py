@@ -140,7 +140,7 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}">
         <div class="top"><b>Прокси {i}</b><span id="status-{x}" class="status"></span></div>
         <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
         <div class="meta">тип {typ} · {p["ms"]} мс · {html.escape(p["source"])}</div>
@@ -165,11 +165,15 @@ def main():
       <button class="btn badbatch" onclick="rejectCurrentBatch()">❌ Вся десятка не работает</button>
       <button class="btn sendall" onclick="showWorking()">⭐ Показать рабочие</button>
       <div class="sendhint">Если ни один не заработал — один раз нажми «Вся десятка не работает». Если какой-то заработал — нажми только «✅ Работает» напротив него.</div>
+      <div class="sendhint" id="source-summary"></div>
     </div>
     <script>
     let batchStart=parseInt(localStorage.getItem('proxy-batch-start')||'0',10);
     const BATCH_SIZE=10;
     function markWorking(id){{
+      const card=document.querySelector('[data-proxy-id="'+id+'"]');
+      const prev=localStorage.getItem('proxy-rating-'+id);
+      if(prev!=='good' && card) bumpSource(card.dataset.source||'','good');
       localStorage.setItem('proxy-rating-'+id,'good');
       paint(id,'good');
     }}
@@ -178,8 +182,36 @@ def main():
       e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
       e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
     }}
+    function sourceKey(source){{return 'proxy-source-stats-'+source;}}
+    function getSourceStats(source){{
+      try{{return JSON.parse(localStorage.getItem(sourceKey(source))||'{"good":0,"bad":0}');}}
+      catch(e){{return {{good:0,bad:0}};}}
+    }}
+    function bumpSource(source,kind){{
+      const s=getSourceStats(source);
+      s[kind]=(s[kind]||0)+1;
+      localStorage.setItem(sourceKey(source),JSON.stringify(s));
+    }}
+    function sourceScore(card){{
+      const s=getSourceStats(card.dataset.source||'');
+      const total=(s.good||0)+(s.bad||0);
+      if(!total) return 0;
+      return ((s.good||0)-(s.bad||0))/total;
+    }}
     function eligibleCards(){{
-      return Array.from(document.querySelectorAll('[data-proxy-id]')).filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)!=='bad');
+      return Array.from(document.querySelectorAll('[data-proxy-id]'))
+        .filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)!=='bad')
+        .sort((a,b)=>sourceScore(b)-sourceScore(a));
+    }}
+    function updateSourceSummary(){{
+      const sources=[...new Set(Array.from(document.querySelectorAll('[data-proxy-id]')).map(c=>c.dataset.source||''))];
+      const rows=sources.map(src=>{{const s=getSourceStats(src);return [src,s.good||0,s.bad||0];}})
+        .filter(r=>r[1]+r[2]>0)
+        .sort((a,b)=>(b[2]-b[1])-(a[2]-a[1]));
+      const el=document.getElementById('source-summary');
+      if(!el) return;
+      if(!rows.length){{el.textContent='Статистика по источникам появится после первых оценок.';return;}}
+      el.innerHTML='<b>Локально по источникам:</b> '+rows.map(r=>r[0]+': ✅ '+r[1]+' / ❌ '+r[2]).join(' · ');
     }}
     function renderBatch(){{
       const all=Array.from(document.querySelectorAll('[data-proxy-id]'));
@@ -192,11 +224,17 @@ def main():
         paint(c.dataset.proxyId,localStorage.getItem('proxy-rating-'+c.dataset.proxyId)||'');
       }});
       localStorage.setItem('proxy-batch-start',String(batchStart));
+      updateSourceSummary();
     }}
     function rejectCurrentBatch(){{
       const visible=Array.from(document.querySelectorAll('[data-proxy-id]')).filter(c=>c.style.display!=='none');
       if(!visible.length) return;
-      visible.forEach(c=>localStorage.setItem('proxy-rating-'+c.dataset.proxyId,'bad'));
+      visible.forEach(c=>{{
+        const id=c.dataset.proxyId;
+        const prev=localStorage.getItem('proxy-rating-'+id);
+        if(prev!=='bad') bumpSource(c.dataset.source||'','bad');
+        localStorage.setItem('proxy-rating-'+id,'bad');
+      }});
       const eligible=eligibleCards();
       if(!eligible.length){{
         renderBatch();

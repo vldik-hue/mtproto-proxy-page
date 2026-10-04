@@ -3,6 +3,8 @@ import {
   recencyWeight,
   recordFeedback,
   selectBatch,
+  workingReserve,
+  rejectBatch,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -73,3 +75,31 @@ assert.equal(batch2[0].id, "c0", "exact confirmed good should rank first");
 assert.equal(batch2.filter(x => x.source !== "known-good").length, 2, "good exact match must not consume exploration slots");
 
 console.log("batch selection tests OK");
+
+
+let reserveState = { events: [], stats: {} };
+const working = {
+  id: "working-1",
+  server: "m.aysghfkzcxg.info",
+  port: "8443",
+  source: "dubblebyte handshake",
+  kind: "ee",
+  domain: "aysghfkzcxg.info",
+  secret: "good-secret",
+};
+const dead = { ...working, id: "dead-1", server: "dead.example", domain: "dead.example", secret: "dead-secret" };
+reserveState = recordFeedback(reserveState, working, "good", "2026-10-04T17:00:00Z");
+reserveState = rejectBatch(reserveState, [working, dead], ["working-1", "dead-1"], "2026-10-04T17:10:00Z");
+assert.equal((reserveState.events.find(e => e.id === "working-1") || {}).kind, "good", "batch reject must not overwrite a working proxy");
+assert.equal((reserveState.events.find(e => e.id === "dead-1") || {}).kind, "bad", "batch reject must mark unconfirmed proxy bad");
+
+reserveState = recordFeedback(reserveState, working, "good", "2026-10-04T17:30:00Z");
+const older = { ...working, id: "working-old", server: "old.example", domain: "old.example", secret: "old-secret" };
+reserveState = recordFeedback(reserveState, older, "good", "2026-09-24T17:00:00Z");
+
+const reserve = workingReserve(reserveState, {}, now);
+assert.equal(reserve[0].id, "working-1", "most recent working proxy should be first");
+assert.equal(reserve[0].goodCount, 2, "repeat confirmations must be counted");
+assert.equal(reserve.find(x => x.id === "working-old").ageBand, "stale", "working entries older than 7 days remain but are stale");
+
+console.log("working reserve tests OK");

@@ -7,11 +7,11 @@
     .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px} .btn{border:0;border-radius:10px;padding:11px 14px;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}
     .open{background:#229ed9} .good{background:#2e9d53} .bad{background:#c64747} .status{font-size:12px;font-weight:700}
     </style></head><body><h1>MTProto — тест разных источников</h1>
-    <div class="lead">Обновлено: 04.10.2026 18:41 UTC+3<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ не только отмечают результат в браузере, но и открывают готовую команду обратной связи в Telegram — её нужно отправить в группу «Прокси ми».</div>
+    <div class="lead">Обновлено: 04.10.2026 18:42 UTC+3<br>Теперь список специально смешивается из 5 независимых источников и разных доменных групп. Кнопки ✅/❌ теперь отправляют результат нашему Telegram-боту. При первом использовании Telegram может попросить нажать Start; дальше оценка попадёт в общую историю автоматически.</div>
     <div class="card" data-proxy-id="84cdedd3">
         <div class="top"><b>Прокси 1</b><span id="status-84cdedd3" class="status"></span></div>
         <div class="host">85.17.89.193:443</div>
-        <div class="meta">тип ee · 84 мс · tgmtproxy hourly</div>
+        <div class="meta">тип ee · 118 мс · tgmtproxy hourly</div>
         <div class="actions">
         <a class="btn open" href="tg://proxy?server=85.17.89.193&amp;port=443&amp;secret=ee76f6583e6b509d946c56287a9ca59dc362726f7773696e672e79616e6465782e636f6d">Открыть в Telegram</a>
         <button class="btn good" onclick="rateAndSend('84cdedd3','good')">✅ Работает</button>
@@ -19,81 +19,80 @@
         </div></div><div class="card" data-proxy-id="26f037b6">
         <div class="top"><b>Прокси 2</b><span id="status-26f037b6" class="status"></span></div>
         <div class="host">208.87.242.223:8443</div>
-        <div class="meta">тип ee · 55 мс · shablin 4h</div>
+        <div class="meta">тип ee · 40 мс · shablin 4h</div>
         <div class="actions">
         <a class="btn open" href="tg://proxy?server=208.87.242.223&amp;port=8443&amp;secret=EERighJJvXrFGRMCIMjdCQ">Открыть в Telegram</a>
         <button class="btn good" onclick="rateAndSend('26f037b6','good')">✅ Работает</button>
         <button class="btn bad" onclick="rateAndSend('26f037b6','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="8c198642">
-        <div class="top"><b>Прокси 3</b><span id="status-8c198642" class="status"></span></div>
-        <div class="host">gole-sorati.golabkashan.info:8443</div>
-        <div class="meta">тип other · 48 мс · Grim 12h</div>
+        </div></div><div class="card" data-proxy-id="2b6994de">
+        <div class="top"><b>Прокси 3</b><span id="status-2b6994de" class="status"></span></div>
+        <div class="host">ir.flipme.info:8443</div>
+        <div class="meta">тип ee · 84 мс · Grim 12h</div>
         <div class="actions">
-        <a class="btn open" href="tg://proxy?server=gole-sorati.golabkashan.info&amp;port=8443&amp;secret=1603010200010001fc030386e24c3add">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('8c198642','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('8c198642','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="bb17f87b">
-        <div class="top"><b>Прокси 4</b><span id="status-bb17f87b" class="status"></span></div>
-        <div class="host">zenon.flashspder.info:8443</div>
-        <div class="meta">тип other · 86 мс · aviamasters RU</div>
+        <a class="btn open" href="tg://proxy?server=ir.flipme.info&amp;port=8443&amp;secret=EERighJJvXrFGRMCIMjdCQ">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('2b6994de','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('2b6994de','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="666eb2d7">
+        <div class="top"><b>Прокси 4</b><span id="status-666eb2d7" class="status"></span></div>
+        <div class="host">rond-hamrahaval.ebimarh.info:8443</div>
+        <div class="meta">тип other · 122 мс · aviamasters RU</div>
         <div class="actions">
-        <a class="btn open" href="tg://proxy?server=zenon.flashspder.info&amp;port=8443&amp;secret=1603010200010001fc030386e24c3add">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('bb17f87b','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('bb17f87b','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="edb1212a">
-        <div class="top"><b>Прокси 5</b><span id="status-edb1212a" class="status"></span></div>
-        <div class="host">t.meow-meow-fast.site:443</div>
-        <div class="meta">тип ee · 38 мс · zakky RU</div>
-        <div class="actions">
-        <a class="btn open" href="tg://proxy?server=t.meow-meow-fast.site&amp;port=443&amp;secret=eeaea279c83d92a4c4fa8a780bf10b8c4b742e6d656f772d6d656f772d666173742e73697465">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('edb1212a','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('edb1212a','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="17c3917c">
-        <div class="top"><b>Прокси 6</b><span id="status-17c3917c" class="status"></span></div>
-        <div class="host">87.248.129.106:8443</div>
-        <div class="meta">тип ee · 84 мс · tgmtproxy hourly</div>
-        <div class="actions">
-        <a class="btn open" href="tg://proxy?server=87.248.129.106&amp;port=8443&amp;secret=ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('17c3917c','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('17c3917c','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="b270da91">
-        <div class="top"><b>Прокси 7</b><span id="status-b270da91" class="status"></span></div>
-        <div class="host">31.58.87.179:443</div>
-        <div class="meta">тип ee · 68 мс · shablin 4h</div>
-        <div class="actions">
-        <a class="btn open" href="tg://proxy?server=31.58.87.179&amp;port=443&amp;secret=ee44bba5fdde571acf4dd7ffe839c20f5b6d2e6265626f6f2e7275">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('b270da91','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('b270da91','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="b7b35f4d">
-        <div class="top"><b>Прокси 8</b><span id="status-b7b35f4d" class="status"></span></div>
-        <div class="host">vizhzhzhzhzh.bypased.info:8443</div>
-        <div class="meta">тип other · 58 мс · Grim 12h</div>
-        <div class="actions">
-        <a class="btn open" href="tg://proxy?server=vizhzhzhzhzh.bypased.info&amp;port=8443&amp;secret=1603010200010001fc030386e24c3add">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('b7b35f4d','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('b7b35f4d','bad')">❌ Не работает</button>
-        </div></div><div class="card" data-proxy-id="ed08a83f">
-        <div class="top"><b>Прокси 9</b><span id="status-ed08a83f" class="status"></span></div>
-        <div class="host">176.65.135.69:443</div>
-        <div class="meta">тип other · 86 мс · aviamasters RU</div>
-        <div class="actions">
-        <a class="btn open" href="tg://proxy?server=176.65.135.69&amp;port=443&amp;secret=3XnnAQIAAQAH8AMDhuJMOt0">Открыть в Telegram</a>
-        <button class="btn good" onclick="rateAndSend('ed08a83f','good')">✅ Работает</button>
-        <button class="btn bad" onclick="rateAndSend('ed08a83f','bad')">❌ Не работает</button>
+        <a class="btn open" href="tg://proxy?server=rond-hamrahaval.ebimarh.info&amp;port=8443&amp;secret=1603010200010001fc030386e24c3add">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('666eb2d7','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('666eb2d7','bad')">❌ Не работает</button>
         </div></div><div class="card" data-proxy-id="0b0955bb">
-        <div class="top"><b>Прокси 10</b><span id="status-0b0955bb" class="status"></span></div>
+        <div class="top"><b>Прокси 5</b><span id="status-0b0955bb" class="status"></span></div>
         <div class="host">143.246.57.51:443</div>
-        <div class="meta">тип ee · 61 мс · zakky RU</div>
+        <div class="meta">тип ee · 34 мс · zakky RU</div>
         <div class="actions">
         <a class="btn open" href="tg://proxy?server=143.246.57.51&amp;port=443&amp;secret=eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d">Открыть в Telegram</a>
         <button class="btn good" onclick="rateAndSend('0b0955bb','good')">✅ Работает</button>
         <button class="btn bad" onclick="rateAndSend('0b0955bb','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="d0b7e0a0">
+        <div class="top"><b>Прокси 6</b><span id="status-d0b7e0a0" class="status"></span></div>
+        <div class="host">89.124.95.185:8443</div>
+        <div class="meta">тип ee · 118 мс · tgmtproxy hourly</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=89.124.95.185&amp;port=8443&amp;secret=ee6403877430086085167456439119957338392e3132342e39352e313835">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('d0b7e0a0','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('d0b7e0a0','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="b270da91">
+        <div class="top"><b>Прокси 7</b><span id="status-b270da91" class="status"></span></div>
+        <div class="host">31.58.87.179:443</div>
+        <div class="meta">тип ee · 44 мс · shablin 4h</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=31.58.87.179&amp;port=443&amp;secret=ee44bba5fdde571acf4dd7ffe839c20f5b6d2e6265626f6f2e7275">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('b270da91','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('b270da91','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="16dc7049">
+        <div class="top"><b>Прокси 8</b><span id="status-16dc7049" class="status"></span></div>
+        <div class="host">85.133.236.147:2096</div>
+        <div class="meta">тип other · 123 мс · Grim 12h</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=85.133.236.147&amp;port=2096&amp;secret=ameuTC0XO0FodFQ1yzE6OQQ1yzE60Q">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('16dc7049','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('16dc7049','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="c208bb9c">
+        <div class="top"><b>Прокси 9</b><span id="status-c208bb9c" class="status"></span></div>
+        <div class="host">92.246.87.243:443</div>
+        <div class="meta">тип other · 124 мс · aviamasters RU</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=92.246.87.243&amp;port=443&amp;secret=3XnnAQIAAQAH8AMDhuJMOt0">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('c208bb9c','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('c208bb9c','bad')">❌ Не работает</button>
+        </div></div><div class="card" data-proxy-id="2d091dba">
+        <div class="top"><b>Прокси 10</b><span id="status-2d091dba" class="status"></span></div>
+        <div class="host">95.182.91.199:443</div>
+        <div class="meta">тип ee · 46 мс · zakky RU</div>
+        <div class="actions">
+        <a class="btn open" href="tg://proxy?server=95.182.91.199&amp;port=443&amp;secret=ee197f462f1b8d59a053ea0a90fe6cd66073352e646967696b616c612e636f6d">Открыть в Telegram</a>
+        <button class="btn good" onclick="rateAndSend('2d091dba','good')">✅ Работает</button>
+        <button class="btn bad" onclick="rateAndSend('2d091dba','bad')">❌ Не работает</button>
         </div></div>
     <script>
     function rateAndSend(id,v){
       localStorage.setItem('proxy-rating-'+id,v);paint(id,v);
-      const cmd='/proxy_'+v+' '+id;
-      window.location.href='https://t.me/share/url?url=&text='+encodeURIComponent(cmd);
+      window.location.href='https://t.me/my_mtproxy_helper_bot?start='+v+'_'+id;
     }
     function paint(id,v){
       let e=document.getElementById('status-'+id);if(!e)return;

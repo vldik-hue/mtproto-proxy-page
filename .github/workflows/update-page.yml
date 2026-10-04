@@ -25,10 +25,10 @@ jobs:
 
       - name: Commit fresh page
         run: |
-          if git status --porcelain index.html | grep -q .; then
+          if git status --porcelain index.html proxy_catalog.json | grep -q .; then
             git config user.name "mtproto-proxy-page"
             git config user.email "actions@users.noreply.github.com"
-            git add index.html
+            git add index.html proxy_catalog.json
             git commit -m "Update fresh proxies"
             git push
           else

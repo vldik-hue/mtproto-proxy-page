@@ -150,7 +150,7 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}">
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
@@ -194,9 +194,10 @@ def main():
     }}
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
-    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: источник, порт и тип рабочего прокси получают больший вес и похожие варианты поднимаются выше.</div>
+    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: запоминает конкретный прокси, секрет, доменную семью, источник, порт и тип. Похожие на рабочие варианты поднимаются выше, похожие на плохие — опускаются.</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
+    <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
     <div class="controls">
       <div class="controls-inner">
@@ -227,29 +228,74 @@ def main():
       catch(e){{return {{good:0,bad:0}};}}
     }}
     function bumpStat(group,value,kind){{
+      if(!value) return;
       const s=getStat(group,value);
       s[kind]=(s[kind]||0)+1;
       localStorage.setItem(statKey(group,value),JSON.stringify(s));
+    }}
+    function rememberEvent(card,kind){{
+      let events=[];
+      try{{events=JSON.parse(localStorage.getItem('proxy-feedback-events')||'[]');}}catch(e){{events=[];}}
+      events.unshift({{
+        at:new Date().toISOString(), kind,
+        id:card.dataset.proxyId||'', server:card.dataset.server||'',
+        port:card.dataset.port||'', source:card.dataset.source||'',
+        domain:card.dataset.domain||'', secret:card.dataset.secret||''
+      }});
+      localStorage.setItem('proxy-feedback-events',JSON.stringify(events.slice(0,500)));
     }}
     function bumpCardStats(card,kind){{
       bumpStat('source',card.dataset.source||'',kind);
       bumpStat('port',card.dataset.port||'',kind);
       bumpStat('kind',card.dataset.kind||'',kind);
+      bumpStat('domain',card.dataset.domain||'',kind);
+      bumpStat('secret',card.dataset.secret||'',kind);
+      rememberEvent(card,kind);
     }}
     function oneScore(group,value){{
       const s=getStat(group,value), total=(s.good||0)+(s.bad||0);
       if(!total) return 0;
-      return ((s.good||0)*3-(s.bad||0))/total;
+      return ((s.good||0)*4-(s.bad||0)*1.25)/Math.max(1,total);
     }}
     function sourceScore(card){{
-      return oneScore('source',card.dataset.source||'')*3
-           + oneScore('port',card.dataset.port||'')*2
-           + oneScore('kind',card.dataset.kind||'');
+      const rating=localStorage.getItem('proxy-rating-'+card.dataset.proxyId);
+      let score=0;
+      if(rating==='good') score+=1000;
+      score += oneScore('secret',card.dataset.secret||'')*8;
+      score += oneScore('domain',card.dataset.domain||'')*5;
+      score += oneScore('source',card.dataset.source||'')*4;
+      score += oneScore('port',card.dataset.port||'')*3;
+      score += oneScore('kind',card.dataset.kind||'')*2;
+      return score;
     }}
     function eligibleCards(){{
       return Array.from(document.querySelectorAll('[data-proxy-id]'))
         .filter(c=>localStorage.getItem('proxy-rating-'+c.dataset.proxyId)!=='bad')
         .sort((a,b)=>sourceScore(b)-sourceScore(a));
+    }}
+    function updateLearnSummary(){{
+      let events=[];
+      try{{events=JSON.parse(localStorage.getItem('proxy-feedback-events')||'[]');}}catch(e){{events=[];}}
+      const good=events.filter(e=>e.kind==='good');
+      const bad=events.filter(e=>e.kind==='bad');
+      const el=document.getElementById('learn-summary');
+      if(!el) return;
+      if(!good.length){{
+        el.textContent='Обучение: подтверждённых рабочих пока нет · отбраковано '+bad.length;
+        return;
+      }}
+      const ports={{}}, sources={{}}, domains={{}};
+      good.forEach(e=>{{
+        ports[e.port]=(ports[e.port]||0)+1;
+        sources[e.source]=(sources[e.source]||0)+1;
+        domains[e.domain]=(domains[e.domain]||0)+1;
+      }});
+      const top=o=>Object.entries(o).sort((a,b)=>b[1]-a[1])[0];
+      const p=top(ports), s=top(sources), d=top(domains);
+      el.innerHTML='<b>Обучение:</b> рабочих '+good.length+' · плохих '+bad.length+
+        (p?' · лучший порт '+p[0]:'')+
+        (s?' · источник '+s[0]:'')+
+        (d?' · семья '+d[0]:'');
     }}
     function updateSourceSummary(){{
       const sources=[...new Set(Array.from(document.querySelectorAll('[data-proxy-id]')).map(c=>c.dataset.source||''))];
@@ -283,6 +329,7 @@ def main():
       const totalBatches=Math.max(1,Math.ceil(eligible.length/BATCH_SIZE));
       const pr=document.getElementById('progress');
       if(pr) pr.textContent='Пачка '+batchNo+' из '+totalBatches+' · сейчас '+shown+' · отбраковано '+badCount+' · рабочих '+goodCount;
+      updateLearnSummary();
       updateSourceSummary();
     }}
     function rejectCurrentBatch(){{

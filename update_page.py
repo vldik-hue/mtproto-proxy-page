@@ -221,7 +221,7 @@ def main():
     }}
     function sourceKey(source){{return 'proxy-source-stats-'+source;}}
     function getSourceStats(source){{
-      try{{return JSON.parse(localStorage.getItem(sourceKey(source))||'{"good":0,"bad":0}');}}
+      try{{return JSON.parse(localStorage.getItem(sourceKey(source))||'{{"good":0,"bad":0}}');}}
       catch(e){{return {{good:0,bad:0}};}}
     }}
     function bumpSource(source,kind){{

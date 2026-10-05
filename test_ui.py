@@ -56,3 +56,8 @@ print("SOCKS5 diagnostic UI constraints OK")
 assert 'buildProxyLink(item)' in html, "working reserve must build transport-specific reconnect links"
 assert "item.protocol.toUpperCase()" in html, "working reserve must show protocol label"
 print("transport-aware working reserve UI OK")
+
+
+assert 'id="diagnostic-summary"' in html, "transport diagnostic summary must exist"
+assert 'SOCKS5 не прошёл контрольный тест' in html, "failed SOCKS5 diagnostic guidance must be wired into UI"
+print("diagnostic decision UI OK")

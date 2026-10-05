@@ -186,6 +186,10 @@ def main():
     .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}}
     .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
     .sourcebox{{font-size:10px;color:#666;background:#fff;border-radius:10px;padding:7px 8px;margin-top:8px;line-height:1.2}}
+    .transport-tabs{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}}
+    .transport-tab{{border:0;border-radius:9px;padding:9px 5px;background:#e4e7eb;color:#3c4043;font-weight:800;font-size:12px;cursor:pointer}}
+    .transport-tab.active{{background:#229ed9;color:#fff}}
+    .transport-tab:disabled{{opacity:.55;cursor:not-allowed}}
     @media(max-width:520px){{
       body{{padding:8px 7px 105px}}
       h1{{font-size:18px}}
@@ -196,7 +200,12 @@ def main():
     }}
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
-    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: запоминает конкретный прокси, секрет, доменную семью, источник, порт и тип. Похожие на рабочие варианты поднимаются выше, похожие на плохие — опускаются.</div>
+    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов. Внешняя проверка MTProto означает только, что TCP-порт доступен; реальную работу Telegram подтверждаешь ты кнопкой «✅ Работает».</div>
+    <div class="transport-tabs">
+      <button class="transport-tab" data-transport="mtproto">MTProto</button>
+      <button class="transport-tab" data-transport="socks5">SOCKS5</button>
+      <button class="transport-tab" data-transport="web" disabled>WEB · скоро</button>
+    </div>
     <div class="progress" id="progress-summary">Открыто 0 · Работает 0 · Осталось 0</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
@@ -212,7 +221,7 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport }} from './learning.js';
 
     const BATCH_SIZE=10;
     const GENERATED_AT='{generated_iso}';
@@ -229,18 +238,34 @@ def main():
     }}));
     let feedback=loadFeedback(localStorage);
     let interaction=loadInteractionState(localStorage);
+    let currentTransport=activeTransport(localStorage);
+    if(currentTransport==='web') currentTransport='mtproto';
 
-    function latestKind(id){{
-      const e=(feedback.events||[]).find(x=>x.id===id);
+    function latestKind(id,protocol=currentTransport){{
+      const e=(feedback.events||[]).find(x=>x.id===id && (x.protocol||'mtproto')===protocol);
       return e?e.kind:'';
+    }}
+
+    function scopedCandidates(){{
+      return candidatesForTransport(candidates,currentTransport);
+    }}
+
+    function scopedCards(){{
+      return allCards.filter(c=>(c.dataset.protocol||'mtproto')===currentTransport);
+    }}
+
+    function paintTabs(){{
+      document.querySelectorAll('[data-transport]').forEach(btn=>{{
+        btn.classList.toggle('active',btn.dataset.transport===currentTransport);
+      }});
     }}
 
     let migrated=false;
     for(const card of allCards){{
       const id=card.dataset.proxyId;
       const legacy=localStorage.getItem('proxy-rating-'+id);
-      if((legacy==='good'||legacy==='bad') && !latestKind(id)){{
-        const candidate=candidates.find(x=>x.id===id);
+      if((legacy==='good'||legacy==='bad') && !latestKind(id,'mtproto')){{
+        const candidate=scopedCandidates().find(x=>x.id===id);
         if(candidate){{
           feedback=recordFeedback(feedback,candidate,legacy,new Date().toISOString());
           migrated=true;
@@ -264,12 +289,12 @@ def main():
       const protocol=card.dataset.protocol||'mtproto';
       interaction=markAttempted(interaction,id,protocol,new Date().toISOString());
       saveInteractionState(localStorage,interaction);
-      paint(id,latestKind(id));
+      paint(id,latestKind(id,protocol));
       updateProgressSummary();
     }}
 
     function updateProgressSummary(){{
-      const p=transportProgress(candidates,feedback,interaction,'mtproto');
+      const p=transportProgress(candidates,feedback,interaction,currentTransport);
       const el=document.getElementById('progress-summary');
       if(el)el.textContent='Открыто '+p.attempted+' · Работает '+p.working+' · Осталось '+p.remaining;
     }}
@@ -277,7 +302,7 @@ def main():
     function markWorking(id){{
       const candidate=candidates.find(x=>x.id===id);
       if(!candidate)return;
-      if(latestKind(id)!=='good'){{
+      if(latestKind(id,candidate.protocol||'mtproto')!=='good'){{
         feedback=recordFeedback(feedback,candidate,'good',new Date().toISOString());
         saveFeedback(localStorage,feedback);
       }}
@@ -287,8 +312,8 @@ def main():
     }}
 
     function updateLearnSummary(){{
-      const good=(feedback.events||[]).filter(e=>e.kind==='good');
-      const bad=(feedback.events||[]).filter(e=>e.kind==='bad');
+      const good=(feedback.events||[]).filter(e=>e.kind==='good' && (e.protocol||'mtproto')===currentTransport);
+      const bad=(feedback.events||[]).filter(e=>e.kind==='bad' && (e.protocol||'mtproto')===currentTransport);
       const el=document.getElementById('learn-summary');
       if(!el)return;
       if(!good.length){{
@@ -326,9 +351,11 @@ def main():
       const reserveBox=document.getElementById('working-reserve');
       if(reserveBox){{reserveBox.style.display='none';reserveBox.innerHTML='';}}
       allCards.forEach(c=>c.style.display='none');
-      const selected=selectBatch(candidates,feedback,BATCH_SIZE,Date.now());
+      paintTabs();
+      const scoped=scopedCandidates();
+      const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now());
       if(!selected.length){{
-        const status=poolStatus(candidates,feedback,GENERATED_AT,Date.now());
+        const status=poolStatus(scoped,feedback,GENERATED_AT,Date.now());
         const next=new Date(status.nextRefreshAt).toLocaleTimeString('ru-RU',{{hour:'2-digit',minute:'2-digit'}});
         const pr=document.getElementById('progress');
         if(pr)pr.textContent='Все кандидаты этого пула проверены · отбраковано '+status.rejected+' · Следующее автообновление около '+next;
@@ -337,12 +364,12 @@ def main():
         return;
       }}
       const ids=new Set(selected.map(x=>x.id));
-      allCards.filter(c=>ids.has(c.dataset.proxyId)).forEach(c=>{{
+      scopedCards().filter(c=>ids.has(c.dataset.proxyId)).forEach(c=>{{
         c.style.display='block';
-        paint(c.dataset.proxyId,latestKind(c.dataset.proxyId));
+        paint(c.dataset.proxyId,latestKind(c.dataset.proxyId,currentTransport));
       }});
-      const badIds=new Set((feedback.events||[]).filter(e=>e.kind==='bad').map(e=>e.id));
-      const goodIds=new Set((feedback.events||[]).filter(e=>e.kind==='good').map(e=>e.id));
+      const badIds=new Set((feedback.events||[]).filter(e=>e.kind==='bad' && (e.protocol||'mtproto')===currentTransport).map(e=>e.id));
+      const goodIds=new Set((feedback.events||[]).filter(e=>e.kind==='good' && (e.protocol||'mtproto')===currentTransport).map(e=>e.id));
       const pr=document.getElementById('progress');
       if(pr)pr.textContent='Сейчас '+selected.length+' · отбраковано '+badIds.size+' · рабочих '+goodIds.size+' · 8 лучших + 2 новых';
       updateLearnSummary();
@@ -351,11 +378,11 @@ def main():
     }}
 
     function rejectCurrentBatch(){{
-      const visible=allCards.filter(c=>c.style.display!=='none');
+      const visible=scopedCards().filter(c=>c.style.display!=='none');
       const ids=visible.map(c=>c.dataset.proxyId);
-      feedback=rejectBatch(feedback,candidates,ids,new Date().toISOString());
+      feedback=rejectBatch(feedback,scopedCandidates(),ids,new Date().toISOString());
       for(const id of ids){{
-        if(latestKind(id)==='bad') localStorage.setItem('proxy-rating-'+id,'bad');
+        if(latestKind(id,currentTransport)==='bad' && currentTransport==='mtproto') localStorage.setItem('proxy-rating-'+id,'bad');
       }}
       saveFeedback(localStorage,feedback);
       renderBatch();
@@ -375,8 +402,9 @@ def main():
     function showWorking(){{
       allCards.forEach(c=>c.style.display='none');
       const box=document.getElementById('working-reserve');
-      const catalog=Object.fromEntries(candidates.map(x=>[x.id,x]));
-      const reserve=workingReserve(feedback,catalog,Date.now());
+      const scoped=scopedCandidates();
+      const catalog=Object.fromEntries(scoped.map(x=>[x.id,x]));
+      const reserve=workingReserve(feedback,catalog,Date.now(),currentTransport);
       if(!box)return;
       if(!reserve.length){{
         box.style.display='block';
@@ -406,6 +434,14 @@ def main():
       localStorage.setItem('proxy-rating-'+id,'good');
       showWorking();
     }}
+
+    document.querySelectorAll('[data-transport]:not([disabled])').forEach(btn=>{{
+      btn.addEventListener('click',()=>{{
+        currentTransport=btn.dataset.transport;
+        setActiveTransport(localStorage,currentTransport);
+        renderBatch();
+      }});
+    }});
 
     document.querySelectorAll('[data-attempt-link]').forEach(link=>{{
       link.addEventListener('click',()=>{{

@@ -435,7 +435,7 @@ def main():
       allCards.forEach(c=>c.style.display='none');
       paintTabs();
       const scoped=scopedCandidates();
-      const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now());
+      const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now(),interaction,currentTransport);
       if(!selected.length){{
         if(currentTransport==='socks5' && socksEmpty)socksEmpty.style.display='block';
         const status=poolStatus(scoped,feedback,GENERATED_AT,Date.now());

@@ -30,6 +30,9 @@ SOURCES=[
     ("zakky RU resilient","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
 ]
 PREFERRED_PORTS={443,853,8443,9443,2053,2083,2096,25565}
+SOCKS5_COUNT=10
+SOCKS5_VERIFY_LIMIT=160
+SOCKS5_SOURCE=("ProxyScrape live","https://raw.githubusercontent.com/proxyscrape/free-proxy-list/main/proxies/protocols/socks5/data.txt")
 
 def get(url,timeout=25):
     req=urllib.request.Request(url,headers={"User-Agent":UA,"Cache-Control":"no-cache"})
@@ -52,6 +55,24 @@ def parse(text,source):
             if not p:continue
             k=(p["server"].lower(),p["port"],p["secret"])
             if k not in seen:seen.add(k);out.append(p)
+        except Exception:pass
+    return out
+
+def parse_socks5(text,source):
+    out=[];seen=set()
+    for raw in text.splitlines():
+        line=raw.strip()
+        if not line:continue
+        if not line.lower().startswith("socks5://"):line="socks5://"+line
+        try:
+            u=urllib.parse.urlsplit(line)
+            host=(u.hostname or "").strip().rstrip(".");port=int(u.port or 0)
+            if not host or not (1<=port<=65535):continue
+            user=urllib.parse.unquote(u.username or "");password=urllib.parse.unquote(u.password or "")
+            k=(host.lower(),port,user,password)
+            if k in seen:continue
+            seen.add(k)
+            out.append({"protocol":"socks5","server":host,"port":port,"user":user,"pass":password,"source":source})
         except Exception:pass
     return out
 
@@ -79,6 +100,26 @@ def check(p):
         except Exception:return p,None
         if n==0:time.sleep(.35)
     return p,round(sum(vals)/len(vals))
+
+def verify_socks5():
+    label,url=SOCKS5_SOURCE
+    try:candidates=parse_socks5(get(url),label)[:SOCKS5_VERIFY_LIMIT]
+    except Exception as e:
+        print("SOCKS5 source failed",e);return []
+    passed=[]
+    with ThreadPoolExecutor(max_workers=24) as ex:
+        fs=[ex.submit(check,p) for p in candidates]
+        for f in as_completed(fs):
+            p,ms=f.result()
+            if ms is not None:
+                q=dict(p);q["ms"]=ms;passed.append(q)
+    passed.sort(key=lambda x:x["ms"])
+    chosen=[];servers=set()
+    for p in passed:
+        if p["server"].lower() in servers:continue
+        chosen.append(p);servers.add(p["server"].lower())
+        if len(chosen)>=SOCKS5_COUNT:break
+    return chosen
 
 def verify(b):
     items=[p for arr in b.values() for p in arr[:120]]
@@ -121,10 +162,16 @@ def choose(by,count):
             if len(chosen)>=count:break
     return chosen
 
-def pid(p):return hashlib.sha256(f"{p['server']}|{p['port']}|{p['secret']}".encode()).hexdigest()[:8]
+def pid(p):
+    if p.get("protocol")=="socks5":
+        raw=f"socks5|{p['server']}|{p['port']}|{p.get('user','')}|{p.get('pass','')}"
+    else:
+        raw=f"{p['server']}|{p['port']}|{p['secret']}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:8]
 
 def main():
     chosen=choose(verify(collect()),COUNT)
+    socks5=verify_socks5()
 
     # Каталог нужен сборщику обратной связи: ID -> конкретный прокси.
     catalog_path=Path("proxy_catalog.json")
@@ -137,7 +184,13 @@ def main():
     for p in chosen:
         x=pid(p)
         catalog["proxies"][x]={
-            "server":p["server"],"port":p["port"],"secret":p["secret"],
+            "protocol":"mtproto","server":p["server"],"port":p["port"],"secret":p["secret"],
+            "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
+        }
+    for p in socks5:
+        x=pid(p)
+        catalog["proxies"][x]={
+            "protocol":"socks5","server":p["server"],"port":p["port"],"user":p.get("user",""),"pass":p.get("pass",""),
             "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
         }
     # Ограничиваем историю последними 500 ID.
@@ -151,19 +204,38 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}" data-protocol="mtproto">
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
           <span id="status-{x}" class="status"></span>
         </div>
-        <div class="meta">{typ.upper()} · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="meta">MTProto · {typ.upper()} · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
-          <a class="btn open" href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
+          <a class="btn open" data-attempt-link href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
         </div>
         </div>''')
-    if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
+    if not cards:cards=['<div class="card"><b>Сейчас кандидатов MTProto нет.</b></div>']
+    for i,p in enumerate(socks5,1):
+        x=pid(p)
+        qs={"server":p["server"],"port":p["port"]}
+        if p.get("user"):qs["user"]=p["user"]
+        if p.get("pass"):qs["pass"]=p["pass"]
+        link="tg://socks?"+urllib.parse.urlencode(qs)
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="socks5" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="" data-user="{html.escape(p.get("user",""),quote=True)}" data-pass="{html.escape(p.get("pass",""),quote=True)}" data-protocol="socks5">
+        <div class="top">
+          <div class="num">S{i}</div>
+          <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
+          <span id="status-{x}" class="status"></span>
+        </div>
+        <div class="meta">SOCKS5 · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="actions">
+          <a class="btn open" data-attempt-link href="{html.escape(link,quote=True)}">▶ Проверить</a>
+          <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
+        </div>
+        </div>''')
+    socks_empty='<div class="card" id="socks5-empty" data-empty-transport="socks5" style="display:none"><b>SOCKS5: нет диагностических кандидатов.</b> Источник обновится автоматически.</div>'
 
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>MTProto — быстрый перебор</title><style>
@@ -172,7 +244,8 @@ def main():
     h1{{font-size:20px;margin:2px 0 4px}}
     .lead{{color:#5f6368;line-height:1.3;font-size:12px;margin-bottom:8px}}
     .progress{{background:#fff;border-radius:10px;padding:7px 9px;margin:8px 0;font-weight:700;font-size:12px;box-shadow:0 1px 5px #0001}}
-    .card{{background:#fff;border-radius:10px;padding:8px 9px;margin:6px 0;box-shadow:0 1px 6px #0001}}
+    .card{{background:#fff;border-radius:10px;padding:8px 9px;margin:6px 0;box-shadow:0 1px 6px #0001;transition:background .15s,border-color .15s}}
+    .card.attempted{{background:#eef4f8;outline:1px solid #b9cfdd}}
     .top{{display:grid;grid-template-columns:30px 1fr auto;gap:5px;align-items:center}}
     .num{{font-weight:800;color:#777;font-size:12px}}
     .host{{font-weight:800;overflow-wrap:anywhere;font-size:13px;line-height:1.15}}
@@ -185,6 +258,10 @@ def main():
     .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}}
     .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
     .sourcebox{{font-size:10px;color:#666;background:#fff;border-radius:10px;padding:7px 8px;margin-top:8px;line-height:1.2}}
+    .transport-tabs{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}}
+    .transport-tab{{border:0;border-radius:9px;padding:9px 5px;background:#e4e7eb;color:#3c4043;font-weight:800;font-size:12px;cursor:pointer}}
+    .transport-tab.active{{background:#229ed9;color:#fff}}
+    .transport-tab:disabled{{opacity:.55;cursor:not-allowed}}
     @media(max-width:520px){{
       body{{padding:8px 7px 105px}}
       h1{{font-size:18px}}
@@ -195,9 +272,17 @@ def main():
     }}
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
-    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: запоминает конкретный прокси, секрет, доменную семью, источник, порт и тип. Похожие на рабочие варианты поднимаются выше, похожие на плохие — опускаются.</div>
+    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов. Внешняя проверка MTProto означает только, что TCP-порт доступен; реальную работу Telegram подтверждаешь ты кнопкой «✅ Работает».</div>
+    <div class="transport-tabs">
+      <button class="transport-tab" data-transport="mtproto">MTProto</button>
+      <button class="transport-tab" data-transport="socks5">SOCKS5</button>
+      <button class="transport-tab" data-transport="web" disabled>WEB · скоро</button>
+    </div>
+    <div class="progress" id="progress-summary">Открыто 0 · Работает 0 · Осталось 0</div>
+    <div class="sourcebox" id="diagnostic-summary">Диагностика транспорта ещё не начата.</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
+    {socks_empty}
     <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
     <div id="working-reserve" data-working-reserve style="display:none"></div>
@@ -210,10 +295,11 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport, buildProxyLink, diagnosticStatus }} from './learning.js';
 
     const BATCH_SIZE=10;
     const GENERATED_AT='{generated_iso}';
+    const SOCKS_FAILED_COPY='SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB.';
     const allCards=Array.from(document.querySelectorAll('[data-proxy-id]'));
     const candidates=allCards.map(card=>({{
       id:card.dataset.proxyId||'',
@@ -222,21 +308,41 @@ def main():
       source:card.dataset.source||'',
       domain:card.dataset.domain||'',
       secret:card.dataset.secret||'',
-      kind:card.dataset.kind||''
+      user:card.dataset.user||'',
+      pass:card.dataset.pass||'',
+      kind:card.dataset.kind||'',
+      protocol:card.dataset.protocol||'mtproto'
     }}));
     let feedback=loadFeedback(localStorage);
+    let interaction=loadInteractionState(localStorage);
+    let currentTransport=activeTransport(localStorage);
+    if(currentTransport==='web') currentTransport='mtproto';
 
-    function latestKind(id){{
-      const e=(feedback.events||[]).find(x=>x.id===id);
+    function latestKind(id,protocol=currentTransport){{
+      const e=(feedback.events||[]).find(x=>x.id===id && (x.protocol||'mtproto')===protocol);
       return e?e.kind:'';
+    }}
+
+    function scopedCandidates(){{
+      return candidatesForTransport(candidates,currentTransport);
+    }}
+
+    function scopedCards(){{
+      return allCards.filter(c=>(c.dataset.protocol||'mtproto')===currentTransport);
+    }}
+
+    function paintTabs(){{
+      document.querySelectorAll('[data-transport]').forEach(btn=>{{
+        btn.classList.toggle('active',btn.dataset.transport===currentTransport);
+      }});
     }}
 
     let migrated=false;
     for(const card of allCards){{
       const id=card.dataset.proxyId;
       const legacy=localStorage.getItem('proxy-rating-'+id);
-      if((legacy==='good'||legacy==='bad') && !latestKind(id)){{
-        const candidate=candidates.find(x=>x.id===id);
+      if((legacy==='good'||legacy==='bad') && !latestKind(id,'mtproto')){{
+        const candidate=scopedCandidates().find(x=>x.id===id);
         if(candidate){{
           feedback=recordFeedback(feedback,candidate,legacy,new Date().toISOString());
           migrated=true;
@@ -247,15 +353,36 @@ def main():
 
     function paint(id,v){{
       const e=document.getElementById('status-'+id);
-      if(!e)return;
-      e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
-      e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
+      const card=allCards.find(c=>c.dataset.proxyId===id);
+      if(!e||!card)return;
+      const attempted=isAttempted(interaction,id,card.dataset.protocol||'mtproto');
+      card.classList.toggle('attempted',attempted && v!=='good');
+      e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':attempted?'↗ Открыт':'';
+      e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':attempted?'#386a8a':'#666';
+    }}
+
+    function markAttemptFromLink(card){{
+      const id=card.dataset.proxyId;
+      const protocol=card.dataset.protocol||'mtproto';
+      interaction=markAttempted(interaction,id,protocol,new Date().toISOString());
+      saveInteractionState(localStorage,interaction);
+      paint(id,latestKind(id,protocol));
+      updateProgressSummary();
+    }}
+
+    function updateProgressSummary(){{
+      const p=transportProgress(candidates,feedback,interaction,currentTransport);
+      const el=document.getElementById('progress-summary');
+      if(el)el.textContent='Открыто '+p.attempted+' · Работает '+p.working+' · Осталось '+p.remaining;
+      const d=diagnosticStatus(currentTransport,p);
+      const diag=document.getElementById('diagnostic-summary');
+      if(diag)diag.textContent=(currentTransport==='socks5' && d.status==='failed')?SOCKS_FAILED_COPY:d.message;
     }}
 
     function markWorking(id){{
       const candidate=candidates.find(x=>x.id===id);
       if(!candidate)return;
-      if(latestKind(id)!=='good'){{
+      if(latestKind(id,candidate.protocol||'mtproto')!=='good'){{
         feedback=recordFeedback(feedback,candidate,'good',new Date().toISOString());
         saveFeedback(localStorage,feedback);
       }}
@@ -265,8 +392,8 @@ def main():
     }}
 
     function updateLearnSummary(){{
-      const good=(feedback.events||[]).filter(e=>e.kind==='good');
-      const bad=(feedback.events||[]).filter(e=>e.kind==='bad');
+      const good=(feedback.events||[]).filter(e=>e.kind==='good' && (e.protocol||'mtproto')===currentTransport);
+      const bad=(feedback.events||[]).filter(e=>e.kind==='bad' && (e.protocol||'mtproto')===currentTransport);
       const el=document.getElementById('learn-summary');
       if(!el)return;
       if(!good.length){{
@@ -303,10 +430,15 @@ def main():
     function renderBatch(){{
       const reserveBox=document.getElementById('working-reserve');
       if(reserveBox){{reserveBox.style.display='none';reserveBox.innerHTML='';}}
+      const socksEmpty=document.getElementById('socks5-empty');
+      if(socksEmpty)socksEmpty.style.display='none';
       allCards.forEach(c=>c.style.display='none');
-      const selected=selectBatch(candidates,feedback,BATCH_SIZE,Date.now());
+      paintTabs();
+      const scoped=scopedCandidates();
+      const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now(),interaction,currentTransport);
       if(!selected.length){{
-        const status=poolStatus(candidates,feedback,GENERATED_AT,Date.now());
+        if(currentTransport==='socks5' && socksEmpty)socksEmpty.style.display='block';
+        const status=poolStatus(scoped,feedback,GENERATED_AT,Date.now());
         const next=new Date(status.nextRefreshAt).toLocaleTimeString('ru-RU',{{hour:'2-digit',minute:'2-digit'}});
         const pr=document.getElementById('progress');
         if(pr)pr.textContent='Все кандидаты этого пула проверены · отбраковано '+status.rejected+' · Следующее автообновление около '+next;
@@ -315,24 +447,25 @@ def main():
         return;
       }}
       const ids=new Set(selected.map(x=>x.id));
-      allCards.filter(c=>ids.has(c.dataset.proxyId)).forEach(c=>{{
+      scopedCards().filter(c=>ids.has(c.dataset.proxyId)).forEach(c=>{{
         c.style.display='block';
-        paint(c.dataset.proxyId,latestKind(c.dataset.proxyId));
+        paint(c.dataset.proxyId,latestKind(c.dataset.proxyId,currentTransport));
       }});
-      const badIds=new Set((feedback.events||[]).filter(e=>e.kind==='bad').map(e=>e.id));
-      const goodIds=new Set((feedback.events||[]).filter(e=>e.kind==='good').map(e=>e.id));
+      const badIds=new Set((feedback.events||[]).filter(e=>e.kind==='bad' && (e.protocol||'mtproto')===currentTransport).map(e=>e.id));
+      const goodIds=new Set((feedback.events||[]).filter(e=>e.kind==='good' && (e.protocol||'mtproto')===currentTransport).map(e=>e.id));
       const pr=document.getElementById('progress');
       if(pr)pr.textContent='Сейчас '+selected.length+' · отбраковано '+badIds.size+' · рабочих '+goodIds.size+' · 8 лучших + 2 новых';
       updateLearnSummary();
       updateSourceSummary();
+      updateProgressSummary();
     }}
 
     function rejectCurrentBatch(){{
-      const visible=allCards.filter(c=>c.style.display!=='none');
+      const visible=scopedCards().filter(c=>c.style.display!=='none');
       const ids=visible.map(c=>c.dataset.proxyId);
-      feedback=rejectBatch(feedback,candidates,ids,new Date().toISOString());
+      feedback=rejectBatch(feedback,scopedCandidates(),ids,new Date().toISOString());
       for(const id of ids){{
-        if(latestKind(id)==='bad') localStorage.setItem('proxy-rating-'+id,'bad');
+        if(latestKind(id,currentTransport)==='bad' && currentTransport==='mtproto') localStorage.setItem('proxy-rating-'+id,'bad');
       }}
       saveFeedback(localStorage,feedback);
       renderBatch();
@@ -352,8 +485,9 @@ def main():
     function showWorking(){{
       allCards.forEach(c=>c.style.display='none');
       const box=document.getElementById('working-reserve');
-      const catalog=Object.fromEntries(candidates.map(x=>[x.id,x]));
-      const reserve=workingReserve(feedback,catalog,Date.now());
+      const scoped=scopedCandidates();
+      const catalog=Object.fromEntries(scoped.map(x=>[x.id,x]));
+      const reserve=workingReserve(feedback,catalog,Date.now(),currentTransport);
       if(!box)return;
       if(!reserve.length){{
         box.style.display='block';
@@ -362,11 +496,10 @@ def main():
       }}
       box.style.display='block';
       box.innerHTML=reserve.map(item=>{{
-        const q=new URLSearchParams({{server:item.server,port:item.port,secret:item.secret||''}});
-        const link='tg://proxy?'+q.toString();
+        const link=buildProxyLink(item);
         return '<div class="card" data-working-reserve-row>'+
           '<div class="top"><div class="num">⭐</div><div class="host">'+item.server+':'+item.port+'</div><span class="status">✓ '+item.goodCount+'×</span></div>'+
-          '<div class="meta">'+item.source+' · работал: '+ageLabel(item)+'</div>'+
+          '<div class="meta">'+item.protocol.toUpperCase()+' · '+item.source+' · работал: '+ageLabel(item)+'</div>'+
           '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" data-confirm-id="'+item.id+'">✅ Подтвердить</button></div>'+
           '</div>';
       }}).join('');
@@ -383,6 +516,21 @@ def main():
       localStorage.setItem('proxy-rating-'+id,'good');
       showWorking();
     }}
+
+    document.querySelectorAll('[data-transport]:not([disabled])').forEach(btn=>{{
+      btn.addEventListener('click',()=>{{
+        currentTransport=btn.dataset.transport;
+        setActiveTransport(localStorage,currentTransport);
+        renderBatch();
+      }});
+    }});
+
+    document.querySelectorAll('[data-attempt-link]').forEach(link=>{{
+      link.addEventListener('click',()=>{{
+        const card=link.closest('[data-proxy-id]');
+        if(card) markAttemptFromLink(card);
+      }});
+    }});
 
     window.markWorking=markWorking;
     window.rejectCurrentBatch=rejectCurrentBatch;

@@ -6,6 +6,16 @@ import {
   workingReserve,
   rejectBatch,
   poolStatus,
+  markAttempted,
+  isAttempted,
+  transportProgress,
+  loadInteractionState,
+  saveInteractionState,
+  activeTransport,
+  setActiveTransport,
+  candidatesForTransport,
+  buildProxyLink,
+  diagnosticStatus,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -122,3 +132,130 @@ assert.equal(status.nextRefreshAt, "2026-10-04T18:19:00.000Z", "next refresh sho
 assert.equal(selectBatch(poolCandidates, exhaustedState, 10, now).length, 0, "exhausted pool must not recycle rejected candidates");
 
 console.log("pool status tests OK");
+
+
+const memoryStorage = () => {
+  const m = new Map();
+  return {
+    getItem: k => m.has(k) ? m.get(k) : null,
+    setItem: (k, v) => m.set(k, String(v)),
+  };
+};
+
+let interaction = { attempted: {} };
+interaction = markAttempted(interaction, "abc123", "mtproto", "2026-10-05T16:00:00Z");
+interaction = markAttempted(interaction, "abc123", "mtproto", "2026-10-05T16:01:00Z");
+assert.equal(isAttempted(interaction, "abc123", "mtproto"), true, "attempt must persist by unique protocol+id");
+assert.equal(Object.keys(interaction.attempted).length, 1, "repeated taps must not create duplicate attempted IDs");
+
+const store = memoryStorage();
+saveInteractionState(store, interaction);
+const loadedInteraction = loadInteractionState(store);
+assert.equal(isAttempted(loadedInteraction, "abc123", "mtproto"), true, "attempted state must survive save/load");
+
+let workingState = { events: [], stats: {} };
+workingState = recordFeedback(workingState, { ...candidate, protocol: "mtproto" }, "good", "2026-10-05T16:02:00Z");
+const afterAttempt = markAttempted(loadedInteraction, "abc123", "mtproto", "2026-10-05T16:03:00Z");
+assert.equal((workingState.events.find(e => e.id === "abc123") || {}).kind, "good", "attempting must not change working feedback");
+
+const progressCandidates = [
+  { id: "abc123", protocol: "mtproto" },
+  { id: "fresh1", protocol: "mtproto" },
+  { id: "other1", protocol: "socks5" },
+];
+const progress = transportProgress(progressCandidates, workingState, afterAttempt, "mtproto");
+assert.deepEqual(progress, { attempted: 1, working: 1, remaining: 1 }, "progress counts must be unique and scoped");
+
+console.log("attempted state tests OK");
+
+
+const transportStore = memoryStorage();
+assert.equal(activeTransport(transportStore), "mtproto", "unknown/missing active transport must default to mtproto");
+setActiveTransport(transportStore, "socks5");
+assert.equal(activeTransport(transportStore), "socks5", "active transport must persist");
+transportStore.setItem("proxy-active-transport-v1", "nonsense");
+assert.equal(activeTransport(transportStore), "mtproto", "unknown protocol must fall back to mtproto");
+
+const mixedCandidates = [
+  { id: "m1", protocol: "mtproto" },
+  { id: "m2", protocol: "mtproto" },
+  { id: "s1", protocol: "socks5" },
+];
+assert.deepEqual(candidatesForTransport(mixedCandidates, "mtproto").map(x => x.id), ["m1", "m2"]);
+assert.deepEqual(candidatesForTransport(mixedCandidates, "socks5").map(x => x.id), ["s1"]);
+
+let isolatedInteraction = { attempted: {} };
+isolatedInteraction = markAttempted(isolatedInteraction, "m1", "mtproto", "2026-10-05T16:10:00Z");
+const mtProg = transportProgress(mixedCandidates, { events: [], stats: {} }, isolatedInteraction, "mtproto");
+const socksProg = transportProgress(mixedCandidates, { events: [], stats: {} }, isolatedInteraction, "socks5");
+assert.equal(mtProg.attempted, 1);
+assert.equal(socksProg.attempted, 0, "MTProto attempted state must not leak into SOCKS5");
+
+console.log("transport isolation tests OK");
+
+
+let protocolReserveState = { events: [], stats: {} };
+protocolReserveState = recordFeedback(protocolReserveState, { ...working, id: "mt-good", protocol: "mtproto" }, "good", "2026-10-05T16:20:00Z");
+protocolReserveState = recordFeedback(protocolReserveState, { ...working, id: "socks-good", protocol: "socks5" }, "good", "2026-10-05T16:21:00Z");
+assert.deepEqual(workingReserve(protocolReserveState, {}, now, "mtproto").map(x => x.id), ["mt-good"], "MTProto reserve must not include SOCKS5");
+assert.deepEqual(workingReserve(protocolReserveState, {}, now, "socks5").map(x => x.id), ["socks-good"], "SOCKS5 reserve must be isolated");
+
+console.log("transport reserve isolation tests OK");
+
+
+assert.equal(
+  buildProxyLink({ protocol:"mtproto", server:"example.com", port:443, secret:"abc def" }),
+  "tg://proxy?server=example.com&port=443&secret=abc+def",
+  "MTProto link must be built with encoded parameters"
+);
+assert.equal(
+  buildProxyLink({ protocol:"socks5", server:"1.2.3.4", port:1080 }),
+  "tg://socks?server=1.2.3.4&port=1080",
+  "SOCKS5 link without credentials must omit user/pass"
+);
+assert.equal(
+  buildProxyLink({ protocol:"socks5", server:"proxy.example", port:1080, user:"a b", pass:"p@ss&x" }),
+  "tg://socks?server=proxy.example&port=1080&user=a+b&pass=p%40ss%26x",
+  "SOCKS5 credentials must be URL encoded"
+);
+
+console.log("proxy link builder tests OK");
+
+
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 3, working: 1, remaining: 6 }),
+  { status: "success", message: "SOCKS5: найден рабочий вариант." }
+);
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 10, working: 0, remaining: 0 }),
+  { status: "failed", message: "SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB." }
+);
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 4, working: 0, remaining: 6 }),
+  { status: "testing", message: "SOCKS5: продолжаем контрольный тест." }
+);
+assert.equal(
+  diagnosticStatus("mtproto", { attempted: 228, working: 0, remaining: 0 }).status,
+  "failed",
+  "hundreds of failed MTProto attempts must not ask for more brute-force volume"
+);
+
+console.log("diagnostic decision tests OK");
+
+
+const attemptRankCandidates = Array.from({ length: 12 }, (_, i) => ({
+  id: "rank-" + i,
+  protocol: "mtproto",
+  source: "rank-source-" + i,
+  port: "443",
+  kind: "ee",
+  domain: "rank-" + i + ".example",
+  secret: "rank-secret-" + i,
+}));
+let attemptRankState = { attempted: {} };
+attemptRankState = markAttempted(attemptRankState, "rank-0", "mtproto", "2026-10-05T16:30:00Z");
+attemptRankState = markAttempted(attemptRankState, "rank-1", "mtproto", "2026-10-05T16:31:00Z");
+const attemptAwareBatch = selectBatch(attemptRankCandidates, { events: [], stats: {} }, 10, now, attemptRankState, "mtproto");
+assert.ok(!attemptAwareBatch.some(x => x.id === "rank-0" || x.id === "rank-1"), "unseen candidates must rank ahead of attempted unresolved candidates when enough unseen exist");
+
+console.log("attempt-aware ranking tests OK");

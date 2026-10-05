@@ -30,3 +30,34 @@ print("exhausted pool UI copy OK")
 assert "confirmWorking(''+item.id+'')" not in html, "generated reserve button quoting must not be malformed"
 assert 'data-confirm-id' in html, "reserve confirmation must use data attribute hook"
 print("working reserve confirm hook OK")
+
+
+assert 'data-attempt-link' in html, "primary proxy action must expose an attempt hook"
+assert '↗ Открыт' in html, "attempted badge copy must exist"
+assert '.attempted' in html, "attempted card styling must exist"
+assert 'Открыто ' in html and 'Работает ' in html and 'Осталось ' in html, "progress summary copy must exist"
+print("attempted/progress UI hooks OK")
+
+
+assert 'data-transport="mtproto"' in html, "MTProto tab must exist"
+assert 'data-transport="socks5"' in html, "SOCKS5 tab must exist"
+assert 'data-transport="web"' in html, "WEB tab must exist"
+assert 'WEB · скоро' in html, "WEB tab must be visibly disabled/pending"
+print("transport tabs UI hooks OK")
+
+
+socks_count = len(re.findall(r'data-protocol="socks5"', html))
+assert socks_count <= 10, f"SOCKS5 diagnostic pool must be capped at 10, got {socks_count}"
+assert ('tg://socks?' in html) or ('SOCKS5: нет диагностических кандидатов' in html), "SOCKS5 mode must provide candidates or explicit empty state"
+assert 'TCP доступен' in html, "external reachability must be labeled as TCP only"
+print("SOCKS5 diagnostic UI constraints OK")
+
+
+assert 'buildProxyLink(item)' in html, "working reserve must build transport-specific reconnect links"
+assert "item.protocol.toUpperCase()" in html, "working reserve must show protocol label"
+print("transport-aware working reserve UI OK")
+
+
+assert 'id="diagnostic-summary"' in html, "transport diagnostic summary must exist"
+assert 'SOCKS5 не прошёл контрольный тест' in html, "failed SOCKS5 diagnostic guidance must be wired into UI"
+print("diagnostic decision UI OK")

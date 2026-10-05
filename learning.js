@@ -15,6 +15,15 @@ function statKey(group, value) {
   return `${group}:${String(value ?? "")}`;
 }
 
+function protocolOf(value) {
+  return ["mtproto", "socks5", "web"].includes(value) ? value : "mtproto";
+}
+
+function protocolStatKey(group, value, protocol) {
+  const p = protocolOf(protocol);
+  return p === "mtproto" ? statKey(group, value) : `${p}|${statKey(group, value)}`;
+}
+
 function cloneState(state) {
   return {
     events: Array.isArray(state?.events) ? [...state.events] : [],
@@ -33,7 +42,10 @@ export function recordFeedback(state, candidate, kind, atIso = new Date().toISOS
     source: candidate.source ?? "",
     domain: candidate.domain ?? "",
     secret: candidate.secret ?? "",
+    user: candidate.user ?? "",
+    pass: candidate.pass ?? "",
     proxyKind: candidate.kind ?? "",
+    protocol: protocolOf(candidate.protocol),
   };
   next.events.unshift(event);
   next.events = next.events.slice(0, 500);
@@ -48,7 +60,7 @@ export function recordFeedback(state, candidate, kind, atIso = new Date().toISOS
   ];
   for (const [group, value] of features) {
     if (!value) continue;
-    const key = statKey(group, value);
+    const key = protocolStatKey(group, value, event.protocol);
     const prev = next.stats[key] ?? { good: 0, bad: 0, lastGoodAt: null, lastBadAt: null };
     const updated = { ...prev };
     if (kind === "good") {
@@ -74,12 +86,14 @@ export function featureScore(stats, weight = 1, nowMs = Date.now()) {
 
 export function candidateScore(candidate, feedbackState, nowMs = Date.now()) {
   const stats = feedbackState?.stats ?? {};
-  const exact = featureScore(stats[statKey("id", candidate.id)], 12, nowMs);
-  const secret = featureScore(stats[statKey("secret", candidate.secret)], 8, nowMs);
-  const domain = featureScore(stats[statKey("domain", candidate.domain)], 5, nowMs);
-  const source = featureScore(stats[statKey("source", candidate.source)], 4, nowMs);
-  const port = featureScore(stats[statKey("port", String(candidate.port ?? ""))], 3, nowMs);
-  const kind = featureScore(stats[statKey("kind", candidate.kind)], 2, nowMs);
+  const protocol = protocolOf(candidate.protocol);
+  const key = (group, value) => protocolStatKey(group, value, protocol);
+  const exact = featureScore(stats[key("id", candidate.id)], 12, nowMs);
+  const secret = featureScore(stats[key("secret", candidate.secret)], 8, nowMs);
+  const domain = featureScore(stats[key("domain", candidate.domain)], 5, nowMs);
+  const source = featureScore(stats[key("source", candidate.source)], 4, nowMs);
+  const port = featureScore(stats[key("port", String(candidate.port ?? ""))], 3, nowMs);
+  const kind = featureScore(stats[key("kind", candidate.kind)], 2, nowMs);
   return exact + secret + domain + source + port + kind;
 }
 
@@ -99,26 +113,40 @@ export function saveFeedback(storage, state) {
 }
 
 
-function latestKindForId(state, id) {
-  const event = (state?.events ?? []).find(e => e.id === id);
+function latestKindForId(state, id, protocol = "mtproto") {
+  const p = protocolOf(protocol);
+  const event = (state?.events ?? []).find(e => e.id === id && protocolOf(e.protocol) === p);
   return event?.kind ?? null;
 }
 
-export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now()) {
-  const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id) !== "bad");
-  const scored = eligible.map((candidate, index) => ({
-    candidate,
-    index,
-    score: candidateScore(candidate, feedbackState, nowMs),
-  }));
+export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now(), interactionState = null, protocol = null) {
+  const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id, c.protocol) !== "bad");
+  const scored = eligible.map((candidate, index) => {
+    const p = protocolOf(candidate.protocol || protocol);
+    const attemptedUnresolved =
+      interactionState &&
+      isAttempted(interactionState, candidate.id, p) &&
+      latestKindForId(feedbackState, candidate.id, p) !== "good";
+    return {
+      candidate,
+      index,
+      attemptedUnresolved: Boolean(attemptedUnresolved),
+      score: candidateScore(candidate, feedbackState, nowMs),
+    };
+  });
+
+  const byFreshnessThenScore = (a, b) =>
+    Number(a.attemptedUnresolved) - Number(b.attemptedUnresolved) ||
+    b.score - a.score ||
+    a.index - b.index;
 
   const exploit = scored
     .filter(x => x.score > 0)
-    .sort((a, b) => b.score - a.score || a.index - b.index);
+    .sort(byFreshnessThenScore);
 
   const explore = scored
     .filter(x => x.score <= 0)
-    .sort((a, b) => a.index - b.index);
+    .sort(byFreshnessThenScore);
 
   const exploreSlots = size >= 5 && explore.length >= 2 ? Math.min(2, size) : Math.min(explore.length, size);
   const exploitSlots = Math.max(0, size - exploreSlots);
@@ -146,10 +174,11 @@ export function rejectBatch(state, candidates, ids, atIso = new Date().toISOStri
   let next = cloneState(state);
   const byId = new Map(candidates.map(c => [c.id, c]));
   for (const id of ids) {
-    const latest = (next.events ?? []).find(e => e.id === id);
-    if (latest?.kind === "good") continue;
     const candidate = byId.get(id);
     if (!candidate) continue;
+    const protocol = protocolOf(candidate.protocol);
+    const latest = (next.events ?? []).find(e => e.id === id && protocolOf(e.protocol) === protocol);
+    if (latest?.kind === "good") continue;
     if (latest?.kind !== "bad") {
       next = recordFeedback(next, candidate, "bad", atIso);
     }
@@ -166,8 +195,9 @@ function ageBandFor(isoTime, nowMs = Date.now()) {
   return "stale";
 }
 
-export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Date.now()) {
-  const events = feedbackState?.events ?? [];
+export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Date.now(), protocol = "mtproto") {
+  const p = protocolOf(protocol);
+  const events = (feedbackState?.events ?? []).filter(e => protocolOf(e.protocol) === p);
   const latestById = new Map();
   for (const event of events) {
     if (!latestById.has(event.id)) latestById.set(event.id, event);
@@ -191,6 +221,9 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
       port: String(catalog.port ?? latestGood.port ?? ""),
       source: catalog.source ?? latestGood.source ?? "",
       secret: catalog.secret ?? latestGood.secret ?? "",
+      user: catalog.user ?? latestGood.user ?? "",
+      pass: catalog.pass ?? latestGood.pass ?? "",
+      protocol: p,
       lastGoodAt: latestGood.at,
       goodCount: goodEvents.length,
       ageBand: ageBandFor(latestGood.at, nowMs),
@@ -209,12 +242,14 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
 export function poolStatus(candidates, feedbackState, generatedAt, nowMs = Date.now()) {
   const latestById = new Map();
   for (const event of feedbackState?.events ?? []) {
-    if (!latestById.has(event.id)) latestById.set(event.id, event.kind);
+    const key = `${protocolOf(event.protocol)}:${event.id}`;
+    if (!latestById.has(key)) latestById.set(key, event.kind);
   }
   let rejected = 0;
   let eligible = 0;
   for (const candidate of candidates) {
-    if (latestById.get(candidate.id) === "bad") rejected += 1;
+    const key = `${protocolOf(candidate.protocol)}:${candidate.id}`;
+    if (latestById.get(key) === "bad") rejected += 1;
     else eligible += 1;
   }
   const generatedMs = Date.parse(generatedAt);
@@ -225,4 +260,119 @@ export function poolStatus(candidates, feedbackState, generatedAt, nowMs = Date.
     nextRefreshAt,
     exhausted: candidates.length > 0 && eligible === 0,
   };
+}
+
+
+function cloneInteractionState(state) {
+  return {
+    attempted: state?.attempted && typeof state.attempted === "object" ? { ...state.attempted } : {},
+  };
+}
+
+function interactionKey(protocol, candidateId) {
+  return `${protocol || "mtproto"}:${candidateId}`;
+}
+
+export function markAttempted(state, candidateId, protocol = "mtproto", atIso = new Date().toISOString()) {
+  const next = cloneInteractionState(state);
+  const key = interactionKey(protocol, candidateId);
+  if (!next.attempted[key]) next.attempted[key] = atIso;
+  return next;
+}
+
+export function isAttempted(state, candidateId, protocol = "mtproto") {
+  return Boolean(state?.attempted?.[interactionKey(protocol, candidateId)]);
+}
+
+export function loadInteractionState(storage) {
+  try {
+    const raw = storage.getItem("proxy-interaction-state-v1");
+    if (!raw) return { attempted: {} };
+    return cloneInteractionState(JSON.parse(raw));
+  } catch {
+    return { attempted: {} };
+  }
+}
+
+export function saveInteractionState(storage, state) {
+  storage.setItem("proxy-interaction-state-v1", JSON.stringify(cloneInteractionState(state)));
+}
+
+function latestFeedbackKind(state, id) {
+  const event = (state?.events ?? []).find(e => e.id === id);
+  return event?.kind ?? null;
+}
+
+export function transportProgress(candidates, feedbackState, interactionState, protocol = "mtproto") {
+  const scoped = candidates.filter(c => (c.protocol || "mtproto") === protocol);
+  let attempted = 0;
+  let working = 0;
+  let remaining = 0;
+  for (const candidate of scoped) {
+    const kind = latestFeedbackKind(feedbackState, candidate.id);
+    const opened = isAttempted(interactionState, candidate.id, protocol);
+    if (opened) attempted += 1;
+    if (kind === "good") working += 1;
+    if (kind !== "bad" && kind !== "good" && !opened) remaining += 1;
+  }
+  return { attempted, working, remaining };
+}
+
+
+const VALID_TRANSPORTS = new Set(["mtproto", "socks5", "web"]);
+
+export function activeTransport(storage) {
+  const value = storage.getItem("proxy-active-transport-v1") || "mtproto";
+  return VALID_TRANSPORTS.has(value) ? value : "mtproto";
+}
+
+export function setActiveTransport(storage, protocol) {
+  const value = VALID_TRANSPORTS.has(protocol) ? protocol : "mtproto";
+  storage.setItem("proxy-active-transport-v1", value);
+}
+
+export function candidatesForTransport(candidates, protocol = "mtproto") {
+  const p = VALID_TRANSPORTS.has(protocol) ? protocol : "mtproto";
+  return candidates.filter(c => (c.protocol || "mtproto") === p);
+}
+
+
+export function buildProxyLink(candidate) {
+  const protocol = protocolOf(candidate?.protocol);
+  const params = new URLSearchParams();
+  params.set("server", String(candidate?.server ?? ""));
+  params.set("port", String(candidate?.port ?? ""));
+  if (protocol === "socks5") {
+    if (candidate?.user) params.set("user", String(candidate.user));
+    if (candidate?.pass) params.set("pass", String(candidate.pass));
+    return "tg://socks?" + params.toString();
+  }
+  if (candidate?.secret) params.set("secret", String(candidate.secret));
+  return "tg://proxy?" + params.toString();
+}
+
+
+export function diagnosticStatus(protocol, progress) {
+  const p = protocolOf(protocol);
+  const attempted = Number(progress?.attempted || 0);
+  const working = Number(progress?.working || 0);
+  const remaining = Number(progress?.remaining || 0);
+
+  if (working > 0) {
+    if (p === "socks5") return { status: "success", message: "SOCKS5: найден рабочий вариант." };
+    return { status: "success", message: "Есть подтверждённый рабочий вариант." };
+  }
+
+  if (remaining === 0 && attempted > 0) {
+    if (p === "socks5") {
+      return { status: "failed", message: "SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB." };
+    }
+    if (p === "mtproto") {
+      return { status: "failed", message: "MTProto-пул исчерпан без рабочего результата — не расширяем слепой перебор." };
+    }
+    return { status: "failed", message: "Контрольный пул исчерпан без рабочего результата." };
+  }
+
+  if (p === "socks5") return { status: "testing", message: "SOCKS5: продолжаем контрольный тест." };
+  return { status: "testing", message: "Продолжаем контрольный тест." };
 }

@@ -284,7 +284,7 @@ def main():
     socks_empty='<div class="card" id="socks5-empty" data-empty-transport="socks5" style="display:none"><b>SOCKS5: нет диагностических кандидатов.</b> Источник обновится автоматически.</div>'
 
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>MTProto — быстрый перебор</title><style>
+    <title>Telegram — рабочий доступ</title><style>
     *{{box-sizing:border-box}}
     body{{font-family:Arial,sans-serif;max-width:760px;margin:auto;padding:10px 10px 108px;background:#f3f5f7;color:#202124}}
     h1{{font-size:20px;margin:2px 0 4px}}
@@ -308,6 +308,13 @@ def main():
     .transport-tab{{border:0;border-radius:9px;padding:9px 5px;background:#e4e7eb;color:#3c4043;font-weight:800;font-size:12px;cursor:pointer}}
     .transport-tab.active{{background:#229ed9;color:#fff}}
     .transport-tab:disabled{{opacity:.55;cursor:not-allowed}}
+    .access-hero{{background:#fff;border-radius:14px;padding:14px;margin:4px 0 14px;box-shadow:0 1px 8px #0001}}
+    .access-title{{font-size:21px;font-weight:900;margin-bottom:5px}}
+    .access-ok{{font-size:13px;font-weight:800;margin:8px 0;color:#1f7a43}}
+    .access-steps{{font-size:12px;line-height:1.45;margin:8px 0;color:#444}}
+    .download{{display:block;background:#229ed9;color:#fff;text-decoration:none;font-weight:900;text-align:center;border-radius:10px;padding:11px 10px;margin:10px 0 7px}}
+    .access-note{{font-size:10px;line-height:1.35;color:#666}}
+    .diag-title{{font-size:15px;font-weight:900;margin:15px 0 5px}}
     @media(max-width:520px){{
       body{{padding:8px 7px 105px}}
       h1{{font-size:18px}}
@@ -317,8 +324,21 @@ def main():
       .controls-inner{{grid-template-columns:repeat(3,1fr)}}
     }}
     </style></head><body>
-    <h1>MTProto — быстрый перебор</h1>
-    <div class="lead">Обновлено: {now}. Показывается по 10 вариантов. Внешняя проверка MTProto означает только, что TCP-порт доступен; реальную работу Telegram подтверждаешь ты кнопкой «✅ Работает».</div>
+    <section class="access-hero">
+      <div class="access-title">Telegram — рабочий доступ</div>
+      <div class="access-ok">✅ Рабочий маршрут: TgWsProxy → Cloudflare/WebSocket</div>
+      <div class="access-steps">
+        1. Установи TgWsProxy на Android.<br>
+        2. Оставь основной маршрут <b>cf_proxy_ws</b>; свой Cloudflare Worker не обязателен.<br>
+        3. Запусти локальный прокси и примени его в Telegram.<br>
+        4. Если всё уже установлено и работает — просто запускай TgWsProxy перед Telegram.
+      </div>
+      <a class="download" href="https://github.com/Regstar2/tg-ws-proxy-android/releases/download/v1.11.0/TgWsProxy-Android-v1.11.0-arm64-v8a.apk">⬇ Скачать TgWsProxy для Samsung / Android</a>
+      <div class="access-note">ARM64 · TgWsProxy v1.11.0 · официальный APK из GitHub Releases. Этот маршрут использует WebSocket/Cloudflare наружу; MTProto на странице ниже оставлен только как диагностика и резерв.</div>
+    </section>
+
+    <div class="diag-title">MTProto / SOCKS5 — диагностика и резерв</div>
+    <div class="lead">Обновлено: {now}. Внешняя проверка MTProto означает только, что TCP-порт доступен. SOCKS5 попадает в выдачу только после handshake + CONNECT к Telegram. Реальную работу в твоей сети подтверждаешь ты.</div>
     <div class="transport-tabs">
       <button class="transport-tab" data-transport="mtproto">MTProto</button>
       <button class="transport-tab" data-transport="socks5">SOCKS5</button>

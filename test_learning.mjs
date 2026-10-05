@@ -6,6 +6,11 @@ import {
   workingReserve,
   rejectBatch,
   poolStatus,
+  markAttempted,
+  isAttempted,
+  transportProgress,
+  loadInteractionState,
+  saveInteractionState,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -122,3 +127,38 @@ assert.equal(status.nextRefreshAt, "2026-10-04T18:19:00.000Z", "next refresh sho
 assert.equal(selectBatch(poolCandidates, exhaustedState, 10, now).length, 0, "exhausted pool must not recycle rejected candidates");
 
 console.log("pool status tests OK");
+
+
+const memoryStorage = () => {
+  const m = new Map();
+  return {
+    getItem: k => m.has(k) ? m.get(k) : null,
+    setItem: (k, v) => m.set(k, String(v)),
+  };
+};
+
+let interaction = { attempted: {} };
+interaction = markAttempted(interaction, "abc123", "mtproto", "2026-10-05T16:00:00Z");
+interaction = markAttempted(interaction, "abc123", "mtproto", "2026-10-05T16:01:00Z");
+assert.equal(isAttempted(interaction, "abc123", "mtproto"), true, "attempt must persist by unique protocol+id");
+assert.equal(Object.keys(interaction.attempted).length, 1, "repeated taps must not create duplicate attempted IDs");
+
+const store = memoryStorage();
+saveInteractionState(store, interaction);
+const loadedInteraction = loadInteractionState(store);
+assert.equal(isAttempted(loadedInteraction, "abc123", "mtproto"), true, "attempted state must survive save/load");
+
+let workingState = { events: [], stats: {} };
+workingState = recordFeedback(workingState, { ...candidate, protocol: "mtproto" }, "good", "2026-10-05T16:02:00Z");
+const afterAttempt = markAttempted(loadedInteraction, "abc123", "mtproto", "2026-10-05T16:03:00Z");
+assert.equal((workingState.events.find(e => e.id === "abc123") || {}).kind, "good", "attempting must not change working feedback");
+
+const progressCandidates = [
+  { id: "abc123", protocol: "mtproto" },
+  { id: "fresh1", protocol: "mtproto" },
+  { id: "other1", protocol: "socks5" },
+];
+const progress = transportProgress(progressCandidates, workingState, afterAttempt, "mtproto");
+assert.deepEqual(progress, { attempted: 1, working: 1, remaining: 1 }, "progress counts must be unique and scoped");
+
+console.log("attempted state tests OK");

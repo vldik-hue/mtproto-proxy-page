@@ -51,3 +51,8 @@ assert socks_count <= 10, f"SOCKS5 diagnostic pool must be capped at 10, got {so
 assert ('tg://socks?' in html) or ('SOCKS5: нет диагностических кандидатов' in html), "SOCKS5 mode must provide candidates or explicit empty state"
 assert 'TCP доступен' in html, "external reachability must be labeled as TCP only"
 print("SOCKS5 diagnostic UI constraints OK")
+
+
+assert 'buildProxyLink(item)' in html, "working reserve must build transport-specific reconnect links"
+assert "item.protocol.toUpperCase()" in html, "working reserve must show protocol label"
+print("transport-aware working reserve UI OK")

@@ -318,3 +318,18 @@ export function candidatesForTransport(candidates, protocol = "mtproto") {
   const p = VALID_TRANSPORTS.has(protocol) ? protocol : "mtproto";
   return candidates.filter(c => (c.protocol || "mtproto") === p);
 }
+
+
+export function buildProxyLink(candidate) {
+  const protocol = protocolOf(candidate?.protocol);
+  const params = new URLSearchParams();
+  params.set("server", String(candidate?.server ?? ""));
+  params.set("port", String(candidate?.port ?? ""));
+  if (protocol === "socks5") {
+    if (candidate?.user) params.set("user", String(candidate.user));
+    if (candidate?.pass) params.set("pass", String(candidate.pass));
+    return "tg://socks?" + params.toString();
+  }
+  if (candidate?.secret) params.set("secret", String(candidate.secret));
+  return "tg://proxy?" + params.toString();
+}

@@ -119,21 +119,34 @@ function latestKindForId(state, id, protocol = "mtproto") {
   return event?.kind ?? null;
 }
 
-export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now()) {
+export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now(), interactionState = null, protocol = null) {
   const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id, c.protocol) !== "bad");
-  const scored = eligible.map((candidate, index) => ({
-    candidate,
-    index,
-    score: candidateScore(candidate, feedbackState, nowMs),
-  }));
+  const scored = eligible.map((candidate, index) => {
+    const p = protocolOf(candidate.protocol || protocol);
+    const attemptedUnresolved =
+      interactionState &&
+      isAttempted(interactionState, candidate.id, p) &&
+      latestKindForId(feedbackState, candidate.id, p) !== "good";
+    return {
+      candidate,
+      index,
+      attemptedUnresolved: Boolean(attemptedUnresolved),
+      score: candidateScore(candidate, feedbackState, nowMs),
+    };
+  });
+
+  const byFreshnessThenScore = (a, b) =>
+    Number(a.attemptedUnresolved) - Number(b.attemptedUnresolved) ||
+    b.score - a.score ||
+    a.index - b.index;
 
   const exploit = scored
     .filter(x => x.score > 0)
-    .sort((a, b) => b.score - a.score || a.index - b.index);
+    .sort(byFreshnessThenScore);
 
   const explore = scored
     .filter(x => x.score <= 0)
-    .sort((a, b) => a.index - b.index);
+    .sort(byFreshnessThenScore);
 
   const exploreSlots = size >= 5 && explore.length >= 2 ? Math.min(2, size) : Math.min(explore.length, size);
   const exploitSlots = Math.max(0, size - exploreSlots);

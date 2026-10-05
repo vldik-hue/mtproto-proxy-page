@@ -6,6 +6,7 @@ on:
     paths:
       - "update_page.py"
       - "test_ui.py"
+      - "test_socks5.py"
       - "learning.js"
       - "test_learning.mjs"
       - ".github/workflows/update-page.yml"
@@ -28,6 +29,9 @@ jobs:
 
       - name: Test UI
         run: python3 test_ui.py
+
+      - name: Test SOCKS5 protocol
+        run: python3 test_socks5.py
 
       - name: Test learning
         run: node test_learning.mjs

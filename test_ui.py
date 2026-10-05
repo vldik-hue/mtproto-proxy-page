@@ -37,3 +37,10 @@ assert '↗ Открыт' in html, "attempted badge copy must exist"
 assert '.attempted' in html, "attempted card styling must exist"
 assert 'Открыто ' in html and 'Работает ' in html and 'Осталось ' in html, "progress summary copy must exist"
 print("attempted/progress UI hooks OK")
+
+
+assert 'data-transport="mtproto"' in html, "MTProto tab must exist"
+assert 'data-transport="socks5"' in html, "SOCKS5 tab must exist"
+assert 'data-transport="web"' in html, "WEB tab must exist"
+assert 'WEB · скоро' in html, "WEB tab must be visibly disabled/pending"
+print("transport tabs UI hooks OK")

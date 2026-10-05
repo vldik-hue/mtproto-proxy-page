@@ -15,6 +15,15 @@ function statKey(group, value) {
   return `${group}:${String(value ?? "")}`;
 }
 
+function protocolOf(value) {
+  return ["mtproto", "socks5", "web"].includes(value) ? value : "mtproto";
+}
+
+function protocolStatKey(group, value, protocol) {
+  const p = protocolOf(protocol);
+  return p === "mtproto" ? statKey(group, value) : `${p}|${statKey(group, value)}`;
+}
+
 function cloneState(state) {
   return {
     events: Array.isArray(state?.events) ? [...state.events] : [],
@@ -34,6 +43,7 @@ export function recordFeedback(state, candidate, kind, atIso = new Date().toISOS
     domain: candidate.domain ?? "",
     secret: candidate.secret ?? "",
     proxyKind: candidate.kind ?? "",
+    protocol: protocolOf(candidate.protocol),
   };
   next.events.unshift(event);
   next.events = next.events.slice(0, 500);
@@ -48,7 +58,7 @@ export function recordFeedback(state, candidate, kind, atIso = new Date().toISOS
   ];
   for (const [group, value] of features) {
     if (!value) continue;
-    const key = statKey(group, value);
+    const key = protocolStatKey(group, value, event.protocol);
     const prev = next.stats[key] ?? { good: 0, bad: 0, lastGoodAt: null, lastBadAt: null };
     const updated = { ...prev };
     if (kind === "good") {
@@ -74,12 +84,14 @@ export function featureScore(stats, weight = 1, nowMs = Date.now()) {
 
 export function candidateScore(candidate, feedbackState, nowMs = Date.now()) {
   const stats = feedbackState?.stats ?? {};
-  const exact = featureScore(stats[statKey("id", candidate.id)], 12, nowMs);
-  const secret = featureScore(stats[statKey("secret", candidate.secret)], 8, nowMs);
-  const domain = featureScore(stats[statKey("domain", candidate.domain)], 5, nowMs);
-  const source = featureScore(stats[statKey("source", candidate.source)], 4, nowMs);
-  const port = featureScore(stats[statKey("port", String(candidate.port ?? ""))], 3, nowMs);
-  const kind = featureScore(stats[statKey("kind", candidate.kind)], 2, nowMs);
+  const protocol = protocolOf(candidate.protocol);
+  const key = (group, value) => protocolStatKey(group, value, protocol);
+  const exact = featureScore(stats[key("id", candidate.id)], 12, nowMs);
+  const secret = featureScore(stats[key("secret", candidate.secret)], 8, nowMs);
+  const domain = featureScore(stats[key("domain", candidate.domain)], 5, nowMs);
+  const source = featureScore(stats[key("source", candidate.source)], 4, nowMs);
+  const port = featureScore(stats[key("port", String(candidate.port ?? ""))], 3, nowMs);
+  const kind = featureScore(stats[key("kind", candidate.kind)], 2, nowMs);
   return exact + secret + domain + source + port + kind;
 }
 
@@ -99,13 +111,14 @@ export function saveFeedback(storage, state) {
 }
 
 
-function latestKindForId(state, id) {
-  const event = (state?.events ?? []).find(e => e.id === id);
+function latestKindForId(state, id, protocol = "mtproto") {
+  const p = protocolOf(protocol);
+  const event = (state?.events ?? []).find(e => e.id === id && protocolOf(e.protocol) === p);
   return event?.kind ?? null;
 }
 
 export function selectBatch(candidates, feedbackState, size = 10, nowMs = Date.now()) {
-  const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id) !== "bad");
+  const eligible = candidates.filter(c => latestKindForId(feedbackState, c.id, c.protocol) !== "bad");
   const scored = eligible.map((candidate, index) => ({
     candidate,
     index,
@@ -146,10 +159,11 @@ export function rejectBatch(state, candidates, ids, atIso = new Date().toISOStri
   let next = cloneState(state);
   const byId = new Map(candidates.map(c => [c.id, c]));
   for (const id of ids) {
-    const latest = (next.events ?? []).find(e => e.id === id);
-    if (latest?.kind === "good") continue;
     const candidate = byId.get(id);
     if (!candidate) continue;
+    const protocol = protocolOf(candidate.protocol);
+    const latest = (next.events ?? []).find(e => e.id === id && protocolOf(e.protocol) === protocol);
+    if (latest?.kind === "good") continue;
     if (latest?.kind !== "bad") {
       next = recordFeedback(next, candidate, "bad", atIso);
     }
@@ -166,8 +180,9 @@ function ageBandFor(isoTime, nowMs = Date.now()) {
   return "stale";
 }
 
-export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Date.now()) {
-  const events = feedbackState?.events ?? [];
+export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Date.now(), protocol = "mtproto") {
+  const p = protocolOf(protocol);
+  const events = (feedbackState?.events ?? []).filter(e => protocolOf(e.protocol) === p);
   const latestById = new Map();
   for (const event of events) {
     if (!latestById.has(event.id)) latestById.set(event.id, event);
@@ -191,6 +206,7 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
       port: String(catalog.port ?? latestGood.port ?? ""),
       source: catalog.source ?? latestGood.source ?? "",
       secret: catalog.secret ?? latestGood.secret ?? "",
+      protocol: p,
       lastGoodAt: latestGood.at,
       goodCount: goodEvents.length,
       ageBand: ageBandFor(latestGood.at, nowMs),
@@ -209,12 +225,14 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
 export function poolStatus(candidates, feedbackState, generatedAt, nowMs = Date.now()) {
   const latestById = new Map();
   for (const event of feedbackState?.events ?? []) {
-    if (!latestById.has(event.id)) latestById.set(event.id, event.kind);
+    const key = `${protocolOf(event.protocol)}:${event.id}`;
+    if (!latestById.has(key)) latestById.set(key, event.kind);
   }
   let rejected = 0;
   let eligible = 0;
   for (const candidate of candidates) {
-    if (latestById.get(candidate.id) === "bad") rejected += 1;
+    const key = `${protocolOf(candidate.protocol)}:${candidate.id}`;
+    if (latestById.get(key) === "bad") rejected += 1;
     else eligible += 1;
   }
   const generatedMs = Date.parse(generatedAt);

@@ -61,3 +61,12 @@ print("transport-aware working reserve UI OK")
 assert 'id="diagnostic-summary"' in html, "transport diagnostic summary must exist"
 assert 'SOCKS5 не прошёл контрольный тест' in html, "failed SOCKS5 diagnostic guidance must be wired into UI"
 print("diagnostic decision UI OK")
+
+
+assert 'Telegram — рабочий доступ' in html, "access hub heading must exist"
+assert 'Рабочий маршрут: TgWsProxy → Cloudflare/WebSocket' in html, "working route must be the primary status"
+assert 'TgWsProxy-Android-v1.11.0-arm64-v8a.apk' in html, "direct ARM64 APK link must be present"
+assert 'Скачать TgWsProxy для Samsung / Android' in html, "download CTA must be obvious"
+assert 'MTProto / SOCKS5 — диагностика и резерв' in html, "legacy radar must be demoted to diagnostics"
+assert html.index('Telegram — рабочий доступ') < html.index('data-transport="mtproto"'), "working WSS route must appear before legacy proxy tabs"
+print("Telegram access hub UI OK")

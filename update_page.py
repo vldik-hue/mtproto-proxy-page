@@ -294,7 +294,7 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport, buildProxyLink }} from './learning.js';
 
     const BATCH_SIZE=10;
     const GENERATED_AT='{generated_iso}';
@@ -425,11 +425,14 @@ def main():
     function renderBatch(){{
       const reserveBox=document.getElementById('working-reserve');
       if(reserveBox){{reserveBox.style.display='none';reserveBox.innerHTML='';}}
+      const socksEmpty=document.getElementById('socks5-empty');
+      if(socksEmpty)socksEmpty.style.display='none';
       allCards.forEach(c=>c.style.display='none');
       paintTabs();
       const scoped=scopedCandidates();
       const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now());
       if(!selected.length){{
+        if(currentTransport==='socks5' && socksEmpty)socksEmpty.style.display='block';
         const status=poolStatus(scoped,feedback,GENERATED_AT,Date.now());
         const next=new Date(status.nextRefreshAt).toLocaleTimeString('ru-RU',{{hour:'2-digit',minute:'2-digit'}});
         const pr=document.getElementById('progress');
@@ -488,11 +491,10 @@ def main():
       }}
       box.style.display='block';
       box.innerHTML=reserve.map(item=>{{
-        const q=new URLSearchParams({{server:item.server,port:item.port,secret:item.secret||''}});
-        const link='tg://proxy?'+q.toString();
+        const link=buildProxyLink(item);
         return '<div class="card" data-working-reserve-row>'+
           '<div class="top"><div class="num">⭐</div><div class="host">'+item.server+':'+item.port+'</div><span class="status">✓ '+item.goodCount+'×</span></div>'+
-          '<div class="meta">'+item.source+' · работал: '+ageLabel(item)+'</div>'+
+          '<div class="meta">'+item.protocol.toUpperCase()+' · '+item.source+' · работал: '+ageLabel(item)+'</div>'+
           '<div class="actions"><a class="btn open" href="'+link+'">▶ Подключить</a><button class="btn good" data-confirm-id="'+item.id+'">✅ Подтвердить</button></div>'+
           '</div>';
       }}).join('');

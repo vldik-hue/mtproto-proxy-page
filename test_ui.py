@@ -30,3 +30,10 @@ print("exhausted pool UI copy OK")
 assert "confirmWorking(''+item.id+'')" not in html, "generated reserve button quoting must not be malformed"
 assert 'data-confirm-id' in html, "reserve confirmation must use data attribute hook"
 print("working reserve confirm hook OK")
+
+
+assert 'data-attempt-link' in html, "primary proxy action must expose an attempt hook"
+assert '↗ Открыт' in html, "attempted badge copy must exist"
+assert '.attempted' in html, "attempted card styling must exist"
+assert 'Открыто ' in html and 'Работает ' in html and 'Осталось ' in html, "progress summary copy must exist"
+print("attempted/progress UI hooks OK")

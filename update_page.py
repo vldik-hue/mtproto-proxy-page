@@ -30,7 +30,7 @@ SOURCES=[
     ("zakky RU resilient","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
 ]
 PREFERRED_PORTS={443,853,8443,9443,2053,2083,2096,25565}
-SOCKS5_COUNT=10
+SOCKS5_COUNT=5
 SOCKS5_VERIFY_LIMIT=160
 SOCKS5_SOURCE=("ProxyScrape live","https://raw.githubusercontent.com/proxyscrape/free-proxy-list/main/proxies/protocols/socks5/data.txt")
 
@@ -90,6 +90,52 @@ def collect():
         except Exception as e:print("source failed",label,e)
     return b
 
+def _recv_exact(sock,n):
+    data=b""
+    while len(data)<n:
+        part=sock.recv(n-len(data))
+        if not part:raise OSError("SOCKS5 closed connection")
+        data+=part
+    return data
+
+def socks5_probe(p,target_host="149.154.167.50",target_port=443,timeout=TIMEOUT):
+    started=time.perf_counter()
+    try:
+        with socket.create_connection((p["server"],p["port"]),timeout=timeout) as s:
+            s.settimeout(timeout)
+            user=str(p.get("user") or "")
+            password=str(p.get("pass") or "")
+            methods=b"\x00\x02" if (user or password) else b"\x00"
+            s.sendall(bytes([5,len(methods)])+methods)
+            ver,method=_recv_exact(s,2)
+            if ver!=5 or method==0xff:return p,None
+            if method==2:
+                ub=user.encode("utf-8");pb=password.encode("utf-8")
+                if len(ub)>255 or len(pb)>255:return p,None
+                s.sendall(bytes([1,len(ub)])+ub+bytes([len(pb)])+pb)
+                if _recv_exact(s,2)!=b"\x01\x00":return p,None
+            elif method!=0:
+                return p,None
+
+            try:
+                addr=socket.inet_aton(target_host);atyp=1
+            except OSError:
+                hb=target_host.encode("idna")
+                if len(hb)>255:return p,None
+                addr=bytes([len(hb)])+hb;atyp=3
+            req=b"\x05\x01\x00"+bytes([atyp])+addr+int(target_port).to_bytes(2,"big")
+            s.sendall(req)
+            head=_recv_exact(s,4)
+            if head[0]!=5 or head[1]!=0:return p,None
+            if head[3]==1:_recv_exact(s,4)
+            elif head[3]==3:_recv_exact(s,_recv_exact(s,1)[0])
+            elif head[3]==4:_recv_exact(s,16)
+            else:return p,None
+            _recv_exact(s,2)
+            return p,int((time.perf_counter()-started)*1000)
+    except Exception:
+        return p,None
+
 def check(p):
     vals=[]
     for n in range(2):
@@ -108,7 +154,7 @@ def verify_socks5():
         print("SOCKS5 source failed",e);return []
     passed=[]
     with ThreadPoolExecutor(max_workers=24) as ex:
-        fs=[ex.submit(check,p) for p in candidates]
+        fs=[ex.submit(socks5_probe,p) for p in candidates]
         for f in as_completed(fs):
             p,ms=f.result()
             if ms is not None:
@@ -229,7 +275,7 @@ def main():
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
           <span id="status-{x}" class="status"></span>
         </div>
-        <div class="meta">SOCKS5 · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="meta">SOCKS5 · handshake + Telegram CONNECT OK · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
           <a class="btn open" data-attempt-link href="{html.escape(link,quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>

@@ -279,6 +279,7 @@ def main():
       <button class="transport-tab" data-transport="web" disabled>WEB · скоро</button>
     </div>
     <div class="progress" id="progress-summary">Открыто 0 · Работает 0 · Осталось 0</div>
+    <div class="sourcebox" id="diagnostic-summary">Диагностика транспорта ещё не начата.</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
     {socks_empty}
@@ -294,10 +295,11 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport, buildProxyLink }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress, activeTransport, setActiveTransport, candidatesForTransport, buildProxyLink, diagnosticStatus }} from './learning.js';
 
     const BATCH_SIZE=10;
     const GENERATED_AT='{generated_iso}';
+    const SOCKS_FAILED_COPY='SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB.';
     const allCards=Array.from(document.querySelectorAll('[data-proxy-id]'));
     const candidates=allCards.map(card=>({{
       id:card.dataset.proxyId||'',
@@ -372,6 +374,9 @@ def main():
       const p=transportProgress(candidates,feedback,interaction,currentTransport);
       const el=document.getElementById('progress-summary');
       if(el)el.textContent='Открыто '+p.attempted+' · Работает '+p.working+' · Осталось '+p.remaining;
+      const d=diagnosticStatus(currentTransport,p);
+      const diag=document.getElementById('diagnostic-summary');
+      if(diag)diag.textContent=(currentTransport==='socks5' && d.status==='failed')?SOCKS_FAILED_COPY:d.message;
     }}
 
     function markWorking(id){{

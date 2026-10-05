@@ -226,3 +226,59 @@ export function poolStatus(candidates, feedbackState, generatedAt, nowMs = Date.
     exhausted: candidates.length > 0 && eligible === 0,
   };
 }
+
+
+function cloneInteractionState(state) {
+  return {
+    attempted: state?.attempted && typeof state.attempted === "object" ? { ...state.attempted } : {},
+  };
+}
+
+function interactionKey(protocol, candidateId) {
+  return `${protocol || "mtproto"}:${candidateId}`;
+}
+
+export function markAttempted(state, candidateId, protocol = "mtproto", atIso = new Date().toISOString()) {
+  const next = cloneInteractionState(state);
+  const key = interactionKey(protocol, candidateId);
+  if (!next.attempted[key]) next.attempted[key] = atIso;
+  return next;
+}
+
+export function isAttempted(state, candidateId, protocol = "mtproto") {
+  return Boolean(state?.attempted?.[interactionKey(protocol, candidateId)]);
+}
+
+export function loadInteractionState(storage) {
+  try {
+    const raw = storage.getItem("proxy-interaction-state-v1");
+    if (!raw) return { attempted: {} };
+    return cloneInteractionState(JSON.parse(raw));
+  } catch {
+    return { attempted: {} };
+  }
+}
+
+export function saveInteractionState(storage, state) {
+  storage.setItem("proxy-interaction-state-v1", JSON.stringify(cloneInteractionState(state)));
+}
+
+function latestFeedbackKind(state, id) {
+  const event = (state?.events ?? []).find(e => e.id === id);
+  return event?.kind ?? null;
+}
+
+export function transportProgress(candidates, feedbackState, interactionState, protocol = "mtproto") {
+  const scoped = candidates.filter(c => (c.protocol || "mtproto") === protocol);
+  let attempted = 0;
+  let working = 0;
+  let remaining = 0;
+  for (const candidate of scoped) {
+    const kind = latestFeedbackKind(feedbackState, candidate.id);
+    const opened = isAttempted(interactionState, candidate.id, protocol);
+    if (opened) attempted += 1;
+    if (kind === "good") working += 1;
+    if (kind !== "bad" && kind !== "good" && !opened) remaining += 1;
+  }
+  return { attempted, working, remaining };
+}

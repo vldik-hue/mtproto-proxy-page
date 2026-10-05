@@ -14,6 +14,7 @@ import {
   activeTransport,
   setActiveTransport,
   candidatesForTransport,
+  buildProxyLink,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -199,3 +200,22 @@ assert.deepEqual(workingReserve(protocolReserveState, {}, now, "mtproto").map(x 
 assert.deepEqual(workingReserve(protocolReserveState, {}, now, "socks5").map(x => x.id), ["socks-good"], "SOCKS5 reserve must be isolated");
 
 console.log("transport reserve isolation tests OK");
+
+
+assert.equal(
+  buildProxyLink({ protocol:"mtproto", server:"example.com", port:443, secret:"abc def" }),
+  "tg://proxy?server=example.com&port=443&secret=abc+def",
+  "MTProto link must be built with encoded parameters"
+);
+assert.equal(
+  buildProxyLink({ protocol:"socks5", server:"1.2.3.4", port:1080 }),
+  "tg://socks?server=1.2.3.4&port=1080",
+  "SOCKS5 link without credentials must omit user/pass"
+);
+assert.equal(
+  buildProxyLink({ protocol:"socks5", server:"proxy.example", port:1080, user:"a b", pass:"p@ss&x" }),
+  "tg://socks?server=proxy.example&port=1080&user=a+b&pass=p%40ss%26x",
+  "SOCKS5 credentials must be URL encoded"
+);
+
+console.log("proxy link builder tests OK");

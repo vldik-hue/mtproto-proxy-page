@@ -42,6 +42,8 @@ export function recordFeedback(state, candidate, kind, atIso = new Date().toISOS
     source: candidate.source ?? "",
     domain: candidate.domain ?? "",
     secret: candidate.secret ?? "",
+    user: candidate.user ?? "",
+    pass: candidate.pass ?? "",
     proxyKind: candidate.kind ?? "",
     protocol: protocolOf(candidate.protocol),
   };
@@ -206,6 +208,8 @@ export function workingReserve(feedbackState, candidateCatalog = {}, nowMs = Dat
       port: String(catalog.port ?? latestGood.port ?? ""),
       source: catalog.source ?? latestGood.source ?? "",
       secret: catalog.secret ?? latestGood.secret ?? "",
+      user: catalog.user ?? latestGood.user ?? "",
+      pass: catalog.pass ?? latestGood.pass ?? "",
       protocol: p,
       lastGoodAt: latestGood.at,
       goodCount: goodEvents.length,

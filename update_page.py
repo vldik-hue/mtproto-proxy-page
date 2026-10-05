@@ -30,6 +30,9 @@ SOURCES=[
     ("zakky RU resilient","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
 ]
 PREFERRED_PORTS={443,853,8443,9443,2053,2083,2096,25565}
+SOCKS5_COUNT=10
+SOCKS5_VERIFY_LIMIT=160
+SOCKS5_SOURCE=("ProxyScrape live","https://raw.githubusercontent.com/proxyscrape/free-proxy-list/main/proxies/protocols/socks5/data.txt")
 
 def get(url,timeout=25):
     req=urllib.request.Request(url,headers={"User-Agent":UA,"Cache-Control":"no-cache"})
@@ -52,6 +55,24 @@ def parse(text,source):
             if not p:continue
             k=(p["server"].lower(),p["port"],p["secret"])
             if k not in seen:seen.add(k);out.append(p)
+        except Exception:pass
+    return out
+
+def parse_socks5(text,source):
+    out=[];seen=set()
+    for raw in text.splitlines():
+        line=raw.strip()
+        if not line:continue
+        if not line.lower().startswith("socks5://"):line="socks5://"+line
+        try:
+            u=urllib.parse.urlsplit(line)
+            host=(u.hostname or "").strip().rstrip(".");port=int(u.port or 0)
+            if not host or not (1<=port<=65535):continue
+            user=urllib.parse.unquote(u.username or "");password=urllib.parse.unquote(u.password or "")
+            k=(host.lower(),port,user,password)
+            if k in seen:continue
+            seen.add(k)
+            out.append({"protocol":"socks5","server":host,"port":port,"user":user,"pass":password,"source":source})
         except Exception:pass
     return out
 
@@ -79,6 +100,26 @@ def check(p):
         except Exception:return p,None
         if n==0:time.sleep(.35)
     return p,round(sum(vals)/len(vals))
+
+def verify_socks5():
+    label,url=SOCKS5_SOURCE
+    try:candidates=parse_socks5(get(url),label)[:SOCKS5_VERIFY_LIMIT]
+    except Exception as e:
+        print("SOCKS5 source failed",e);return []
+    passed=[]
+    with ThreadPoolExecutor(max_workers=24) as ex:
+        fs=[ex.submit(check,p) for p in candidates]
+        for f in as_completed(fs):
+            p,ms=f.result()
+            if ms is not None:
+                q=dict(p);q["ms"]=ms;passed.append(q)
+    passed.sort(key=lambda x:x["ms"])
+    chosen=[];servers=set()
+    for p in passed:
+        if p["server"].lower() in servers:continue
+        chosen.append(p);servers.add(p["server"].lower())
+        if len(chosen)>=SOCKS5_COUNT:break
+    return chosen
 
 def verify(b):
     items=[p for arr in b.values() for p in arr[:120]]
@@ -121,10 +162,16 @@ def choose(by,count):
             if len(chosen)>=count:break
     return chosen
 
-def pid(p):return hashlib.sha256(f"{p['server']}|{p['port']}|{p['secret']}".encode()).hexdigest()[:8]
+def pid(p):
+    if p.get("protocol")=="socks5":
+        raw=f"socks5|{p['server']}|{p['port']}|{p.get('user','')}|{p.get('pass','')}"
+    else:
+        raw=f"{p['server']}|{p['port']}|{p['secret']}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:8]
 
 def main():
     chosen=choose(verify(collect()),COUNT)
+    socks5=verify_socks5()
 
     # Каталог нужен сборщику обратной связи: ID -> конкретный прокси.
     catalog_path=Path("proxy_catalog.json")
@@ -137,7 +184,13 @@ def main():
     for p in chosen:
         x=pid(p)
         catalog["proxies"][x]={
-            "server":p["server"],"port":p["port"],"secret":p["secret"],
+            "protocol":"mtproto","server":p["server"],"port":p["port"],"secret":p["secret"],
+            "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
+        }
+    for p in socks5:
+        x=pid(p)
+        catalog["proxies"][x]={
+            "protocol":"socks5","server":p["server"],"port":p["port"],"user":p.get("user",""),"pass":p.get("pass",""),
             "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
         }
     # Ограничиваем историю последними 500 ID.
@@ -157,13 +210,32 @@ def main():
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
           <span id="status-{x}" class="status"></span>
         </div>
-        <div class="meta">{typ.upper()} · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="meta">MTProto · {typ.upper()} · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
           <a class="btn open" data-attempt-link href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
         </div>
         </div>''')
-    if not cards:cards=['<div class="card"><b>Сейчас кандидатов нет.</b> Ни один из пяти источников не прошёл локальную двойную проверку.</div>']
+    if not cards:cards=['<div class="card"><b>Сейчас кандидатов MTProto нет.</b></div>']
+    for i,p in enumerate(socks5,1):
+        x=pid(p)
+        qs={"server":p["server"],"port":p["port"]}
+        if p.get("user"):qs["user"]=p["user"]
+        if p.get("pass"):qs["pass"]=p["pass"]
+        link="tg://socks?"+urllib.parse.urlencode(qs)
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="socks5" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="" data-user="{html.escape(p.get("user",""),quote=True)}" data-pass="{html.escape(p.get("pass",""),quote=True)}" data-protocol="socks5">
+        <div class="top">
+          <div class="num">S{i}</div>
+          <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
+          <span id="status-{x}" class="status"></span>
+        </div>
+        <div class="meta">SOCKS5 · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="actions">
+          <a class="btn open" data-attempt-link href="{html.escape(link,quote=True)}">▶ Проверить</a>
+          <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
+        </div>
+        </div>''')
+    socks_empty='<div class="card" id="socks5-empty" data-empty-transport="socks5" style="display:none"><b>SOCKS5: нет диагностических кандидатов.</b> Источник обновится автоматически.</div>'
 
     page=f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>MTProto — быстрый перебор</title><style>
@@ -209,6 +281,7 @@ def main():
     <div class="progress" id="progress-summary">Открыто 0 · Работает 0 · Осталось 0</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
+    {socks_empty}
     <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
     <div class="sourcebox" id="source-summary">Статистика по источникам появится после первых оценок.</div>
     <div id="working-reserve" data-working-reserve style="display:none"></div>
@@ -233,6 +306,8 @@ def main():
       source:card.dataset.source||'',
       domain:card.dataset.domain||'',
       secret:card.dataset.secret||'',
+      user:card.dataset.user||'',
+      pass:card.dataset.pass||'',
       kind:card.dataset.kind||'',
       protocol:card.dataset.protocol||'mtproto'
     }}));

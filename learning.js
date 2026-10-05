@@ -282,3 +282,21 @@ export function transportProgress(candidates, feedbackState, interactionState, p
   }
   return { attempted, working, remaining };
 }
+
+
+const VALID_TRANSPORTS = new Set(["mtproto", "socks5", "web"]);
+
+export function activeTransport(storage) {
+  const value = storage.getItem("proxy-active-transport-v1") || "mtproto";
+  return VALID_TRANSPORTS.has(value) ? value : "mtproto";
+}
+
+export function setActiveTransport(storage, protocol) {
+  const value = VALID_TRANSPORTS.has(protocol) ? protocol : "mtproto";
+  storage.setItem("proxy-active-transport-v1", value);
+}
+
+export function candidatesForTransport(candidates, protocol = "mtproto") {
+  const p = VALID_TRANSPORTS.has(protocol) ? protocol : "mtproto";
+  return candidates.filter(c => (c.protocol || "mtproto") === p);
+}

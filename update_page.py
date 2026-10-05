@@ -151,7 +151,7 @@ def main():
     cards=[]
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}">
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}" data-protocol="mtproto">
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
@@ -159,7 +159,7 @@ def main():
         </div>
         <div class="meta">{typ.upper()} · {p["ms"]} мс · {html.escape(p["source"])}</div>
         <div class="actions">
-          <a class="btn open" href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
+          <a class="btn open" data-attempt-link href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
         </div>
         </div>''')
@@ -172,7 +172,8 @@ def main():
     h1{{font-size:20px;margin:2px 0 4px}}
     .lead{{color:#5f6368;line-height:1.3;font-size:12px;margin-bottom:8px}}
     .progress{{background:#fff;border-radius:10px;padding:7px 9px;margin:8px 0;font-weight:700;font-size:12px;box-shadow:0 1px 5px #0001}}
-    .card{{background:#fff;border-radius:10px;padding:8px 9px;margin:6px 0;box-shadow:0 1px 6px #0001}}
+    .card{{background:#fff;border-radius:10px;padding:8px 9px;margin:6px 0;box-shadow:0 1px 6px #0001;transition:background .15s,border-color .15s}}
+    .card.attempted{{background:#eef4f8;outline:1px solid #b9cfdd}}
     .top{{display:grid;grid-template-columns:30px 1fr auto;gap:5px;align-items:center}}
     .num{{font-weight:800;color:#777;font-size:12px}}
     .host{{font-weight:800;overflow-wrap:anywhere;font-size:13px;line-height:1.15}}
@@ -196,6 +197,7 @@ def main():
     </style></head><body>
     <h1>MTProto — быстрый перебор</h1>
     <div class="lead">Обновлено: {now}. Показывается по 10 вариантов из большого проверенного пула. Страница сама учится на твоих отметках: запоминает конкретный прокси, секрет, доменную семью, источник, порт и тип. Похожие на рабочие варианты поднимаются выше, похожие на плохие — опускаются.</div>
+    <div class="progress" id="progress-summary">Открыто 0 · Работает 0 · Осталось 0</div>
     <div class="progress" id="progress">Загрузка...</div>
     {''.join(cards)}
     <div class="sourcebox" id="learn-summary">Обучение: пока нет подтверждённых результатов.</div>
@@ -210,7 +212,7 @@ def main():
       <div class="sendhint">Нерабочая десятка исчезнет сразу, и откроется следующая. Уже отмеченные «✅ Работает» не будут сброшены. «Новый пул сейчас» откроет GitHub Actions — там нажми Run workflow.</div>
     </div>
     <script type="module">
-    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus }} from './learning.js';
+    import {{ loadFeedback, saveFeedback, recordFeedback, selectBatch, rejectBatch, workingReserve, poolStatus, loadInteractionState, saveInteractionState, markAttempted, isAttempted, transportProgress }} from './learning.js';
 
     const BATCH_SIZE=10;
     const GENERATED_AT='{generated_iso}';
@@ -222,9 +224,11 @@ def main():
       source:card.dataset.source||'',
       domain:card.dataset.domain||'',
       secret:card.dataset.secret||'',
-      kind:card.dataset.kind||''
+      kind:card.dataset.kind||'',
+      protocol:card.dataset.protocol||'mtproto'
     }}));
     let feedback=loadFeedback(localStorage);
+    let interaction=loadInteractionState(localStorage);
 
     function latestKind(id){{
       const e=(feedback.events||[]).find(x=>x.id===id);
@@ -247,9 +251,27 @@ def main():
 
     function paint(id,v){{
       const e=document.getElementById('status-'+id);
-      if(!e)return;
-      e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':'';
-      e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':'#666';
+      const card=allCards.find(c=>c.dataset.proxyId===id);
+      if(!e||!card)return;
+      const attempted=isAttempted(interaction,id,card.dataset.protocol||'mtproto');
+      card.classList.toggle('attempted',attempted && v!=='good');
+      e.textContent=v==='good'?'✓ рабочий':v==='bad'?'✕ нерабочий':attempted?'↗ Открыт':'';
+      e.style.color=v==='good'?'#2e9d53':v==='bad'?'#c64747':attempted?'#386a8a':'#666';
+    }}
+
+    function markAttemptFromLink(card){{
+      const id=card.dataset.proxyId;
+      const protocol=card.dataset.protocol||'mtproto';
+      interaction=markAttempted(interaction,id,protocol,new Date().toISOString());
+      saveInteractionState(localStorage,interaction);
+      paint(id,latestKind(id));
+      updateProgressSummary();
+    }}
+
+    function updateProgressSummary(){{
+      const p=transportProgress(candidates,feedback,interaction,'mtproto');
+      const el=document.getElementById('progress-summary');
+      if(el)el.textContent='Открыто '+p.attempted+' · Работает '+p.working+' · Осталось '+p.remaining;
     }}
 
     function markWorking(id){{
@@ -325,6 +347,7 @@ def main():
       if(pr)pr.textContent='Сейчас '+selected.length+' · отбраковано '+badIds.size+' · рабочих '+goodIds.size+' · 8 лучших + 2 новых';
       updateLearnSummary();
       updateSourceSummary();
+      updateProgressSummary();
     }}
 
     function rejectCurrentBatch(){{
@@ -383,6 +406,13 @@ def main():
       localStorage.setItem('proxy-rating-'+id,'good');
       showWorking();
     }}
+
+    document.querySelectorAll('[data-attempt-link]').forEach(link=>{{
+      link.addEventListener('click',()=>{{
+        const card=link.closest('[data-proxy-id]');
+        if(card) markAttemptFromLink(card);
+      }});
+    }});
 
     window.markWorking=markWorking;
     window.rejectCurrentBatch=rejectCurrentBatch;

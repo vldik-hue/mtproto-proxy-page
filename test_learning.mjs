@@ -15,6 +15,7 @@ import {
   setActiveTransport,
   candidatesForTransport,
   buildProxyLink,
+  diagnosticStatus,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -219,3 +220,24 @@ assert.equal(
 );
 
 console.log("proxy link builder tests OK");
+
+
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 3, working: 1, remaining: 6 }),
+  { status: "success", message: "SOCKS5: найден рабочий вариант." }
+);
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 10, working: 0, remaining: 0 }),
+  { status: "failed", message: "SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB." }
+);
+assert.deepEqual(
+  diagnosticStatus("socks5", { attempted: 4, working: 0, remaining: 6 }),
+  { status: "testing", message: "SOCKS5: продолжаем контрольный тест." }
+);
+assert.equal(
+  diagnosticStatus("mtproto", { attempted: 228, working: 0, remaining: 0 }).status,
+  "failed",
+  "hundreds of failed MTProto attempts must not ask for more brute-force volume"
+);
+
+console.log("diagnostic decision tests OK");

@@ -11,6 +11,9 @@ import {
   transportProgress,
   loadInteractionState,
   saveInteractionState,
+  activeTransport,
+  setActiveTransport,
+  candidatesForTransport,
 } from "./learning.js";
 
 const HOUR = 60 * 60 * 1000;
@@ -162,3 +165,28 @@ const progress = transportProgress(progressCandidates, workingState, afterAttemp
 assert.deepEqual(progress, { attempted: 1, working: 1, remaining: 1 }, "progress counts must be unique and scoped");
 
 console.log("attempted state tests OK");
+
+
+const transportStore = memoryStorage();
+assert.equal(activeTransport(transportStore), "mtproto", "unknown/missing active transport must default to mtproto");
+setActiveTransport(transportStore, "socks5");
+assert.equal(activeTransport(transportStore), "socks5", "active transport must persist");
+transportStore.setItem("proxy-active-transport-v1", "nonsense");
+assert.equal(activeTransport(transportStore), "mtproto", "unknown protocol must fall back to mtproto");
+
+const mixedCandidates = [
+  { id: "m1", protocol: "mtproto" },
+  { id: "m2", protocol: "mtproto" },
+  { id: "s1", protocol: "socks5" },
+];
+assert.deepEqual(candidatesForTransport(mixedCandidates, "mtproto").map(x => x.id), ["m1", "m2"]);
+assert.deepEqual(candidatesForTransport(mixedCandidates, "socks5").map(x => x.id), ["s1"]);
+
+let isolatedInteraction = { attempted: {} };
+isolatedInteraction = markAttempted(isolatedInteraction, "m1", "mtproto", "2026-10-05T16:10:00Z");
+const mtProg = transportProgress(mixedCandidates, { events: [], stats: {} }, isolatedInteraction, "mtproto");
+const socksProg = transportProgress(mixedCandidates, { events: [], stats: {} }, isolatedInteraction, "socks5");
+assert.equal(mtProg.attempted, 1);
+assert.equal(socksProg.attempted, 0, "MTProto attempted state must not leak into SOCKS5");
+
+console.log("transport isolation tests OK");

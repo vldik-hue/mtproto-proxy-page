@@ -190,3 +190,12 @@ assert.equal(mtProg.attempted, 1);
 assert.equal(socksProg.attempted, 0, "MTProto attempted state must not leak into SOCKS5");
 
 console.log("transport isolation tests OK");
+
+
+let protocolReserveState = { events: [], stats: {} };
+protocolReserveState = recordFeedback(protocolReserveState, { ...working, id: "mt-good", protocol: "mtproto" }, "good", "2026-10-05T16:20:00Z");
+protocolReserveState = recordFeedback(protocolReserveState, { ...working, id: "socks-good", protocol: "socks5" }, "good", "2026-10-05T16:21:00Z");
+assert.deepEqual(workingReserve(protocolReserveState, {}, now, "mtproto").map(x => x.id), ["mt-good"], "MTProto reserve must not include SOCKS5");
+assert.deepEqual(workingReserve(protocolReserveState, {}, now, "socks5").map(x => x.id), ["socks-good"], "SOCKS5 reserve must be isolated");
+
+console.log("transport reserve isolation tests OK");

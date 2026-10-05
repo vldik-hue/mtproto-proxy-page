@@ -241,3 +241,21 @@ assert.equal(
 );
 
 console.log("diagnostic decision tests OK");
+
+
+const attemptRankCandidates = Array.from({ length: 12 }, (_, i) => ({
+  id: "rank-" + i,
+  protocol: "mtproto",
+  source: "rank-source-" + i,
+  port: "443",
+  kind: "ee",
+  domain: "rank-" + i + ".example",
+  secret: "rank-secret-" + i,
+}));
+let attemptRankState = { attempted: {} };
+attemptRankState = markAttempted(attemptRankState, "rank-0", "mtproto", "2026-10-05T16:30:00Z");
+attemptRankState = markAttempted(attemptRankState, "rank-1", "mtproto", "2026-10-05T16:31:00Z");
+const attemptAwareBatch = selectBatch(attemptRankCandidates, { events: [], stats: {} }, 10, now, attemptRankState, "mtproto");
+assert.ok(!attemptAwareBatch.some(x => x.id === "rank-0" || x.id === "rank-1"), "unseen candidates must rank ahead of attempted unresolved candidates when enough unseen exist");
+
+console.log("attempt-aware ranking tests OK");

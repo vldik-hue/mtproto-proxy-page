@@ -337,3 +337,29 @@ export function buildProxyLink(candidate) {
   if (candidate?.secret) params.set("secret", String(candidate.secret));
   return "tg://proxy?" + params.toString();
 }
+
+
+export function diagnosticStatus(protocol, progress) {
+  const p = protocolOf(protocol);
+  const attempted = Number(progress?.attempted || 0);
+  const working = Number(progress?.working || 0);
+  const remaining = Number(progress?.remaining || 0);
+
+  if (working > 0) {
+    if (p === "socks5") return { status: "success", message: "SOCKS5: найден рабочий вариант." };
+    return { status: "success", message: "Есть подтверждённый рабочий вариант." };
+  }
+
+  if (remaining === 0 && attempted > 0) {
+    if (p === "socks5") {
+      return { status: "failed", message: "SOCKS5 не прошёл контрольный тест — не расширяем перебор; переходим к WEB." };
+    }
+    if (p === "mtproto") {
+      return { status: "failed", message: "MTProto-пул исчерпан без рабочего результата — не расширяем слепой перебор." };
+    }
+    return { status: "failed", message: "Контрольный пул исчерпан без рабочего результата." };
+  }
+
+  if (p === "socks5") return { status: "testing", message: "SOCKS5: продолжаем контрольный тест." };
+  return { status: "testing", message: "Продолжаем контрольный тест." };
+}

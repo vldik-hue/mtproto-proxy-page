@@ -29,7 +29,10 @@ SOURCES=[
     # Список с проверкой из России через внешние точки и FakeTLS handshake.
     ("zakky RU resilient","https://zakky8.github.io/mtproto-proxy-pro/censorship_resistant.txt"),
 ]
-PREFERRED_PORTS={443,853,8443,9443,2053,2083,2096,25565}
+PREFERRED_PORTS={443,853,7443,8443,9443,2053,2083,2096,25565}
+PROXYMT_LABEL="@ProxyMTProto"
+PROXYMT_URL="https://t.me/s/proxymtproto"
+PROXYMT_LIMIT=30
 SOCKS5_COUNT=5
 SOCKS5_VERIFY_LIMIT=160
 SOCKS5_SOURCE=("ProxyScrape live","https://raw.githubusercontent.com/proxyscrape/free-proxy-list/main/proxies/protocols/socks5/data.txt")
@@ -58,6 +61,41 @@ def parse(text,source):
         except Exception:pass
     return out
 
+def parse_proxymtproto_feed(text):
+    """Parse recent public @ProxyMTProto channel posts from Telegram's web preview."""
+    items={}
+    blocks=re.split(r'(?=<div class=["\\\']tgme_widget_message_wrap\\b)',text,flags=re.I)
+    for block in blocks:
+        if "Server:" not in block or "Secret:" not in block:
+            continue
+        plain=re.sub(r'<br\\s*/?>',"\\n",block,flags=re.I)
+        plain=html.unescape(re.sub(r'<[^>]+>'," ",plain))
+        sm=re.search(r'Server:\\s*([^\\s]+)',plain,re.I)
+        pm=re.search(r'Port:\\s*(\\d{1,5})',plain,re.I)
+        km=re.search(r'Secret:\\s*([A-Za-z0-9_-]+)',plain,re.I)
+        if not (sm and pm and km):
+            continue
+        server=sm.group(1).strip().rstrip(".")
+        if server.lower()=="unknown":
+            continue
+        p=norm(server,pm.group(1),km.group(1),PROXYMT_LABEL)
+        if not p:
+            continue
+        tm=re.search(r'datetime=["\\\']([^"\\\']+)["\\\']',block,re.I)
+        published=tm.group(1) if tm else ""
+        key=(p["server"].lower(),p["port"],p["secret"])
+        if key in items:
+            old=items[key]
+            old["repeat_count"]=old.get("repeat_count",1)+1
+            if published and published>old.get("published_at",""):
+                old["published_at"]=published
+            continue
+        p["published_at"]=published
+        p["repeat_count"]=1
+        p["priority"]=True
+        items[key]=p
+    return list(items.values())
+
 def parse_socks5(text,source):
     out=[];seen=set()
     for raw in text.splitlines():
@@ -82,6 +120,12 @@ def dgroup(host):
 
 def collect():
     b=defaultdict(list)
+    try:
+        fresh=parse_proxymtproto_feed(get(PROXYMT_URL))
+        fresh.sort(key=lambda x:(x.get("repeat_count",1),x.get("published_at","")),reverse=True)
+        b[PROXYMT_LABEL].extend(fresh[:PROXYMT_LIMIT])
+    except Exception as e:
+        print("source failed",PROXYMT_LABEL,e)
     for h,p,s,label in CONFIRMED:
         q=norm(h,p,s,"white-list")
         if q:q["label"]=label;b["white-list"].append(q)
@@ -178,15 +222,30 @@ def verify(b):
                 p=dict(p);p["ms"]=ms;passed.append(p)
     out=defaultdict(list)
     for p in passed:out[p["source"]].append(p)
-    for src in out:out[src].sort(key=lambda x:x["ms"])
+    for src in out:
+        if src==PROXYMT_LABEL:
+            out[src].sort(key=lambda x:(x.get("repeat_count",1),x.get("published_at",""),-x["ms"]),reverse=True)
+        else:
+            out[src].sort(key=lambda x:x["ms"])
     return out
 
 def choose(by,count):
     chosen=[];keys=set();domains=set()
-    for p in by.get("white-list",[]):
-        k=(p["server"].lower(),p["port"],p["secret"])
-        if k not in keys:chosen.append(p);keys.add(k);domains.add(dgroup(p["server"]))
+
+    def take(p):
+        k=(p["server"].lower(),p["port"],p["secret"]);dg=dgroup(p["server"])
+        if k in keys or dg in domains:return False
+        chosen.append(p);keys.add(k);domains.add(dg);return True
+
+    # Fresh curated channel candidates come first.
+    for p in by.get(PROXYMT_LABEL,[]):
+        take(p)
         if len(chosen)>=count:return chosen
+
+    for p in by.get("white-list",[]):
+        take(p)
+        if len(chosen)>=count:return chosen
+
     order=[x[0] for x in SOURCES];idx=defaultdict(int)
     while len(chosen)<count:
         added=False
@@ -194,9 +253,7 @@ def choose(by,count):
             arr=by.get(src,[])
             while idx[src]<len(arr):
                 p=arr[idx[src]];idx[src]+=1
-                k=(p["server"].lower(),p["port"],p["secret"]);dg=dgroup(p["server"])
-                if k in keys or dg in domains:continue
-                chosen.append(p);keys.add(k);domains.add(dg);added=True;break
+                if take(p):added=True;break
             if len(chosen)>=count:break
         if not added:break
     if len(chosen)<count:
@@ -207,7 +264,6 @@ def choose(by,count):
             chosen.append(p);keys.add(k)
             if len(chosen)>=count:break
     return chosen
-
 def pid(p):
     if p.get("protocol")=="socks5":
         raw=f"socks5|{p['server']}|{p['port']}|{p.get('user','')}|{p.get('pass','')}"
@@ -231,7 +287,9 @@ def main():
         x=pid(p)
         catalog["proxies"][x]={
             "protocol":"mtproto","server":p["server"],"port":p["port"],"secret":p["secret"],
-            "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat()
+            "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat(),
+            "published_at":p.get("published_at",""),"repeat_count":p.get("repeat_count",1),
+            "priority":bool(p.get("priority"))
         }
     for p in socks5:
         x=pid(p)
@@ -248,15 +306,26 @@ def main():
     generated_iso=datetime.now(timezone.utc).isoformat()
     now=datetime.now(timezone(timedelta(hours=3))).strftime("%d.%m.%Y %H:%M UTC+3")
     cards=[]
+    priority_heading_added=False
     for i,p in enumerate(chosen,1):
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
-        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}" data-protocol="mtproto">
+        is_priority=p.get("source")==PROXYMT_LABEL
+        if is_priority and not priority_heading_added:
+            cards.append('<div class="source-section" data-priority-section="proxymtproto"><b>Свежие из @ProxyMTProto</b><br>Приоритетный поток: Unknown и дубли отфильтрованы, повторные публикации подняты выше.</div>')
+            priority_heading_added=True
+        priority_attr=' data-priority-source="proxymtproto"' if is_priority else ''
+        freshness=""
+        if is_priority:
+            rep_count=p.get("repeat_count",1)
+            pub=p.get("published_at","")
+            freshness=(" · повтор ×"+str(rep_count) if rep_count>1 else "")+(" · "+html.escape(pub[:16].replace("T"," ")) if pub else "")
+        cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}" data-protocol="mtproto"{priority_attr}>
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
           <span id="status-{x}" class="status"></span>
         </div>
-        <div class="meta">MTProto · {typ.upper()} · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}</div>
+        <div class="meta">MTProto · {typ.upper()} · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}{freshness}</div>
         <div class="actions">
           <a class="btn open" data-attempt-link href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>
@@ -304,6 +373,7 @@ def main():
     .controls-inner{{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}}
     .sendhint{{font-size:10px;color:#666;margin-top:5px;line-height:1.2}}
     .sourcebox{{font-size:10px;color:#666;background:#fff;border-radius:10px;padding:7px 8px;margin-top:8px;line-height:1.2}}
+    .source-section{{font-size:12px;line-height:1.3;background:#eaf6ff;border:1px solid #b8ddf4;border-radius:10px;padding:9px 10px;margin:9px 0 6px}}
     .transport-tabs{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}}
     .transport-tab{{border:0;border-radius:9px;padding:9px 5px;background:#e4e7eb;color:#3c4043;font-weight:800;font-size:12px;cursor:pointer}}
     .transport-tab.active{{background:#229ed9;color:#fff}}
@@ -499,6 +569,8 @@ def main():
       const socksEmpty=document.getElementById('socks5-empty');
       if(socksEmpty)socksEmpty.style.display='none';
       allCards.forEach(c=>c.style.display='none');
+      const prioritySection=document.querySelector('[data-priority-section="proxymtproto"]');
+      if(prioritySection)prioritySection.style.display=currentTransport==='mtproto'?'block':'none';
       paintTabs();
       const scoped=scopedCandidates();
       const selected=selectBatch(scoped,feedback,BATCH_SIZE,Date.now(),interaction,currentTransport);

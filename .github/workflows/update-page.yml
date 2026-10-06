@@ -25,6 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Test ProxyMTProto parser
+        run: python3 test_proxymtproto.py
+
       - name: Build page
         run: python3 update_page.py
 
@@ -33,9 +36,6 @@ jobs:
 
       - name: Test SOCKS5 protocol
         run: python3 test_socks5.py
-
-      - name: Test ProxyMTProto parser
-        run: python3 test_proxymtproto.py
 
       - name: Test learning
         run: node test_learning.mjs

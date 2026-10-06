@@ -74,5 +74,5 @@ print("Telegram access hub UI OK")
 
 assert 'Свежие из @ProxyMTProto' in html, "priority ProxyMTProto section must exist"
 assert 'data-priority-source="proxymtproto"' in html, "priority source cards need a stable hook"
-assert html.index('Свежие из @ProxyMTProto') < html.index('data-transport="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve"
+assert html.index('Свежие из @ProxyMTProto') < html.index('data-protocol="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve cards"
 print("ProxyMTProto priority UI OK")

@@ -70,3 +70,9 @@ assert 'Скачать TgWsProxy для Samsung / Android' in html, "download CT
 assert 'MTProto / SOCKS5 — диагностика и резерв' in html, "legacy radar must be demoted to diagnostics"
 assert html.index('Telegram — рабочий доступ') < html.index('data-transport="mtproto"'), "working WSS route must appear before legacy proxy tabs"
 print("Telegram access hub UI OK")
+
+
+assert 'Свежие из @ProxyMTProto' in html, "priority ProxyMTProto section must exist"
+assert 'data-priority-source="proxymtproto"' in html, "priority source cards need a stable hook"
+assert html.index('Свежие из @ProxyMTProto') < html.index('data-transport="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve"
+print("ProxyMTProto priority UI OK")

@@ -64,15 +64,15 @@ def parse(text,source):
 def parse_proxymtproto_feed(text):
     """Parse recent public @ProxyMTProto channel posts from Telegram's web preview."""
     items={}
-    blocks=re.split(r"""(?=<div class=["']tgme_widget_message_wrap\\b)""",text,flags=re.I)
+    blocks=re.split(r"""(?=<div class=["']tgme_widget_message_wrap\b)""",text,flags=re.I)
     for block in blocks:
         if "Server:" not in block or "Secret:" not in block:
             continue
-        plain=re.sub(r"<br\\s*/?>","\\n",block,flags=re.I)
+        plain=re.sub(r"<br\s*/?>","\n",block,flags=re.I)
         plain=html.unescape(re.sub(r"<[^>]+>"," ",plain))
-        sm=re.search(r"Server:\\s*([^\\s]+)",plain,re.I)
-        pm=re.search(r"Port:\\s*(\\d{1,5})",plain,re.I)
-        km=re.search(r"Secret:\\s*([A-Za-z0-9_-]+)",plain,re.I)
+        sm=re.search(r"Server:\s*([^\s]+)",plain,re.I)
+        pm=re.search(r"Port:\s*(\d{1,5})",plain,re.I)
+        km=re.search(r"Secret:\s*([A-Za-z0-9_-]+)",plain,re.I)
         if not (sm and pm and km):
             continue
         server=sm.group(1).strip().rstrip(".")
@@ -95,6 +95,7 @@ def parse_proxymtproto_feed(text):
         p["priority"]=True
         items[key]=p
     return list(items.values())
+
 def parse_socks5(text,source):
     out=[];seen=set()
     for raw in text.splitlines():

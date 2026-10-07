@@ -32,7 +32,7 @@ SOURCES=[
 PREFERRED_PORTS={443,853,7443,8443,9443,2053,2083,2096,25565}
 PROXYMT_LABEL="@ProxyMTProto"
 PROXYMT_URL="https://t.me/s/proxymtproto"
-PROXYMT_LIMIT=30
+PROXYMT_LIMIT=6
 SOCKS5_COUNT=5
 SOCKS5_VERIFY_LIMIT=160
 SOCKS5_SOURCE=("ProxyScrape live","https://raw.githubusercontent.com/proxyscrape/free-proxy-list/main/proxies/protocols/socks5/data.txt")
@@ -94,7 +94,7 @@ def parse_proxymtproto_feed(text):
         p["repeat_count"]=1
         p["priority"]=True
         items[key]=p
-    return list(items.values())
+    return sorted(items.values(), key=lambda x:x.get("published_at",""), reverse=True)
 
 def parse_socks5(text,source):
     out=[];seen=set()
@@ -122,7 +122,6 @@ def collect():
     b=defaultdict(list)
     try:
         fresh=parse_proxymtproto_feed(get(PROXYMT_URL))
-        fresh.sort(key=lambda x:(x.get("repeat_count",1),x.get("published_at","")),reverse=True)
         b[PROXYMT_LABEL].extend(fresh[:PROXYMT_LIMIT])
     except Exception as e:
         print("source failed",PROXYMT_LABEL,e)
@@ -132,6 +131,17 @@ def collect():
     for label,url in SOURCES:
         try:b[label].extend(parse(get(url),label)[:180])
         except Exception as e:print("source failed",label,e)
+
+    # Exact corroboration only: same server + port + secret in independent sources.
+    source_keys={}
+    for label,_ in SOURCES:
+        source_keys[label]={
+            (p["server"].lower(),p["port"],p["secret"])
+            for p in b.get(label,[])
+        }
+    for p in b.get(PROXYMT_LABEL,[]):
+        key=(p["server"].lower(),p["port"],p["secret"])
+        p["corroborated_by"]=[label for label,_ in SOURCES if key in source_keys.get(label,set())]
     return b
 
 def _recv_exact(sock,n):
@@ -212,19 +222,31 @@ def verify_socks5():
     return chosen
 
 def verify(b):
-    items=[p for arr in b.values() for p in arr[:120]]
+    # @ProxyMTProto is intentionally not gated or reordered by GitHub TCP checks.
+    # The channel itself is the primary freshness signal; GitHub probing remains
+    # only for the automatic reserve from other sources.
+    out=defaultdict(list)
+    for p in b.get(PROXYMT_LABEL,[]):
+        q=dict(p)
+        q["channel_fresh"]=True
+        out[PROXYMT_LABEL].append(q)
+
+    items=[
+        p for src,arr in b.items()
+        if src!=PROXYMT_LABEL
+        for p in arr[:120]
+    ]
     passed=[]
     with ThreadPoolExecutor(max_workers=24) as ex:
         fs=[ex.submit(check,p) for p in items]
         for f in as_completed(fs):
             p,ms=f.result()
             if ms is not None:
-                p=dict(p);p["ms"]=ms;passed.append(p)
-    out=defaultdict(list)
+                q=dict(p);q["ms"]=ms;passed.append(q)
     for p in passed:out[p["source"]].append(p)
     for src in out:
         if src==PROXYMT_LABEL:
-            out[src].sort(key=lambda x:(x.get("repeat_count",1),x.get("published_at",""),-x["ms"]),reverse=True)
+            out[src].sort(key=lambda x:x.get("published_at",""),reverse=True)
         else:
             out[src].sort(key=lambda x:x["ms"])
     return out
@@ -268,7 +290,8 @@ def pid(p):
     if p.get("protocol")=="socks5":
         raw=f"socks5|{p['server']}|{p['port']}|{p.get('user','')}|{p.get('pass','')}"
     else:
-        raw=f"{p['server']}|{p['port']}|{p['secret']}"
+        published=p.get("published_at","") if p.get("source")==PROXYMT_LABEL else ""
+        raw=f"{p['server']}|{p['port']}|{p['secret']}|{published}"
     return hashlib.sha256(raw.encode()).hexdigest()[:8]
 
 def main():
@@ -289,7 +312,8 @@ def main():
             "protocol":"mtproto","server":p["server"],"port":p["port"],"secret":p["secret"],
             "source":p["source"],"last_seen":datetime.now(timezone.utc).isoformat(),
             "published_at":p.get("published_at",""),"repeat_count":p.get("repeat_count",1),
-            "priority":bool(p.get("priority"))
+            "priority":bool(p.get("priority")),"channel_fresh":bool(p.get("channel_fresh")),
+            "corroborated_by":p.get("corroborated_by",[])
         }
     for p in socks5:
         x=pid(p)
@@ -311,21 +335,23 @@ def main():
         x=pid(p);typ="dd" if p["secret"].lower().startswith("dd") else ("ee" if p["secret"].lower().startswith("ee") else "other")
         is_priority=p.get("source")==PROXYMT_LABEL
         if is_priority and not priority_heading_added:
-            cards.append('<div class="source-section" data-priority-section="proxymtproto"><b>Свежие из @ProxyMTProto</b><br>Приоритетный поток: Unknown и дубли отфильтрованы, повторные публикации подняты выше.</div>')
+            cards.append('<div class="source-section" data-priority-section="proxymtproto"><b>🔥 Последние из @ProxyMTProto</b><br>Показываем последние 6 реальных публикаций канала как есть: без сортировки по пингу и без отсечения GitHub TCP-проверкой.</div>')
             priority_heading_added=True
         priority_attr=' data-priority-source="proxymtproto"' if is_priority else ''
         freshness=""
         if is_priority:
-            rep_count=p.get("repeat_count",1)
             pub=p.get("published_at","")
-            freshness=(" · повтор ×"+str(rep_count) if rep_count>1 else "")+(" · "+html.escape(pub[:16].replace("T"," ")) if pub else "")
+            corroborated=p.get("corroborated_by",[])
+            freshness=(" · "+html.escape(pub[:16].replace("T"," ")) if pub else "")
+            if corroborated:
+                freshness+=" · ✓ ещё "+str(len(corroborated))+" источник"+("а" if len(corroborated) in (2,3,4) else "")
         cards.append(f'''<div class="card" data-proxy-id="{x}" data-index="{i-1}" data-source="{html.escape(p["source"],quote=True)}" data-port="{p["port"]}" data-kind="{typ}" data-server="{html.escape(p["server"],quote=True)}" data-domain="{html.escape(dgroup(p["server"]),quote=True)}" data-secret="{html.escape(p["secret"],quote=True)}" data-protocol="mtproto"{priority_attr}>
         <div class="top">
           <div class="num">#{i}</div>
           <div class="host">{html.escape(p["server"])}:{p["port"]}</div>
           <span id="status-{x}" class="status"></span>
         </div>
-        <div class="meta">MTProto · {typ.upper()} · TCP доступен · {p["ms"]} мс · {html.escape(p["source"])}{freshness}</div>
+        <div class="meta">{("MTProto · свежий пост канала" if is_priority else "MTProto · "+typ.upper()+" · TCP доступен · "+str(p["ms"])+" мс")} · {html.escape(p["source"])}{freshness}</div>
         <div class="actions">
           <a class="btn open" data-attempt-link href="{html.escape(p["tg"],quote=True)}">▶ Проверить</a>
           <button class="btn good" onclick="markWorking('{x}')">✅ Работает</button>

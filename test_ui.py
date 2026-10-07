@@ -72,7 +72,9 @@ assert html.index('Telegram — рабочий доступ') < html.index('data
 print("Telegram access hub UI OK")
 
 
-assert 'Свежие из @ProxyMTProto' in html, "priority ProxyMTProto section must exist"
-assert 'data-priority-source="proxymtproto"' in html, "priority source cards need a stable hook"
-assert html.index('Свежие из @ProxyMTProto') < html.index('data-protocol="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve cards"
-print("ProxyMTProto priority UI OK")
+assert 'Последние из @ProxyMTProto' in html, "fresh ProxyMTProto section must exist"
+assert 'без сортировки по пингу' in html, "UI must explain channel order is preserved"
+priority_count = html.count('data-priority-source="proxymtproto"')
+assert 1 <= priority_count <= 6, f"must show up to 6 fresh channel posts, got {priority_count}"
+assert html.index('Последние из @ProxyMTProto') < html.index('data-protocol="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve cards"
+print("ProxyMTProto fresh-feed UI OK")

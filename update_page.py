@@ -259,9 +259,12 @@ def choose(by,count):
         if k in keys or dg in domains:return False
         chosen.append(p);keys.add(k);domains.add(dg);return True
 
-    # Fresh curated channel candidates come first.
+    # Fresh curated channel candidates come first exactly in channel order.
+    # Do not de-duplicate by domain: distinct fresh channel posts are intentional.
     for p in by.get(PROXYMT_LABEL,[]):
-        take(p)
+        k=(p["server"].lower(),p["port"],p["secret"])
+        if k in keys:continue
+        chosen.append(p);keys.add(k);domains.add(dgroup(p["server"]))
         if len(chosen)>=count:return chosen
 
     for p in by.get("white-list",[]):
@@ -279,7 +282,7 @@ def choose(by,count):
             if len(chosen)>=count:break
         if not added:break
     if len(chosen)<count:
-        rest=[p for arr in by.values() for p in arr];rest.sort(key=lambda x:x["ms"])
+        rest=[p for src,arr in by.items() if src!=PROXYMT_LABEL for p in arr];rest.sort(key=lambda x:x.get("ms",10**9))
         for p in rest:
             k=(p["server"].lower(),p["port"],p["secret"])
             if k in keys:continue

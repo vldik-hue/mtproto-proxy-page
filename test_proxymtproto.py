@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from collections import defaultdict
-from update_page import PROXYMT_LABEL, parse_proxymtproto_feed, verify
+from update_page import PROXYMT_LABEL, choose, parse_proxymtproto_feed, verify
 
 sample = r'''
 <div class="tgme_widget_message_wrap js-widget_message_wrap">
@@ -51,5 +51,13 @@ bucket[PROXYMT_LABEL] = items
 verified = verify(bucket)
 assert [x["server"] for x in verified[PROXYMT_LABEL]] == ["cdntide.org", "akenai.tg"], verified
 assert all(x.get("channel_fresh") is True for x in verified[PROXYMT_LABEL]), verified
+
+same_family = defaultdict(list)
+same_family[PROXYMT_LABEL] = [
+    {"server":"a.example.org","port":443,"secret":"ddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","source":PROXYMT_LABEL,"published_at":"2026-10-07T18:00:00+00:00","channel_fresh":True},
+    {"server":"b.example.org","port":443,"secret":"ddbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","source":PROXYMT_LABEL,"published_at":"2026-10-07T17:30:00+00:00","channel_fresh":True},
+]
+picked = choose(same_family, 10)
+assert [x["server"] for x in picked[:2]] == ["a.example.org", "b.example.org"], picked
 
 print("ProxyMTProto freshness path OK")

@@ -1,5 +1,1650 @@
 {
   "proxies": {
+    "1f44880f": {
+      "protocol": "socks5",
+      "server": "5.255.99.75",
+      "port": 1080,
+      "user": "",
+      "pass": "",
+      "source": "ProxyScrape live",
+      "last_seen": "2026-10-17T12:12:31.765820+00:00"
+    },
+    "ac9cf8aa": {
+      "protocol": "socks5",
+      "server": "192.111.139.162",
+      "port": 4145,
+      "user": "",
+      "pass": "",
+      "source": "ProxyScrape live",
+      "last_seen": "2026-10-17T12:12:31.765817+00:00"
+    },
+    "02d06e62": {
+      "protocol": "socks5",
+      "server": "192.252.214.17",
+      "port": 4145,
+      "user": "",
+      "pass": "",
+      "source": "ProxyScrape live",
+      "last_seen": "2026-10-17T12:12:31.765814+00:00"
+    },
+    "7817029c": {
+      "protocol": "socks5",
+      "server": "192.111.139.163",
+      "port": 19404,
+      "user": "",
+      "pass": "",
+      "source": "ProxyScrape live",
+      "last_seen": "2026-10-17T12:12:31.765810+00:00"
+    },
+    "1eb0ad31": {
+      "protocol": "socks5",
+      "server": "192.111.137.35",
+      "port": 4145,
+      "user": "",
+      "pass": "",
+      "source": "ProxyScrape live",
+      "last_seen": "2026-10-17T12:12:31.765805+00:00"
+    },
+    "e8313163": {
+      "protocol": "mtproto",
+      "server": "bonsoir.palmyra.recklessly.wowteleserye.com",
+      "port": 443,
+      "secret": "ee32d124a367d9981c0dc205513dc9f949647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765801+00:00"
+    },
+    "247a08ad": {
+      "protocol": "mtproto",
+      "server": "sherkat.noavaran.novin.gostare.kosha.tashkilat.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765798+00:00"
+    },
+    "7f5b9a3c": {
+      "protocol": "mtproto",
+      "server": "lith.paddle.sank.compinoy.com",
+      "port": 443,
+      "secret": "ee155f6a42cc14eb162c7720986706d583647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765794+00:00"
+    },
+    "2909c379": {
+      "protocol": "mtproto",
+      "server": "cinema-hulk.avangement.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765791+00:00"
+    },
+    "f360010a": {
+      "protocol": "mtproto",
+      "server": "constructive.pericardia.undrinkable.teleseryepinoytv.com",
+      "port": 443,
+      "secret": "eec64effb030d8d2a3331aad8b431b55fe647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765788+00:00"
+    },
+    "e342cbc7": {
+      "protocol": "mtproto",
+      "server": "jiko-pok.lamari.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765785+00:00"
+    },
+    "f27672f2": {
+      "protocol": "mtproto",
+      "server": "edge.ehtemal.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765782+00:00"
+    },
+    "8c4d7768": {
+      "protocol": "mtproto",
+      "server": "fluctuant.migration.palsy.pinoywebtv.com",
+      "port": 443,
+      "secret": "ee9280f583ff78c356fe69766ad320356c647a656e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765779+00:00"
+    },
+    "f5e54ff4": {
+      "protocol": "mtproto",
+      "server": "45.67.57.32",
+      "port": 443,
+      "secret": "ee68ae8284982465dfcb198342d01cdedb6d2e6265626f6f2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765776+00:00"
+    },
+    "3530d894": {
+      "protocol": "mtproto",
+      "server": "aghaye.aseman.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765773+00:00"
+    },
+    "61fd1d46": {
+      "protocol": "mtproto",
+      "server": "cracklings.descendable.rangoon.teleseryerepaly.com",
+      "port": 443,
+      "secret": "ee0cb8055ed28d45a4cc20cbe67325489d647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765770+00:00"
+    },
+    "ce8e792f": {
+      "protocol": "mtproto",
+      "server": "intercom.mope.stoppage.teleseryestv.com",
+      "port": 443,
+      "secret": "eee9b3d6538064741ec64e9611e309065a647a656e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765766+00:00"
+    },
+    "2805fe93": {
+      "protocol": "mtproto",
+      "server": "155.212.142.105",
+      "port": 443,
+      "secret": "ee0dbf98440246f4b9228dd2b704256cad6f7a6f6e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765763+00:00"
+    },
+    "de8a6a35": {
+      "protocol": "mtproto",
+      "server": "nasaji.estakhr.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765760+00:00"
+    },
+    "a1c08ed7": {
+      "protocol": "mtproto",
+      "server": "boob.plutonium.saturator.teleseryeepisodes.com",
+      "port": 443,
+      "secret": "ee79f494e4de87dea2dd5e7fc9cee0e4df647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765757+00:00"
+    },
+    "277f699c": {
+      "protocol": "mtproto",
+      "server": "jounob-iran-dar-ghalb-mast.simbol.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765754+00:00"
+    },
+    "9b59f737": {
+      "protocol": "mtproto",
+      "server": "176.109.105.129",
+      "port": 443,
+      "secret": "ee248c43b7aee97c6fe887311452a323026164732e78352e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765751+00:00"
+    },
+    "ea7d8ccf": {
+      "protocol": "mtproto",
+      "server": "proxy.lodkirmm.ru",
+      "port": 8443,
+      "secret": "ee16309abd572d284b309ef26bd7a3f68570726f78792e6c6f646b69726d6d2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765748+00:00"
+    },
+    "ace783eb": {
+      "protocol": "mtproto",
+      "server": "dl3.soft98.net",
+      "port": 2053,
+      "secret": "ee277b571aff100fbafc2e3efebac80b2b736f667439382e6972",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765745+00:00"
+    },
+    "56ae4192": {
+      "protocol": "mtproto",
+      "server": "genuismind.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765742+00:00"
+    },
+    "273208cf": {
+      "protocol": "mtproto",
+      "server": "rkn1.botrkn.cloud-ip.cc",
+      "port": 443,
+      "secret": "eef6564861f6b464d94e1acc6564428cee726b6e312e626f74726b6e2e636c6f75642d69702e6363",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765738+00:00"
+    },
+    "7799e444": {
+      "protocol": "mtproto",
+      "server": "sdfree.mahanam.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765735+00:00"
+    },
+    "df90ad87": {
+      "protocol": "mtproto",
+      "server": "kharazmi-abo-reyhan-bironi-va-dakheli.basalam.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765732+00:00"
+    },
+    "c990ec78": {
+      "protocol": "mtproto",
+      "server": "dns.vdl.lat",
+      "port": 443,
+      "secret": "eece59031f1109f05387b7155534c7ac87646e732e76646c2e6c6174",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765729+00:00"
+    },
+    "0e39f9df": {
+      "protocol": "mtproto",
+      "server": "lte.mishutkin.click",
+      "port": 443,
+      "secret": "ee67af30bbe3543b32fd7b6966a61417e26c74652e6d69736875746b696e2e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765726+00:00"
+    },
+    "50362889": {
+      "protocol": "mtproto",
+      "server": "cheater.nosy.yawningly.teleseryeshd.com",
+      "port": 443,
+      "secret": "eee3b01fd16836a459f83deca3c18dd0fb647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765723+00:00"
+    },
+    "0de64eca": {
+      "protocol": "mtproto",
+      "server": "gold.flarevpn.top",
+      "port": 443,
+      "secret": "ee3dd1018840a3488d2571092614a5ca44706c617932676f2e636c6f7564",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765720+00:00"
+    },
+    "068e128d": {
+      "protocol": "mtproto",
+      "server": "he.de-nu.7.mtproto.ru",
+      "port": 443,
+      "secret": "ee2111222233334444555566667777888862726f777365722e79616e6465782e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765717+00:00"
+    },
+    "e89f9dfa": {
+      "protocol": "mtproto",
+      "server": "89.108.88.184",
+      "port": 443,
+      "secret": "ee00d85706e58f9b5ead3b6c8a08d984df636c6f75642e6d61696c2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765714+00:00"
+    },
+    "88e12714": {
+      "protocol": "mtproto",
+      "server": "proxy.sosavpn.ru",
+      "port": 443,
+      "secret": "ee942d2deee4d90bc892c74fd132b34d116d61782e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765711+00:00"
+    },
+    "6cdd2abf": {
+      "protocol": "mtproto",
+      "server": "t.meow-network.com",
+      "port": 443,
+      "secret": "ee5622e11fff3e49bcc85280197a6106b5742e6d656f772d6e6574776f726b2e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765708+00:00"
+    },
+    "dd8e5479": {
+      "protocol": "mtproto",
+      "server": "130.49.151.113",
+      "port": 443,
+      "secret": "ee00d85706e58f9b5ead3b6c8a08d984df636c6f75642e6d61696c2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765705+00:00"
+    },
+    "570fc8d5": {
+      "protocol": "mtproto",
+      "server": "yeh.topbelka.ru",
+      "port": 443,
+      "secret": "ee050c8f82b0877cccd23a08c65f062b987275747562652e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765701+00:00"
+    },
+    "e90fcbf3": {
+      "protocol": "mtproto",
+      "server": "reef.lanternmoss.top",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765698+00:00"
+    },
+    "69ea222f": {
+      "protocol": "mtproto",
+      "server": "cheyenne.overwrap.phthisic.teleseryeme.com",
+      "port": 443,
+      "secret": "ee3f9438591f486e2672a133a8e4f06e92647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765696+00:00"
+    },
+    "168e0d67": {
+      "protocol": "mtproto",
+      "server": "pub.ultra-fast.cc",
+      "port": 443,
+      "secret": "ee481ab49363e8a17d25393a1cce3d0ced7075622e756c7472612d666173742e6363",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765693+00:00"
+    },
+    "65e88c55": {
+      "protocol": "mtproto",
+      "server": "s1.smetanka.click",
+      "port": 443,
+      "secret": "ee80229c70b86eb8ec094dae3d69c00914736d6574616e6b612e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765690+00:00"
+    },
+    "72941d88": {
+      "protocol": "mtproto",
+      "server": "naturalistic.receptacle.sternutator.teleseryetvreplay.com",
+      "port": 443,
+      "secret": "eeb66c9ff483d807e9f811a41f31dd0b59647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765687+00:00"
+    },
+    "b7c17ba1": {
+      "protocol": "mtproto",
+      "server": "storagexx.space",
+      "port": 443,
+      "secret": "ee24b61556a3ec49bc0c7a5a7e8525702873746f7261676578782e7370616365",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765683+00:00"
+    },
+    "6c80a29c": {
+      "protocol": "mtproto",
+      "server": "skill-issue.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765680+00:00"
+    },
+    "9d9364f7": {
+      "protocol": "mtproto",
+      "server": "diuresis.gents.undereducated.teleseryegroup.com",
+      "port": 443,
+      "secret": "eebf59d99c1d5dae0a80d25eaa6f0af5c2647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765677+00:00"
+    },
+    "bd798f67": {
+      "protocol": "mtproto",
+      "server": "proxy.noblok.org",
+      "port": 443,
+      "secret": "ee59523800f28b6c8384f93860bf95630270726f78792e6e6f626c6f6b2e6f7267",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765674+00:00"
+    },
+    "5fa687c8": {
+      "protocol": "mtproto",
+      "server": "calcium-credit.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765671+00:00"
+    },
+    "6dcd18c5": {
+      "protocol": "mtproto",
+      "server": "phonebackup.lol",
+      "port": 443,
+      "secret": "ee4a587c0a84d8c02045cbbfc2edbdb8d9636c6f75642e6d61696c2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765668+00:00"
+    },
+    "11f609c8": {
+      "protocol": "mtproto",
+      "server": "vaultmyphone.space",
+      "port": 443,
+      "secret": "eee0f2c5c0e0982f222ac066c72082c259636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765665+00:00"
+    },
+    "a402e058": {
+      "protocol": "mtproto",
+      "server": "sky.hollowfern.sbs",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765662+00:00"
+    },
+    "f5de7690": {
+      "protocol": "mtproto",
+      "server": "alevin.ekistics.sparrowhawk.gmateleserye.com",
+      "port": 443,
+      "secret": "ee6050cd496935a7f49cd37ca30493d05c647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765659+00:00"
+    },
+    "907d1ca7": {
+      "protocol": "mtproto",
+      "server": "xxmatrixx.top",
+      "port": 853,
+      "secret": "eee4508d288bf81791177a2f5e73ac06cf6d617472697878782e746f70",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765656+00:00"
+    },
+    "44a9b8f2": {
+      "protocol": "mtproto",
+      "server": "violet.lite64.click",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765653+00:00"
+    },
+    "6d470ef6": {
+      "protocol": "mtproto",
+      "server": "depicted.husker.waters.pilipinoteleserye.com",
+      "port": 443,
+      "secret": "eee3cf82ccb7f0dfdf6ceda06493dcf43c647a656e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765650+00:00"
+    },
+    "ea0bbbcc": {
+      "protocol": "mtproto",
+      "server": "matrixxx.top",
+      "port": 853,
+      "secret": "eee4508d288bf81791177a2f5e73ac06cf6d617472697878782e746f70",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765647+00:00"
+    },
+    "ba543938": {
+      "protocol": "mtproto",
+      "server": "wolf.lite64.top",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765643+00:00"
+    },
+    "9b1442c5": {
+      "protocol": "mtproto",
+      "server": "saadi.masnavi.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765640+00:00"
+    },
+    "42182f40": {
+      "protocol": "mtproto",
+      "server": "kima.rabotaet.online",
+      "port": 443,
+      "secret": "ee12e7e5f961f258b04af168a1cba6318a6b696d612e7261626f746165742e6f6e6c696e65",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765637+00:00"
+    },
+    "69010b22": {
+      "protocol": "mtproto",
+      "server": "tide.lite64.xyz",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765634+00:00"
+    },
+    "237266aa": {
+      "protocol": "mtproto",
+      "server": "37.27.38.205",
+      "port": 443,
+      "secret": "ee9d659fc2ae43e0b8323c082960233d7b7777772e636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765631+00:00"
+    },
+    "bb9b0786": {
+      "protocol": "mtproto",
+      "server": "ru2.replayeye.cc",
+      "port": 443,
+      "secret": "ee2b1d631a79b5110bd8e6b7740f7ad62764726976652e676f6f676c652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765628+00:00"
+    },
+    "fb7b5c23": {
+      "protocol": "mtproto",
+      "server": "y0u-found-a-way-ou7-of-gorphosts-lockd0wn.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765625+00:00"
+    },
+    "7ae8e805": {
+      "protocol": "mtproto",
+      "server": "46.62.132.241",
+      "port": 443,
+      "secret": "eeae762d0e4d199c7a7085525d37e230c97777772e636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765622+00:00"
+    },
+    "75923f96": {
+      "protocol": "mtproto",
+      "server": "as.mkim.click",
+      "port": 443,
+      "secret": "ee2dfa3526fc70b7abd7a09eade6ccea1f61732e6d6b696d2e636c69636b",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765619+00:00"
+    },
+    "20135a2c": {
+      "protocol": "mtproto",
+      "server": "i-love-hse.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765616+00:00"
+    },
+    "05cddabe": {
+      "protocol": "mtproto",
+      "server": "65.108.154.5",
+      "port": 443,
+      "secret": "eecdf95381f978fb348f233a14b2251e6d7777772e636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765613+00:00"
+    },
+    "30f8785d": {
+      "protocol": "mtproto",
+      "server": "kostyanchekloh.lol",
+      "port": 443,
+      "secret": "ee3f72634c46d320aaa30d8bb2682e9b497975672d6c696e6b2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765610+00:00"
+    },
+    "85cc2370": {
+      "protocol": "mtproto",
+      "server": "delta.pebblewisp.xyz",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765607+00:00"
+    },
+    "5b22a85c": {
+      "protocol": "mtproto",
+      "server": "31.58.137.124",
+      "port": 443,
+      "secret": "eee2970b9a0d34e958110ee25e8bc8378d6d61696c2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765603+00:00"
+    },
+    "a66c358e": {
+      "protocol": "mtproto",
+      "server": "akenai.tg",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765600+00:00"
+    },
+    "cfa47267": {
+      "protocol": "mtproto",
+      "server": "tori.fi.endpro.tech",
+      "port": 443,
+      "secret": "eee68e265d96da13efc2ce1337910da6de746f72692e6669",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765597+00:00"
+    },
+    "bc74f236": {
+      "protocol": "mtproto",
+      "server": "storm.driftquill.click",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765594+00:00"
+    },
+    "8378a3ed": {
+      "protocol": "mtproto",
+      "server": "russia.its-work.ru",
+      "port": 443,
+      "secret": "ee368601a36ebfafec1604dd8ad6c2d1eb636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765591+00:00"
+    },
+    "a9d74567": {
+      "protocol": "mtproto",
+      "server": "topproxt.asia",
+      "port": 443,
+      "secret": "eebbb00c5d6d8a742b1a762499eb7d4912617669746f2e7275",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765588+00:00"
+    },
+    "ade27c9a": {
+      "protocol": "mtproto",
+      "server": "155.212.209.22",
+      "port": 443,
+      "secret": "ee71fa13a616c63b461ab210a84de8f8e16f7a6f6e2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765585+00:00"
+    },
+    "225d2665": {
+      "protocol": "mtproto",
+      "server": "espress0-macch1ato-p0r-favor3.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765582+00:00"
+    },
+    "ae75b2b6": {
+      "protocol": "mtproto",
+      "server": "5.178.96.232",
+      "port": 443,
+      "secret": "ee3d8fd974cbcaf86cb4d3f57788efd6cc7777772e636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765579+00:00"
+    },
+    "183e9db4": {
+      "protocol": "mtproto",
+      "server": "ir-ir.engematica.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765576+00:00"
+    },
+    "c30ee10b": {
+      "protocol": "mtproto",
+      "server": "relay.surfvpn.app",
+      "port": 443,
+      "secret": "eedf44a4347c1eb8938c7e63340bd1ca4972656c61792e7375726676706e2e617070",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765573+00:00"
+    },
+    "fce470ce": {
+      "protocol": "mtproto",
+      "server": "ctfd-is-shit.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765570+00:00"
+    },
+    "7a3f8775": {
+      "protocol": "mtproto",
+      "server": "host.mizbanonline.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765567+00:00"
+    },
+    "0843c7d8": {
+      "protocol": "mtproto",
+      "server": "ir.ataman.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765564+00:00"
+    },
+    "d6042a65": {
+      "protocol": "mtproto",
+      "server": "surfing.suslik-cloud.homes",
+      "port": 443,
+      "secret": "eed7f61466f824eafe116a533553e01bca73757266696e672e7375736c696b2d636c6f75642e686f6d6573",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765561+00:00"
+    },
+    "01bdd403": {
+      "protocol": "mtproto",
+      "server": "89.127.201.206",
+      "port": 443,
+      "secret": "ee02ad2cb059cc54486e3499efc3170e2c7777772e617669746f2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765558+00:00"
+    },
+    "b4096239": {
+      "protocol": "mtproto",
+      "server": "31.41.33.114",
+      "port": 443,
+      "secret": "eee854b22396ba5a74f23b6f126108294a6972616e2e6d69642e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765555+00:00"
+    },
+    "1019a02f": {
+      "protocol": "mtproto",
+      "server": "ir-ir.grumpyoldmen.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765552+00:00"
+    },
+    "32d953e2": {
+      "protocol": "mtproto",
+      "server": "178.214.211.58",
+      "port": 443,
+      "secret": "eea425a48d01f15bfec1f84b7addbc6946636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765549+00:00"
+    },
+    "074bb074": {
+      "protocol": "mtproto",
+      "server": "cover-acid.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765546+00:00"
+    },
+    "fa871686": {
+      "protocol": "mtproto",
+      "server": "217.60.33.154",
+      "port": 443,
+      "secret": "ee838ba0ade3e2463bef78fcdce3da8c24706f6c616e646d6f6f6e6c696768742e6d6f6f6f2e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765543+00:00"
+    },
+    "7daf0a0d": {
+      "protocol": "mtproto",
+      "server": "ir-ir.simpleelegance-us.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765540+00:00"
+    },
+    "c49cfd18": {
+      "protocol": "mtproto",
+      "server": "2.26.85.57",
+      "port": 443,
+      "secret": "ee470ad979df6233ed96590c3dcde61b42706c617932676f2e636c6f7564",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765537+00:00"
+    },
+    "b92ebe51": {
+      "protocol": "mtproto",
+      "server": "pinklove.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765534+00:00"
+    },
+    "87d0481b": {
+      "protocol": "mtproto",
+      "server": "81.90.17.8",
+      "port": 443,
+      "secret": "ee3c9f1a7e5b2d8046af13ce9271b4d5a87a6f6f6d2e7573",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765531+00:00"
+    },
+    "7799f960": {
+      "protocol": "mtproto",
+      "server": "ir.lv223.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765527+00:00"
+    },
+    "988239d5": {
+      "protocol": "mtproto",
+      "server": "max.kimt.click",
+      "port": 443,
+      "secret": "ee1b153cf06dbd43c6085c359a6702eb936d61782e6b696d742e636c69636b",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765524+00:00"
+    },
+    "1a0d7dc6": {
+      "protocol": "mtproto",
+      "server": "i-love-boobs.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765522+00:00"
+    },
+    "d35edd91": {
+      "protocol": "mtproto",
+      "server": "144.31.255.134",
+      "port": 443,
+      "secret": "eec000b1d98be36f6f50b7d47cf75d237474672e61657a616b6d692e6f7267",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765519+00:00"
+    },
+    "aae06c76": {
+      "protocol": "mtproto",
+      "server": "ir.panhandleflyers.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765516+00:00"
+    },
+    "bb44e445": {
+      "protocol": "mtproto",
+      "server": "t3.nevcodeframe.com",
+      "port": 443,
+      "secret": "ee0e4d933242164450da8a7e6b469b629774332e6e6576636f64656672616d652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765513+00:00"
+    },
+    "dab64aa5": {
+      "protocol": "mtproto",
+      "server": "believe-gravity.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765509+00:00"
+    },
+    "0c4e47fb": {
+      "protocol": "mtproto",
+      "server": "45.76.88.12",
+      "port": 443,
+      "secret": "eef338321541ef499551b93c64f8eadb947777772e617276616e636c6f75642e6972",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765506+00:00"
+    },
+    "784017f9": {
+      "protocol": "mtproto",
+      "server": "ir-ir.naganuma.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765503+00:00"
+    },
+    "5be9a886": {
+      "protocol": "mtproto",
+      "server": "82.47.62.82",
+      "port": 443,
+      "secret": "eea63b9ba526e9762f138e4eee189bd48f636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765501+00:00"
+    },
+    "cabc7e0c": {
+      "protocol": "mtproto",
+      "server": "grin-idle.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765498+00:00"
+    },
+    "bc88ec66": {
+      "protocol": "mtproto",
+      "server": "panel-portal.managep.info",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765494+00:00"
+    },
+    "708977ab": {
+      "protocol": "mtproto",
+      "server": "ir-ir.my-pv.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765491+00:00"
+    },
+    "94b36c07": {
+      "protocol": "mtproto",
+      "server": "tg8.chadvpn.shop",
+      "port": 443,
+      "secret": "ee3931ebe70d8f4e37acd9c3db534b17627275747562652e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765488+00:00"
+    },
+    "462d48f1": {
+      "protocol": "mtproto",
+      "server": "owner-explain.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765486+00:00"
+    },
+    "0e748f33": {
+      "protocol": "mtproto",
+      "server": "93.185.167.212",
+      "port": 443,
+      "secret": "ee1c88677acf461e09e68f4ff0cef5724a617669746f2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765483+00:00"
+    },
+    "dfb84b34": {
+      "protocol": "mtproto",
+      "server": "ir.rebol.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765480+00:00"
+    },
+    "0143bd94": {
+      "protocol": "mtproto",
+      "server": "2.27.105.19",
+      "port": 443,
+      "secret": "ee90b73e408980df9057f816d0399be261636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765477+00:00"
+    },
+    "8ad7d874": {
+      "protocol": "mtproto",
+      "server": "focus-ultimate.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765474+00:00"
+    },
+    "c81d238d": {
+      "protocol": "mtproto",
+      "server": "77.73.135.166",
+      "port": 443,
+      "secret": "ee41ab28a235a527f950facce3193ad74e766b2e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765471+00:00"
+    },
+    "c7f2d126": {
+      "protocol": "mtproto",
+      "server": "ir.xn--ds-bja.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765467+00:00"
+    },
+    "41360c87": {
+      "protocol": "mtproto",
+      "server": "2.26.52.23",
+      "port": 443,
+      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765464+00:00"
+    },
+    "17a3e8e2": {
+      "protocol": "mtproto",
+      "server": "nya-nya.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765461+00:00"
+    },
+    "b567959d": {
+      "protocol": "mtproto",
+      "server": "150.241.70.0",
+      "port": 443,
+      "secret": "eefd4933b3863b668128a246b6cb2249016170692d6d6170732e79616e6465782e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765458+00:00"
+    },
+    "2b6994de": {
+      "protocol": "mtproto",
+      "server": "ir.flipme.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765455+00:00"
+    },
+    "3374c958": {
+      "protocol": "mtproto",
+      "server": "2.26.87.69",
+      "port": 443,
+      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765452+00:00"
+    },
+    "95819f57": {
+      "protocol": "mtproto",
+      "server": "i-love-femboys.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765449+00:00"
+    },
+    "a679071b": {
+      "protocol": "mtproto",
+      "server": "217.144.187.230",
+      "port": 443,
+      "secret": "ee68ae8284982465dfcb198342d01cdedb6f7a6f6e2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765446+00:00"
+    },
+    "efa1d39c": {
+      "protocol": "mtproto",
+      "server": "ir.ariely.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765443+00:00"
+    },
+    "26f5e839": {
+      "protocol": "mtproto",
+      "server": "178.236.245.98",
+      "port": 443,
+      "secret": "ee86b4315adbe231d1a6398b057f9869e86f7a6f6e2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765440+00:00"
+    },
+    "b83c0bc6": {
+      "protocol": "mtproto",
+      "server": "i-love-cu.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765437+00:00"
+    },
+    "ae544c80": {
+      "protocol": "mtproto",
+      "server": "82.40.49.189",
+      "port": 443,
+      "secret": "ee4f16151d4d748e02ab3a97325f54554d62726f777365722e79616e6465782e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765434+00:00"
+    },
+    "f4e40f0a": {
+      "protocol": "mtproto",
+      "server": "ir-ir.grasic.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765430+00:00"
+    },
+    "5a5f3b75": {
+      "protocol": "mtproto",
+      "server": "87.58.149.247",
+      "port": 443,
+      "secret": "eeaaa7b0dbdfce2f2a3e7bc5563c900e297777772e636c6f7564666c6172652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765427+00:00"
+    },
+    "155182c4": {
+      "protocol": "mtproto",
+      "server": "5hu7-up-4nd-sell-me-mor3-th353-chocol47e5.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765424+00:00"
+    },
+    "ca28c821": {
+      "protocol": "mtproto",
+      "server": "62.171.183.101",
+      "port": 443,
+      "secret": "ee36ee4a84e1fa2cca6f1d430eee851de7636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765420+00:00"
+    },
+    "151021b4": {
+      "protocol": "mtproto",
+      "server": "ir.gnutella2.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765417+00:00"
+    },
+    "c5a6fced": {
+      "protocol": "mtproto",
+      "server": "31.76.77.201",
+      "port": 443,
+      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765414+00:00"
+    },
+    "953b54f8": {
+      "protocol": "mtproto",
+      "server": "ruby.velvetoak.work",
+      "port": 443,
+      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765411+00:00"
+    },
+    "0889189e": {
+      "protocol": "mtproto",
+      "server": "132.243.213.215",
+      "port": 443,
+      "secret": "ee46f33d84ae85e3ad53567904d7199be7706574726f766963682e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765408+00:00"
+    },
+    "7d7daded": {
+      "protocol": "mtproto",
+      "server": "ir.xeonxu.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765405+00:00"
+    },
+    "eccea6a0": {
+      "protocol": "mtproto",
+      "server": "bo.cryptocurency.wiki",
+      "port": 443,
+      "secret": "eeafff8ed2b758741b6872fb8b00f1230270782e63727970746f637572656e63792e77696b69",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765402+00:00"
+    },
+    "227d841a": {
+      "protocol": "mtproto",
+      "server": "179.237.76.190",
+      "port": 443,
+      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765399+00:00"
+    },
+    "bda9ff74": {
+      "protocol": "mtproto",
+      "server": "167.86.100.17",
+      "port": 443,
+      "secret": "eee26c8002852c6d9c74ec17c8532d2dfb636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765396+00:00"
+    },
+    "d6d218b6": {
+      "protocol": "mtproto",
+      "server": "ir.radio-zvez.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765393+00:00"
+    },
+    "171ed8a9": {
+      "protocol": "mtproto",
+      "server": "57.131.194.46",
+      "port": 443,
+      "secret": "eebdcf16a127970ad245cb99fbb1fbc66a7777772e636c6f7564666c6172652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765390+00:00"
+    },
+    "cd1734c4": {
+      "protocol": "mtproto",
+      "server": "m4in-fr4mes-are-comp1ex-but-cut3.top",
+      "port": 853,
+      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765386+00:00"
+    },
+    "c992b8ac": {
+      "protocol": "mtproto",
+      "server": "132.243.235.143",
+      "port": 443,
+      "secret": "ee1a043ca04520458fe7fc96309b095f3679616e6465782e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765383+00:00"
+    },
+    "31cd0e6e": {
+      "protocol": "mtproto",
+      "server": "dh1.masi.ir.he6fhd.ru",
+      "port": 8443,
+      "secret": "dd104462821249bd7ac519130220c25d09",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765380+00:00"
+    },
+    "4f0a7daf": {
+      "protocol": "mtproto",
+      "server": "85.9.221.39",
+      "port": 443,
+      "secret": "ee4f78aa8b9f346ca2aba542dd8ea658f07777772e636c6f7564666c6172652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765376+00:00"
+    },
+    "1bae390f": {
+      "protocol": "mtproto",
+      "server": "178.105.137.152",
+      "port": 443,
+      "secret": "eeabf13064a3bf0851a02ad67114f842ce676f6f676c65617069732e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765373+00:00"
+    },
+    "80050a03": {
+      "protocol": "mtproto",
+      "server": "31.57.108.82",
+      "port": 443,
+      "secret": "ee9a6c795e4161815cd4f24cfc8033b5de6d2e6265626f6f2e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765370+00:00"
+    },
+    "5a89dc55": {
+      "protocol": "mtproto",
+      "server": "ir.genesbyjohn.info",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765367+00:00"
+    },
+    "ce3d2aab": {
+      "protocol": "mtproto",
+      "server": "212.147.241.136",
+      "port": 443,
+      "secret": "eeed0542373d8297f689458ff7dd1a4ba87777772e636c6f7564666c6172652e636f6d",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765363+00:00"
+    },
+    "9935ba15": {
+      "protocol": "mtproto",
+      "server": "179.237.76.238",
+      "port": 443,
+      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765360+00:00"
+    },
+    "678613fb": {
+      "protocol": "mtproto",
+      "server": "132.243.235.188",
+      "port": 443,
+      "secret": "eecff01a06513433100e81c6eadff452e779616e6465782e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765357+00:00"
+    },
+    "f93e88b2": {
+      "protocol": "mtproto",
+      "server": "x.shmelproxy.top",
+      "port": 443,
+      "secret": "eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765353+00:00"
+    },
+    "8eb2dc7c": {
+      "protocol": "mtproto",
+      "server": "191.44.113.201",
+      "port": 443,
+      "secret": "eef4b4eaeceb1a9e4a9a6a962012cdb5fa7a6f6f6d2e7573",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765350+00:00"
+    },
+    "deb74520": {
+      "protocol": "mtproto",
+      "server": "83.228.224.201",
+      "port": 443,
+      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765347+00:00"
+    },
+    "2016f55f": {
+      "protocol": "mtproto",
+      "server": "132.243.235.196",
+      "port": 443,
+      "secret": "ee5895bbd18604365e8d18b63af6c3bfbe79616e6465782e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765344+00:00"
+    },
+    "17c57e40": {
+      "protocol": "mtproto",
+      "server": "3.mtprotonewrunningproxasia.info",
+      "port": 8443,
+      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765341+00:00"
+    },
+    "415b37dd": {
+      "protocol": "mtproto",
+      "server": "2.26.160.35",
+      "port": 443,
+      "secret": "ee093eb331f53e059073cd5c7a7e8ea4ee636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765338+00:00"
+    },
+    "d0b7e0a0": {
+      "protocol": "mtproto",
+      "server": "89.124.95.185",
+      "port": 8443,
+      "secret": "ee6403877430086085167456439119957338392e3132342e39352e313835",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765335+00:00"
+    },
+    "78919f39": {
+      "protocol": "mtproto",
+      "server": "5.83.129.84",
+      "port": 443,
+      "secret": "ee79e7010200010007f0030386e24c3add646f776e6c6f61642e77696e646f77737570646174652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765332+00:00"
+    },
+    "3985daa8": {
+      "protocol": "mtproto",
+      "server": "redflag.yazaebalsyadelatproxy.top",
+      "port": 443,
+      "secret": "ee24c8636b7e946779a023ee708370719b726564666c61672e79617a616562616c73796164656c617470726f78792e746f70",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765329+00:00"
+    },
+    "d78d229d": {
+      "protocol": "mtproto",
+      "server": "78.108.56.5",
+      "port": 443,
+      "secret": "eeb94114703ae80f7c88d45fde367c6063636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765325+00:00"
+    },
+    "3e19fd61": {
+      "protocol": "mtproto",
+      "server": "79.137.196.223",
+      "port": 2053,
+      "secret": "eeee1701dff011da0ee1313d584fc565187777772e636c6f7564666c6172652e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765322+00:00"
+    },
+    "c0617f18": {
+      "protocol": "mtproto",
+      "server": "78.17.71.42",
+      "port": 443,
+      "secret": "eeec75b855ebcc01c982f3e013af8ed92a7777772e79616e6465782e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765319+00:00"
+    },
+    "ddf2a8a6": {
+      "protocol": "mtproto",
+      "server": "s7n.ir.ir.ir.meli-n12.info",
+      "port": 8443,
+      "secret": "dd104462821249bd7ac519130220c25d09",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765315+00:00"
+    },
+    "bdc897a2": {
+      "protocol": "mtproto",
+      "server": "ykima.davay.click",
+      "port": 443,
+      "secret": "ee06dfdbdf271bab18c6b606484c237384796b696d612e64617661792e636c69636b",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765312+00:00"
+    },
+    "daa8df1a": {
+      "protocol": "mtproto",
+      "server": "87.248.129.137",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765309+00:00"
+    },
+    "19c13074": {
+      "protocol": "mtproto",
+      "server": "80.76.44.13",
+      "port": 443,
+      "secret": "ee75a3d821b91547a3f2e8146386198aee6b726f7075732e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765306+00:00"
+    },
+    "157e74a8": {
+      "protocol": "mtproto",
+      "server": "65.21.222.229",
+      "port": 443,
+      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765303+00:00"
+    },
+    "74207256": {
+      "protocol": "mtproto",
+      "server": "150.241.103.119",
+      "port": 443,
+      "secret": "eec33c876928f0929103a7dfc2703752aa67697465612e6769742e6368726973746d6173",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765300+00:00"
+    },
+    "d3e54045": {
+      "protocol": "mtproto",
+      "server": "87.248.129.97",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765296+00:00"
+    },
+    "00732ae6": {
+      "protocol": "mtproto",
+      "server": "2.26.254.220",
+      "port": 443,
+      "secret": "ee05c6cef4c32559e2a8fdc779655298d77777772e626f6f6b696e672e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765293+00:00"
+    },
+    "3db9e72c": {
+      "protocol": "mtproto",
+      "server": "deraka22.amberreed.top",
+      "port": 443,
+      "secret": "ee920a4026fcc79354d87c30db9280e578646572616b6132322e616d626572726565642e746f70",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765290+00:00"
+    },
+    "8d02d392": {
+      "protocol": "mtproto",
+      "server": "151.247.25.71",
+      "port": 443,
+      "secret": "ee2fde21a2954be74e1f6d8dd3d2aada0a636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765287+00:00"
+    },
+    "dc9e5477": {
+      "protocol": "mtproto",
+      "server": "190.2.144.63",
+      "port": 443,
+      "secret": "eea3c15217ac9f487f3a9c2a1cab661ebb7777772e676f6f676c652e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765284+00:00"
+    },
+    "bf023f17": {
+      "protocol": "mtproto",
+      "server": "shared2.ddproxy.xyz",
+      "port": 443,
+      "secret": "7t3d3d3d3d3d3d3d3d3d3d1tLmJlYm9vLnJ1`",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765281+00:00"
+    },
+    "179e48c3": {
+      "protocol": "mtproto",
+      "server": "91.84.109.244",
+      "port": 443,
+      "secret": "ee00ff000fffff00fff5555ffffffffff56d656469612e737465616d706f77657265642e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765278+00:00"
+    },
+    "9619f2eb": {
+      "protocol": "mtproto",
+      "server": "65.108.123.76",
+      "port": 443,
+      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765274+00:00"
+    },
+    "9480f204": {
+      "protocol": "mtproto",
+      "server": "151.247.25.59",
+      "port": 443,
+      "secret": "eea7e6325e523331b679a1ba64dc2e962a636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765271+00:00"
+    },
+    "95247e0e": {
+      "protocol": "mtproto",
+      "server": "87.248.129.7",
+      "port": 2053,
+      "secret": "ee1603010200010001fc030386e24c3add7777772e7961686f6f2e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765268+00:00"
+    },
+    "a963101b": {
+      "protocol": "mtproto",
+      "server": "redflag.yazaebalsyadelatproxy.cc",
+      "port": 443,
+      "secret": "7mnomdiexo4iDKF3VXMisn9yZWRmbGFnLnlhemFlYmFsc3lhZGVsYXRwcm94eS5jYw`",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765265+00:00"
+    },
+    "94df0df6": {
+      "protocol": "mtproto",
+      "server": "194.50.94.169",
+      "port": 443,
+      "secret": "eef0cc7b0627ec46bfe543ca738048b755706574726f766963682e7275",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765262+00:00"
+    },
+    "bd2189a9": {
+      "protocol": "mtproto",
+      "server": "redflag.yazaebalsyadelatproxy.vip",
+      "port": 443,
+      "secret": "eeb8e5365580b9ad3c2ee355dfcbc245e5726564666c61672e79617a616562616c73796164656c617470726f78792e766970",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765259+00:00"
+    },
+    "cc7259e7": {
+      "protocol": "mtproto",
+      "server": "yostavpn.casacam.net",
+      "port": 443,
+      "secret": "ee65e2b4d72f5b6dbf24698282d4be7efc796f73746176706e2e6361736163616d2e6e6574",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765256+00:00"
+    },
+    "b7231f0e": {
+      "protocol": "mtproto",
+      "server": "87.248.129.98",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765252+00:00"
+    },
+    "aaffccb1": {
+      "protocol": "mtproto",
+      "server": "edge.tidalcache.com",
+      "port": 443,
+      "secret": "7lyJqyAmbOdZ-WoHRbY9fN9lZGdlLnRpZGFsY2FjaGUuY29t)",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765249+00:00"
+    },
+    "5fa76c7f": {
+      "protocol": "mtproto",
+      "server": "95.170.13.27",
+      "port": 443,
+      "secret": "ee4df606d31cf1e4b98716ab6cdaa6255e626973636f7474692e79656b74616e65742e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765245+00:00"
+    },
+    "50f9cd90": {
+      "protocol": "mtproto",
+      "server": "rale49.mosswren.vip",
+      "port": 443,
+      "secret": "ee73e7dbb3f2f846f567e24bee244c0f1072616c6534392e6d6f73737772656e2e766970",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765242+00:00"
+    },
+    "7cfc3627": {
+      "protocol": "mtproto",
+      "server": "2.namenewok.info",
+      "port": 2096,
+      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765239+00:00"
+    },
+    "7a0725cc": {
+      "protocol": "mtproto",
+      "server": "87.248.129.101",
+      "port": 443,
+      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765236+00:00"
+    },
+    "d4a8fc98": {
+      "protocol": "mtproto",
+      "server": "akenai.top",
+      "port": 853,
+      "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s`",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765233+00:00"
+    },
+    "2d091dba": {
+      "protocol": "mtproto",
+      "server": "95.182.91.199",
+      "port": 443,
+      "secret": "ee197f462f1b8d59a053ea0a90fe6cd66073352e646967696b616c612e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765229+00:00"
+    },
+    "088aca7e": {
+      "protocol": "mtproto",
+      "server": "91.107.171.35",
+      "port": 443,
+      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765226+00:00"
+    },
+    "a15da36f": {
+      "protocol": "mtproto",
+      "server": "check.lotfan.ir.yplkmbcyu.info",
+      "port": 8443,
+      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765223+00:00"
+    },
+    "a566cb4b": {
+      "protocol": "mtproto",
+      "server": "217.138.215.102",
+      "port": 443,
+      "secret": "ee8357954a3df5c26e32a7b8a7978c3f107777772e636974696c696e6b2e7275",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765220+00:00"
+    },
+    "7023aaf5": {
+      "protocol": "mtproto",
+      "server": "predator-artist.top",
+      "port": 853,
+      "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s`",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765216+00:00"
+    },
+    "0b0955bb": {
+      "protocol": "mtproto",
+      "server": "143.246.57.51",
+      "port": 443,
+      "secret": "eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765212+00:00"
+    },
+    "9b969e9c": {
+      "protocol": "mtproto",
+      "server": "star.talebi.co.uk",
+      "port": 2096,
+      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765209+00:00"
+    },
+    "ae7f02b1": {
+      "protocol": "mtproto",
+      "server": "45.91.138.18",
+      "port": 443,
+      "secret": "ee6f81ba440520d90d61497381bf9c829b636c6f75642e6d61696c2e7275",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765206+00:00"
+    },
+    "84cdedd3": {
+      "protocol": "mtproto",
+      "server": "85.17.89.193",
+      "port": 443,
+      "secret": "ee76f6583e6b509d946c56287a9ca59dc362726f7773696e672e79616e6465782e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765203+00:00"
+    },
+    "50a674b5": {
+      "protocol": "mtproto",
+      "server": "redflag.yazaebalsyadelatproxy.uk",
+      "port": 443,
+      "secret": "7mnomdiexo4iDKF3VXMisn9yZWRmbGFnLnlhemFlYmFsc3lhZGVsYXRwcm94eS5jYw)",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765199+00:00"
+    },
+    "a24103f9": {
+      "protocol": "mtproto",
+      "server": "109.248.160.115",
+      "port": 443,
+      "secret": "eeb98c4468ede108c68dd40139ba31e8d57777772e636c6f7564666c6172652e636f6d",
+      "source": "zakky RU resilient",
+      "last_seen": "2026-10-17T12:12:31.765196+00:00"
+    },
+    "26f037b6": {
+      "protocol": "mtproto",
+      "server": "208.87.242.223",
+      "port": 8443,
+      "secret": "EERighJJvXrFGRMCIMjdCQ",
+      "source": "aviamasters RU verified",
+      "last_seen": "2026-10-17T12:12:31.765193+00:00"
+    },
+    "398c18fd": {
+      "protocol": "mtproto",
+      "server": "max.yard-tg-bot.online",
+      "port": 443,
+      "secret": "ee526372c4f8c8ade6146df721f700c06663646e2e796172642d74672d626f742e6f6e6c696e65",
+      "source": "dubblebyte handshake",
+      "last_seen": "2026-10-17T12:12:31.765189+00:00"
+    },
+    "a1add16a": {
+      "protocol": "mtproto",
+      "server": "172.65.119.133",
+      "port": 25565,
+      "secret": "ee104462821249bd7ac519130220c25d0963646e2e79656b74616e65742e636f6d",
+      "source": "tgmtproxy handshake",
+      "last_seen": "2026-10-17T12:12:31.765185+00:00"
+    },
+    "69e8b102": {
+      "protocol": "mtproto",
+      "server": "edge.turboass.live",
+      "port": 443,
+      "secret": "7lERb0AYorPfyb2ihsUq_p9lZGdlLnR1cmJvYXNzLmxpdmU)",
+      "source": "Prihs RU curated",
+      "last_seen": "2026-10-17T12:12:31.765179+00:00"
+    },
+    "37f782b7": {
+      "protocol": "mtproto",
+      "server": "m.aysghfkzcxg.info",
+      "port": 8443,
+      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
+      "source": "white-list",
+      "last_seen": "2026-10-17T12:12:31.765157+00:00"
+    },
     "d7237d4f": {
       "protocol": "socks5",
       "server": "142.54.237.38",
@@ -45,14 +1690,6 @@
       "source": "ProxyScrape live",
       "last_seen": "2026-10-17T06:58:31.516932+00:00"
     },
-    "c0617f18": {
-      "protocol": "mtproto",
-      "server": "78.17.71.42",
-      "port": 443,
-      "secret": "eeec75b855ebcc01c982f3e013af8ed92a7777772e79616e6465782e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516927+00:00"
-    },
     "34caf424": {
       "protocol": "mtproto",
       "server": "company.avacloud.info",
@@ -60,30 +1697,6 @@
       "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516924+00:00"
-    },
-    "6d470ef6": {
-      "protocol": "mtproto",
-      "server": "depicted.husker.waters.pilipinoteleserye.com",
-      "port": 443,
-      "secret": "eee3cf82ccb7f0dfdf6ceda06493dcf43c647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516921+00:00"
-    },
-    "f5de7690": {
-      "protocol": "mtproto",
-      "server": "alevin.ekistics.sparrowhawk.gmateleserye.com",
-      "port": 443,
-      "secret": "ee6050cd496935a7f49cd37ca30493d05c647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516918+00:00"
-    },
-    "f360010a": {
-      "protocol": "mtproto",
-      "server": "constructive.pericardia.undrinkable.teleseryepinoytv.com",
-      "port": 443,
-      "secret": "eec64effb030d8d2a3331aad8b431b55fe647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516914+00:00"
     },
     "8e3e8dc9": {
       "protocol": "mtproto",
@@ -109,22 +1722,6 @@
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516905+00:00"
     },
-    "155182c4": {
-      "protocol": "mtproto",
-      "server": "5hu7-up-4nd-sell-me-mor3-th353-chocol47e5.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516902+00:00"
-    },
-    "50362889": {
-      "protocol": "mtproto",
-      "server": "cheater.nosy.yawningly.teleseryeshd.com",
-      "port": 443,
-      "secret": "eee3b01fd16836a459f83deca3c18dd0fb647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516899+00:00"
-    },
     "ac607bba": {
       "protocol": "mtproto",
       "server": "dl.aapks.app",
@@ -133,14 +1730,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516896+00:00"
     },
-    "f5e54ff4": {
-      "protocol": "mtproto",
-      "server": "45.67.57.32",
-      "port": 443,
-      "secret": "ee68ae8284982465dfcb198342d01cdedb6d2e6265626f6f2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516893+00:00"
-    },
     "b500a2b4": {
       "protocol": "mtproto",
       "server": "s.rkn.tg",
@@ -148,14 +1737,6 @@
       "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516891+00:00"
-    },
-    "61fd1d46": {
-      "protocol": "mtproto",
-      "server": "cracklings.descendable.rangoon.teleseryerepaly.com",
-      "port": 443,
-      "secret": "ee0cb8055ed28d45a4cc20cbe67325489d647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516888+00:00"
     },
     "e21f5753": {
       "protocol": "mtproto",
@@ -173,14 +1754,6 @@
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516881+00:00"
     },
-    "df90ad87": {
-      "protocol": "mtproto",
-      "server": "kharazmi-abo-reyhan-bironi-va-dakheli.basalam.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516878+00:00"
-    },
     "9ef6e952": {
       "protocol": "mtproto",
       "server": "62.217.176.200",
@@ -188,22 +1761,6 @@
       "secret": "ee0dbf98440246f4b9228dd2b704256cad6f7a6f6e2e7275",
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516875+00:00"
-    },
-    "ea7d8ccf": {
-      "protocol": "mtproto",
-      "server": "proxy.lodkirmm.ru",
-      "port": 8443,
-      "secret": "ee16309abd572d284b309ef26bd7a3f68570726f78792e6c6f646b69726d6d2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516872+00:00"
-    },
-    "277f699c": {
-      "protocol": "mtproto",
-      "server": "jounob-iran-dar-ghalb-mast.simbol.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516869+00:00"
     },
     "b07c4272": {
       "protocol": "mtproto",
@@ -229,22 +1786,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516860+00:00"
     },
-    "2805fe93": {
-      "protocol": "mtproto",
-      "server": "155.212.142.105",
-      "port": 443,
-      "secret": "ee0dbf98440246f4b9228dd2b704256cad6f7a6f6e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516857+00:00"
-    },
-    "570fc8d5": {
-      "protocol": "mtproto",
-      "server": "yeh.topbelka.ru",
-      "port": 443,
-      "secret": "ee050c8f82b0877cccd23a08c65f062b987275747562652e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516854+00:00"
-    },
     "f117a1f9": {
       "protocol": "mtproto",
       "server": "most.karshenasi.info",
@@ -253,30 +1794,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516851+00:00"
     },
-    "e89f9dfa": {
-      "protocol": "mtproto",
-      "server": "89.108.88.184",
-      "port": 443,
-      "secret": "ee00d85706e58f9b5ead3b6c8a08d984df636c6f75642e6d61696c2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516848+00:00"
-    },
-    "b7c17ba1": {
-      "protocol": "mtproto",
-      "server": "storagexx.space",
-      "port": 443,
-      "secret": "ee24b61556a3ec49bc0c7a5a7e8525702873746f7261676578782e7370616365",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516845+00:00"
-    },
-    "e342cbc7": {
-      "protocol": "mtproto",
-      "server": "jiko-pok.lamari.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516841+00:00"
-    },
     "90713dc7": {
       "protocol": "mtproto",
       "server": "liberate.shave.valedictory.teleseryeepisodes.com",
@@ -284,86 +1801,6 @@
       "secret": "ee8e85e11e6b67d91ac09f06ee7de11287647a656e2e7275",
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516838+00:00"
-    },
-    "ea0bbbcc": {
-      "protocol": "mtproto",
-      "server": "matrixxx.top",
-      "port": 853,
-      "secret": "eee4508d288bf81791177a2f5e73ac06cf6d617472697878782e746f70",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516835+00:00"
-    },
-    "6cdd2abf": {
-      "protocol": "mtproto",
-      "server": "t.meow-network.com",
-      "port": 443,
-      "secret": "ee5622e11fff3e49bcc85280197a6106b5742e6d656f772d6e6574776f726b2e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516832+00:00"
-    },
-    "8c4d7768": {
-      "protocol": "mtproto",
-      "server": "fluctuant.migration.palsy.pinoywebtv.com",
-      "port": 443,
-      "secret": "ee9280f583ff78c356fe69766ad320356c647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516829+00:00"
-    },
-    "88e12714": {
-      "protocol": "mtproto",
-      "server": "proxy.sosavpn.ru",
-      "port": 443,
-      "secret": "ee942d2deee4d90bc892c74fd132b34d116d61782e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516826+00:00"
-    },
-    "ace783eb": {
-      "protocol": "mtproto",
-      "server": "dl3.soft98.net",
-      "port": 2053,
-      "secret": "ee277b571aff100fbafc2e3efebac80b2b736f667439382e6972",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516824+00:00"
-    },
-    "dd8e5479": {
-      "protocol": "mtproto",
-      "server": "130.49.151.113",
-      "port": 443,
-      "secret": "ee00d85706e58f9b5ead3b6c8a08d984df636c6f75642e6d61696c2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516821+00:00"
-    },
-    "bd798f67": {
-      "protocol": "mtproto",
-      "server": "proxy.noblok.org",
-      "port": 443,
-      "secret": "ee59523800f28b6c8384f93860bf95630270726f78792e6e6f626c6f6b2e6f7267",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516817+00:00"
-    },
-    "5fa687c8": {
-      "protocol": "mtproto",
-      "server": "calcium-credit.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516814+00:00"
-    },
-    "9b59f737": {
-      "protocol": "mtproto",
-      "server": "176.109.105.129",
-      "port": 443,
-      "secret": "ee248c43b7aee97c6fe887311452a323026164732e78352e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516811+00:00"
-    },
-    "907d1ca7": {
-      "protocol": "mtproto",
-      "server": "xxmatrixx.top",
-      "port": 853,
-      "secret": "eee4508d288bf81791177a2f5e73ac06cf6d617472697878782e746f70",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516808+00:00"
     },
     "69ceb4aa": {
       "protocol": "mtproto",
@@ -381,14 +1818,6 @@
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516802+00:00"
     },
-    "c30ee10b": {
-      "protocol": "mtproto",
-      "server": "relay.surfvpn.app",
-      "port": 443,
-      "secret": "eedf44a4347c1eb8938c7e63340bd1ca4972656c61792e7375726676706e2e617070",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516799+00:00"
-    },
     "e976033b": {
       "protocol": "mtproto",
       "server": "ivory.driftquill.click",
@@ -396,30 +1825,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516796+00:00"
-    },
-    "7799e444": {
-      "protocol": "mtproto",
-      "server": "sdfree.mahanam.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516793+00:00"
-    },
-    "273208cf": {
-      "protocol": "mtproto",
-      "server": "rkn1.botrkn.cloud-ip.cc",
-      "port": 443,
-      "secret": "eef6564861f6b464d94e1acc6564428cee726b6e312e626f74726b6e2e636c6f75642d69702e6363",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516790+00:00"
-    },
-    "fb7b5c23": {
-      "protocol": "mtproto",
-      "server": "y0u-found-a-way-ou7-of-gorphosts-lockd0wn.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516787+00:00"
     },
     "d5c067cd": {
       "protocol": "mtproto",
@@ -429,14 +1834,6 @@
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T06:58:31.516784+00:00"
     },
-    "d6042a65": {
-      "protocol": "mtproto",
-      "server": "surfing.suslik-cloud.homes",
-      "port": 443,
-      "secret": "eed7f61466f824eafe116a533553e01bca73757266696e672e7375736c696b2d636c6f75642e686f6d6573",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516781+00:00"
-    },
     "6de17525": {
       "protocol": "mtproto",
       "server": "bocasin.frowsty.interpretative.teleseryetvreplay.com",
@@ -444,46 +1841,6 @@
       "secret": "ee956b4f35754cd86428c93935ba7704a0647a656e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516777+00:00"
-    },
-    "237266aa": {
-      "protocol": "mtproto",
-      "server": "37.27.38.205",
-      "port": 443,
-      "secret": "ee9d659fc2ae43e0b8323c082960233d7b7777772e636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516774+00:00"
-    },
-    "75923f96": {
-      "protocol": "mtproto",
-      "server": "as.mkim.click",
-      "port": 443,
-      "secret": "ee2dfa3526fc70b7abd7a09eade6ccea1f61732e6d6b696d2e636c69636b",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516772+00:00"
-    },
-    "fce470ce": {
-      "protocol": "mtproto",
-      "server": "ctfd-is-shit.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516769+00:00"
-    },
-    "05cddabe": {
-      "protocol": "mtproto",
-      "server": "65.108.154.5",
-      "port": 443,
-      "secret": "eecdf95381f978fb348f233a14b2251e6d7777772e636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516766+00:00"
-    },
-    "0143bd94": {
-      "protocol": "mtproto",
-      "server": "2.27.105.19",
-      "port": 443,
-      "secret": "ee90b73e408980df9057f816d0399be261636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516762+00:00"
     },
     "794632ce": {
       "protocol": "mtproto",
@@ -493,38 +1850,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516759+00:00"
     },
-    "7ae8e805": {
-      "protocol": "mtproto",
-      "server": "46.62.132.241",
-      "port": 443,
-      "secret": "eeae762d0e4d199c7a7085525d37e230c97777772e636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516756+00:00"
-    },
-    "11f609c8": {
-      "protocol": "mtproto",
-      "server": "vaultmyphone.space",
-      "port": 443,
-      "secret": "eee0f2c5c0e0982f222ac066c72082c259636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516753+00:00"
-    },
-    "cabc7e0c": {
-      "protocol": "mtproto",
-      "server": "grin-idle.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516750+00:00"
-    },
-    "ae75b2b6": {
-      "protocol": "mtproto",
-      "server": "5.178.96.232",
-      "port": 443,
-      "secret": "ee3d8fd974cbcaf86cb4d3f57788efd6cc7777772e636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516748+00:00"
-    },
     "2942e822": {
       "protocol": "mtproto",
       "server": "pub.ultra-fast.cc",
@@ -532,94 +1857,6 @@
       "secret": "eea727b55fa29408edd59b03aacda293ee7075622e756c7472612d666173742e6363",
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-17T06:58:31.516744+00:00"
-    },
-    "20135a2c": {
-      "protocol": "mtproto",
-      "server": "i-love-hse.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516741+00:00"
-    },
-    "5b22a85c": {
-      "protocol": "mtproto",
-      "server": "31.58.137.124",
-      "port": 443,
-      "secret": "eee2970b9a0d34e958110ee25e8bc8378d6d61696c2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516739+00:00"
-    },
-    "42182f40": {
-      "protocol": "mtproto",
-      "server": "kima.rabotaet.online",
-      "port": 443,
-      "secret": "ee12e7e5f961f258b04af168a1cba6318a6b696d612e7261626f746165742e6f6e6c696e65",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516735+00:00"
-    },
-    "17a3e8e2": {
-      "protocol": "mtproto",
-      "server": "nya-nya.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516732+00:00"
-    },
-    "56ae4192": {
-      "protocol": "mtproto",
-      "server": "genuismind.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516730+00:00"
-    },
-    "cfa47267": {
-      "protocol": "mtproto",
-      "server": "tori.fi.endpro.tech",
-      "port": 443,
-      "secret": "eee68e265d96da13efc2ce1337910da6de746f72692e6669",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516727+00:00"
-    },
-    "95819f57": {
-      "protocol": "mtproto",
-      "server": "i-love-femboys.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516723+00:00"
-    },
-    "fa871686": {
-      "protocol": "mtproto",
-      "server": "217.60.33.154",
-      "port": 443,
-      "secret": "ee838ba0ade3e2463bef78fcdce3da8c24706f6c616e646d6f6f6e6c696768742e6d6f6f6f2e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516720+00:00"
-    },
-    "bdc897a2": {
-      "protocol": "mtproto",
-      "server": "ykima.davay.click",
-      "port": 443,
-      "secret": "ee06dfdbdf271bab18c6b606484c237384796b696d612e64617661792e636c69636b",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516717+00:00"
-    },
-    "1a0d7dc6": {
-      "protocol": "mtproto",
-      "server": "i-love-boobs.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516714+00:00"
-    },
-    "87d0481b": {
-      "protocol": "mtproto",
-      "server": "81.90.17.8",
-      "port": 443,
-      "secret": "ee3c9f1a7e5b2d8046af13ce9271b4d5a87a6f6f6d2e7573",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516711+00:00"
     },
     "d435aaea": {
       "protocol": "mtproto",
@@ -629,38 +1866,6 @@
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-17T06:58:31.516707+00:00"
     },
-    "b83c0bc6": {
-      "protocol": "mtproto",
-      "server": "i-love-cu.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516704+00:00"
-    },
-    "b4096239": {
-      "protocol": "mtproto",
-      "server": "31.41.33.114",
-      "port": 443,
-      "secret": "eee854b22396ba5a74f23b6f126108294a6972616e2e6d69642e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516701+00:00"
-    },
-    "aae06c76": {
-      "protocol": "mtproto",
-      "server": "ir.panhandleflyers.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516698+00:00"
-    },
-    "30f8785d": {
-      "protocol": "mtproto",
-      "server": "kostyanchekloh.lol",
-      "port": 443,
-      "secret": "ee3f72634c46d320aaa30d8bb2682e9b497975672d6c696e6b2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516695+00:00"
-    },
     "3b40c070": {
       "protocol": "mtproto",
       "server": "forest.lite64.xyz",
@@ -668,14 +1873,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516692+00:00"
-    },
-    "d35edd91": {
-      "protocol": "mtproto",
-      "server": "144.31.255.134",
-      "port": 443,
-      "secret": "eec000b1d98be36f6f50b7d47cf75d237474672e61657a616b6d692e6f7267",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516689+00:00"
     },
     "7646a190": {
       "protocol": "mtproto",
@@ -685,14 +1882,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516686+00:00"
     },
-    "ade27c9a": {
-      "protocol": "mtproto",
-      "server": "155.212.209.22",
-      "port": 443,
-      "secret": "ee71fa13a616c63b461ab210a84de8f8e16f7a6f6e2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516683+00:00"
-    },
     "b35204ca": {
       "protocol": "mtproto",
       "server": "ember.lite64.top",
@@ -700,14 +1889,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516680+00:00"
-    },
-    "0e748f33": {
-      "protocol": "mtproto",
-      "server": "93.185.167.212",
-      "port": 443,
-      "secret": "ee1c88677acf461e09e68f4ff0cef5724a617669746f2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516677+00:00"
     },
     "c79fe389": {
       "protocol": "mtproto",
@@ -717,14 +1898,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516674+00:00"
     },
-    "bb9b0786": {
-      "protocol": "mtproto",
-      "server": "ru2.replayeye.cc",
-      "port": 443,
-      "secret": "ee2b1d631a79b5110bd8e6b7740f7ad62764726976652e676f6f676c652e636f6d",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516670+00:00"
-    },
     "74b1c412": {
       "protocol": "mtproto",
       "server": "lagoon.pebblewisp.xyz",
@@ -732,30 +1905,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516667+00:00"
-    },
-    "8378a3ed": {
-      "protocol": "mtproto",
-      "server": "russia.its-work.ru",
-      "port": 443,
-      "secret": "ee368601a36ebfafec1604dd8ad6c2d1eb636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516664+00:00"
-    },
-    "7daf0a0d": {
-      "protocol": "mtproto",
-      "server": "ir-ir.simpleelegance-us.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516661+00:00"
-    },
-    "94b36c07": {
-      "protocol": "mtproto",
-      "server": "tg8.chadvpn.shop",
-      "port": 443,
-      "secret": "ee3931ebe70d8f4e37acd9c3db534b17627275747562652e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516658+00:00"
     },
     "d1fa1f26": {
       "protocol": "mtproto",
@@ -765,30 +1914,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516655+00:00"
     },
-    "c81d238d": {
-      "protocol": "mtproto",
-      "server": "77.73.135.166",
-      "port": 443,
-      "secret": "ee41ab28a235a527f950facce3193ad74e766b2e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516652+00:00"
-    },
-    "f4e40f0a": {
-      "protocol": "mtproto",
-      "server": "ir-ir.grasic.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516648+00:00"
-    },
-    "5be9a886": {
-      "protocol": "mtproto",
-      "server": "82.47.62.82",
-      "port": 443,
-      "secret": "eea63b9ba526e9762f138e4eee189bd48f636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516645+00:00"
-    },
     "3d3b3eef": {
       "protocol": "mtproto",
       "server": "sapphire.lanternmoss.top",
@@ -796,270 +1921,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T06:58:31.516642+00:00"
-    },
-    "b567959d": {
-      "protocol": "mtproto",
-      "server": "150.241.70.0",
-      "port": 443,
-      "secret": "eefd4933b3863b668128a246b6cb2249016170692d6d6170732e79616e6465782e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516639+00:00"
-    },
-    "a66c358e": {
-      "protocol": "mtproto",
-      "server": "akenai.tg",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516636+00:00"
-    },
-    "32d953e2": {
-      "protocol": "mtproto",
-      "server": "178.214.211.58",
-      "port": 443,
-      "secret": "eea425a48d01f15bfec1f84b7addbc6946636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516633+00:00"
-    },
-    "074bb074": {
-      "protocol": "mtproto",
-      "server": "cover-acid.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516630+00:00"
-    },
-    "9b1442c5": {
-      "protocol": "mtproto",
-      "server": "saadi.masnavi.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516627+00:00"
-    },
-    "c7f2d126": {
-      "protocol": "mtproto",
-      "server": "ir.xn--ds-bja.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516624+00:00"
-    },
-    "26f5e839": {
-      "protocol": "mtproto",
-      "server": "178.236.245.98",
-      "port": 443,
-      "secret": "ee86b4315adbe231d1a6398b057f9869e86f7a6f6e2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516621+00:00"
-    },
-    "01bdd403": {
-      "protocol": "mtproto",
-      "server": "89.127.201.206",
-      "port": 443,
-      "secret": "ee02ad2cb059cc54486e3499efc3170e2c7777772e617669746f2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516618+00:00"
-    },
-    "7a3f8775": {
-      "protocol": "mtproto",
-      "server": "host.mizbanonline.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516615+00:00"
-    },
-    "f93e88b2": {
-      "protocol": "mtproto",
-      "server": "x.shmelproxy.top",
-      "port": 443,
-      "secret": "eefc2612ff65a557fddf1d1b334395ef237975672d6c696e6b2e7275",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516612+00:00"
-    },
-    "6dcd18c5": {
-      "protocol": "mtproto",
-      "server": "phonebackup.lol",
-      "port": 443,
-      "secret": "ee4a587c0a84d8c02045cbbfc2edbdb8d9636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516609+00:00"
-    },
-    "cd1734c4": {
-      "protocol": "mtproto",
-      "server": "m4in-fr4mes-are-comp1ex-but-cut3.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516606+00:00"
-    },
-    "0c4e47fb": {
-      "protocol": "mtproto",
-      "server": "45.76.88.12",
-      "port": 443,
-      "secret": "eef338321541ef499551b93c64f8eadb947777772e617276616e636c6f75642e6972",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516603+00:00"
-    },
-    "7799f960": {
-      "protocol": "mtproto",
-      "server": "ir.lv223.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516600+00:00"
-    },
-    "5a5f3b75": {
-      "protocol": "mtproto",
-      "server": "87.58.149.247",
-      "port": 443,
-      "secret": "eeaaa7b0dbdfce2f2a3e7bc5563c900e297777772e636c6f7564666c6172652e636f6d",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516597+00:00"
-    },
-    "225d2665": {
-      "protocol": "mtproto",
-      "server": "espress0-macch1ato-p0r-favor3.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516594+00:00"
-    },
-    "a679071b": {
-      "protocol": "mtproto",
-      "server": "217.144.187.230",
-      "port": 443,
-      "secret": "ee68ae8284982465dfcb198342d01cdedb6f7a6f6e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516591+00:00"
-    },
-    "183e9db4": {
-      "protocol": "mtproto",
-      "server": "ir-ir.engematica.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516588+00:00"
-    },
-    "988239d5": {
-      "protocol": "mtproto",
-      "server": "max.kimt.click",
-      "port": 443,
-      "secret": "ee1b153cf06dbd43c6085c359a6702eb936d61782e6b696d742e636c69636b",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516585+00:00"
-    },
-    "b92ebe51": {
-      "protocol": "mtproto",
-      "server": "pinklove.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516582+00:00"
-    },
-    "0889189e": {
-      "protocol": "mtproto",
-      "server": "132.243.213.215",
-      "port": 443,
-      "secret": "ee46f33d84ae85e3ad53567904d7199be7706574726f766963682e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516579+00:00"
-    },
-    "efa1d39c": {
-      "protocol": "mtproto",
-      "server": "ir.ariely.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516576+00:00"
-    },
-    "171ed8a9": {
-      "protocol": "mtproto",
-      "server": "57.131.194.46",
-      "port": 443,
-      "secret": "eebdcf16a127970ad245cb99fbb1fbc66a7777772e636c6f7564666c6172652e636f6d",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516573+00:00"
-    },
-    "dab64aa5": {
-      "protocol": "mtproto",
-      "server": "believe-gravity.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516570+00:00"
-    },
-    "f27672f2": {
-      "protocol": "mtproto",
-      "server": "edge.ehtemal.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516566+00:00"
-    },
-    "7d7daded": {
-      "protocol": "mtproto",
-      "server": "ir.xeonxu.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516563+00:00"
-    },
-    "4f0a7daf": {
-      "protocol": "mtproto",
-      "server": "85.9.221.39",
-      "port": 443,
-      "secret": "ee4f78aa8b9f346ca2aba542dd8ea658f07777772e636c6f7564666c6172652e636f6d",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516560+00:00"
-    },
-    "d0b7e0a0": {
-      "protocol": "mtproto",
-      "server": "89.124.95.185",
-      "port": 8443,
-      "secret": "ee6403877430086085167456439119957338392e3132342e39352e313835",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516557+00:00"
-    },
-    "ae544c80": {
-      "protocol": "mtproto",
-      "server": "82.40.49.189",
-      "port": 443,
-      "secret": "ee4f16151d4d748e02ab3a97325f54554d62726f777365722e79616e6465782e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516554+00:00"
-    },
-    "0843c7d8": {
-      "protocol": "mtproto",
-      "server": "ir.ataman.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516551+00:00"
-    },
-    "ce3d2aab": {
-      "protocol": "mtproto",
-      "server": "212.147.241.136",
-      "port": 443,
-      "secret": "eeed0542373d8297f689458ff7dd1a4ba87777772e636c6f7564666c6172652e636f6d",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516547+00:00"
-    },
-    "8ad7d874": {
-      "protocol": "mtproto",
-      "server": "focus-ultimate.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516544+00:00"
-    },
-    "ca28c821": {
-      "protocol": "mtproto",
-      "server": "62.171.183.101",
-      "port": 443,
-      "secret": "ee36ee4a84e1fa2cca6f1d430eee851de7636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516541+00:00"
     },
     "69263f87": {
       "protocol": "mtproto",
@@ -1069,94 +1930,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516538+00:00"
     },
-    "c5a6fced": {
-      "protocol": "mtproto",
-      "server": "31.76.77.201",
-      "port": 443,
-      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516535+00:00"
-    },
-    "462d48f1": {
-      "protocol": "mtproto",
-      "server": "owner-explain.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516532+00:00"
-    },
-    "068e128d": {
-      "protocol": "mtproto",
-      "server": "he.de-nu.7.mtproto.ru",
-      "port": 443,
-      "secret": "ee2111222233334444555566667777888862726f777365722e79616e6465782e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516529+00:00"
-    },
-    "dfb84b34": {
-      "protocol": "mtproto",
-      "server": "ir.rebol.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516526+00:00"
-    },
-    "41360c87": {
-      "protocol": "mtproto",
-      "server": "2.26.52.23",
-      "port": 443,
-      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516522+00:00"
-    },
-    "6c80a29c": {
-      "protocol": "mtproto",
-      "server": "skill-issue.top",
-      "port": 853,
-      "secret": "ee54ce330e4690cc297d2b031ff3f288b06d742e616b656e61692e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516519+00:00"
-    },
-    "bda9ff74": {
-      "protocol": "mtproto",
-      "server": "167.86.100.17",
-      "port": 443,
-      "secret": "eee26c8002852c6d9c74ec17c8532d2dfb636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516516+00:00"
-    },
-    "a9d74567": {
-      "protocol": "mtproto",
-      "server": "topproxt.asia",
-      "port": 443,
-      "secret": "eebbb00c5d6d8a742b1a762499eb7d4912617669746f2e7275",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516513+00:00"
-    },
-    "c49cfd18": {
-      "protocol": "mtproto",
-      "server": "2.26.85.57",
-      "port": 443,
-      "secret": "ee470ad979df6233ed96590c3dcde61b42706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516510+00:00"
-    },
-    "9935ba15": {
-      "protocol": "mtproto",
-      "server": "179.237.76.238",
-      "port": 443,
-      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516507+00:00"
-    },
-    "678613fb": {
-      "protocol": "mtproto",
-      "server": "132.243.235.188",
-      "port": 443,
-      "secret": "eecff01a06513433100e81c6eadff452e779616e6465782e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516504+00:00"
-    },
     "6cd8bd28": {
       "protocol": "mtproto",
       "server": "77.42.56.67",
@@ -1164,30 +1937,6 @@
       "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516501+00:00"
-    },
-    "8eb2dc7c": {
-      "protocol": "mtproto",
-      "server": "191.44.113.201",
-      "port": 443,
-      "secret": "eef4b4eaeceb1a9e4a9a6a962012cdb5fa7a6f6f6d2e7573",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516497+00:00"
-    },
-    "bc88ec66": {
-      "protocol": "mtproto",
-      "server": "panel-portal.managep.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516494+00:00"
-    },
-    "c992b8ac": {
-      "protocol": "mtproto",
-      "server": "132.243.235.143",
-      "port": 443,
-      "secret": "ee1a043ca04520458fe7fc96309b095f3679616e6465782e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516491+00:00"
     },
     "21a77016": {
       "protocol": "mtproto",
@@ -1197,62 +1946,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516488+00:00"
     },
-    "415b37dd": {
-      "protocol": "mtproto",
-      "server": "2.26.160.35",
-      "port": 443,
-      "secret": "ee093eb331f53e059073cd5c7a7e8ea4ee636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516485+00:00"
-    },
-    "227d841a": {
-      "protocol": "mtproto",
-      "server": "179.237.76.190",
-      "port": 443,
-      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516482+00:00"
-    },
-    "94df0df6": {
-      "protocol": "mtproto",
-      "server": "194.50.94.169",
-      "port": 443,
-      "secret": "eef0cc7b0627ec46bfe543ca738048b755706574726f766963682e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516479+00:00"
-    },
-    "9619f2eb": {
-      "protocol": "mtproto",
-      "server": "65.108.123.76",
-      "port": 443,
-      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516476+00:00"
-    },
-    "3374c958": {
-      "protocol": "mtproto",
-      "server": "2.26.87.69",
-      "port": 443,
-      "secret": "ee5018602bc9cb9124a5c1cb0154634ad2706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516472+00:00"
-    },
-    "deb74520": {
-      "protocol": "mtproto",
-      "server": "83.228.224.201",
-      "port": 443,
-      "secret": "ee271a79a8c3ffc97950025632d757aa227777772e6d736e2e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516469+00:00"
-    },
-    "78919f39": {
-      "protocol": "mtproto",
-      "server": "5.83.129.84",
-      "port": 443,
-      "secret": "ee79e7010200010007f0030386e24c3add646f776e6c6f61642e77696e646f77737570646174652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516466+00:00"
-    },
     "0c9a560f": {
       "protocol": "mtproto",
       "server": "matora47.amberreed.top",
@@ -1261,30 +1954,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516463+00:00"
     },
-    "d78d229d": {
-      "protocol": "mtproto",
-      "server": "78.108.56.5",
-      "port": 443,
-      "secret": "eeb94114703ae80f7c88d45fde367c6063636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516460+00:00"
-    },
-    "1bae390f": {
-      "protocol": "mtproto",
-      "server": "178.105.137.152",
-      "port": 443,
-      "secret": "eeabf13064a3bf0851a02ad67114f842ce676f6f676c65617069732e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516456+00:00"
-    },
-    "80050a03": {
-      "protocol": "mtproto",
-      "server": "31.57.108.82",
-      "port": 443,
-      "secret": "ee9a6c795e4161815cd4f24cfc8033b5de6d2e6265626f6f2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516453+00:00"
-    },
     "8b8f0022": {
       "protocol": "mtproto",
       "server": "65.109.181.71",
@@ -1292,38 +1961,6 @@
       "secret": "79e344818749bd7ac519130220c25d09",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516450+00:00"
-    },
-    "74207256": {
-      "protocol": "mtproto",
-      "server": "150.241.103.119",
-      "port": 443,
-      "secret": "eec33c876928f0929103a7dfc2703752aa67697465612e6769742e6368726973746d6173",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516447+00:00"
-    },
-    "3e19fd61": {
-      "protocol": "mtproto",
-      "server": "79.137.196.223",
-      "port": 2053,
-      "secret": "eeee1701dff011da0ee1313d584fc565187777772e636c6f7564666c6172652e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516443+00:00"
-    },
-    "bf023f17": {
-      "protocol": "mtproto",
-      "server": "shared2.ddproxy.xyz",
-      "port": 443,
-      "secret": "7t3d3d3d3d3d3d3d3d3d3d1tLmJlYm9vLnJ1`",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-17T06:58:31.516440+00:00"
-    },
-    "19c13074": {
-      "protocol": "mtproto",
-      "server": "80.76.44.13",
-      "port": 443,
-      "secret": "ee75a3d821b91547a3f2e8146386198aee6b726f7075732e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516437+00:00"
     },
     "5e2f3f2a": {
       "protocol": "mtproto",
@@ -1341,30 +1978,6 @@
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-17T06:58:31.516431+00:00"
     },
-    "d3e54045": {
-      "protocol": "mtproto",
-      "server": "87.248.129.97",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516428+00:00"
-    },
-    "69e8b102": {
-      "protocol": "mtproto",
-      "server": "edge.turboass.live",
-      "port": 443,
-      "secret": "7lERb0AYorPfyb2ihsUq_p9lZGdlLnR1cmJvYXNzLmxpdmU)",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-17T06:58:31.516424+00:00"
-    },
-    "00732ae6": {
-      "protocol": "mtproto",
-      "server": "2.26.254.220",
-      "port": 443,
-      "secret": "ee05c6cef4c32559e2a8fdc779655298d77777772e626f6f6b696e672e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516421+00:00"
-    },
     "879079aa": {
       "protocol": "mtproto",
       "server": "u8886h6.masi.ir.he6fhd.ru",
@@ -1372,14 +1985,6 @@
       "secret": "dd104462821249bd7ac519130220c25d09",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516418+00:00"
-    },
-    "9480f204": {
-      "protocol": "mtproto",
-      "server": "151.247.25.59",
-      "port": 443,
-      "secret": "eea7e6325e523331b679a1ba64dc2e962a636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516415+00:00"
     },
     "65b7e9e5": {
       "protocol": "mtproto",
@@ -1397,14 +2002,6 @@
       "source": "Prihs RU curated",
       "last_seen": "2026-10-17T06:58:31.516408+00:00"
     },
-    "2016f55f": {
-      "protocol": "mtproto",
-      "server": "132.243.235.196",
-      "port": 443,
-      "secret": "ee5895bbd18604365e8d18b63af6c3bfbe79616e6465782e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516405+00:00"
-    },
     "7f114cb1": {
       "protocol": "mtproto",
       "server": "nylole24.copperfinch.top",
@@ -1412,22 +2009,6 @@
       "secret": "eea881007b38d5a73bdbdb67c6142053d06e796c6f6c6532342e636f7070657266696e63682e746f70",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516402+00:00"
-    },
-    "8d02d392": {
-      "protocol": "mtproto",
-      "server": "151.247.25.71",
-      "port": 443,
-      "secret": "ee2fde21a2954be74e1f6d8dd3d2aada0a636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516399+00:00"
-    },
-    "b7231f0e": {
-      "protocol": "mtproto",
-      "server": "87.248.129.98",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516395+00:00"
     },
     "189732c4": {
       "protocol": "mtproto",
@@ -1437,14 +2018,6 @@
       "source": "Prihs RU curated",
       "last_seen": "2026-10-17T06:58:31.516392+00:00"
     },
-    "179e48c3": {
-      "protocol": "mtproto",
-      "server": "91.84.109.244",
-      "port": 443,
-      "secret": "ee00ff000fffff00fff5555ffffffffff56d656469612e737465616d706f77657265642e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516389+00:00"
-    },
     "a222a6d6": {
       "protocol": "mtproto",
       "server": "ff16g.ir.meli-n13.info",
@@ -1452,22 +2025,6 @@
       "secret": "104462821249bd7ac519130220c25d09",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516386+00:00"
-    },
-    "cc7259e7": {
-      "protocol": "mtproto",
-      "server": "yostavpn.casacam.net",
-      "port": 443,
-      "secret": "ee65e2b4d72f5b6dbf24698282d4be7efc796f73746176706e2e6361736163616d2e6e6574",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516383+00:00"
-    },
-    "95247e0e": {
-      "protocol": "mtproto",
-      "server": "87.248.129.7",
-      "port": 2053,
-      "secret": "ee1603010200010001fc030386e24c3add7777772e7961686f6f2e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516380+00:00"
     },
     "63639525": {
       "protocol": "mtproto",
@@ -1477,38 +2034,6 @@
       "source": "Prihs RU curated",
       "last_seen": "2026-10-17T06:58:31.516376+00:00"
     },
-    "5fa76c7f": {
-      "protocol": "mtproto",
-      "server": "95.170.13.27",
-      "port": 443,
-      "secret": "ee4df606d31cf1e4b98716ab6cdaa6255e626973636f7474692e79656b74616e65742e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516373+00:00"
-    },
-    "088aca7e": {
-      "protocol": "mtproto",
-      "server": "91.107.171.35",
-      "port": 443,
-      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516370+00:00"
-    },
-    "7cfc3627": {
-      "protocol": "mtproto",
-      "server": "2.namenewok.info",
-      "port": 2096,
-      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516367+00:00"
-    },
-    "dc9e5477": {
-      "protocol": "mtproto",
-      "server": "190.2.144.63",
-      "port": 443,
-      "secret": "eea3c15217ac9f487f3a9c2a1cab661ebb7777772e676f6f676c652e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516364+00:00"
-    },
     "64aee386": {
       "protocol": "mtproto",
       "server": "predator-artist.top",
@@ -1516,14 +2041,6 @@
       "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s)",
       "source": "Prihs RU curated",
       "last_seen": "2026-10-17T06:58:31.516361+00:00"
-    },
-    "2d091dba": {
-      "protocol": "mtproto",
-      "server": "95.182.91.199",
-      "port": 443,
-      "secret": "ee197f462f1b8d59a053ea0a90fe6cd66073352e646967696b616c612e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516358+00:00"
     },
     "879d5293": {
       "protocol": "mtproto",
@@ -1533,38 +2050,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516355+00:00"
     },
-    "ae7f02b1": {
-      "protocol": "mtproto",
-      "server": "45.91.138.18",
-      "port": 443,
-      "secret": "ee6f81ba440520d90d61497381bf9c829b636c6f75642e6d61696c2e7275",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516352+00:00"
-    },
-    "a566cb4b": {
-      "protocol": "mtproto",
-      "server": "217.138.215.102",
-      "port": 443,
-      "secret": "ee8357954a3df5c26e32a7b8a7978c3f107777772e636974696c696e6b2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516349+00:00"
-    },
-    "a963101b": {
-      "protocol": "mtproto",
-      "server": "redflag.yazaebalsyadelatproxy.cc",
-      "port": 443,
-      "secret": "7mnomdiexo4iDKF3VXMisn9yZWRmbGFnLnlhemFlYmFsc3lhZGVsYXRwcm94eS5jYw`",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-17T06:58:31.516346+00:00"
-    },
-    "0b0955bb": {
-      "protocol": "mtproto",
-      "server": "143.246.57.51",
-      "port": 443,
-      "secret": "eed7b564f2e6798df5a7aa226b94769634636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516343+00:00"
-    },
     "468e7041": {
       "protocol": "mtproto",
       "server": "167.235.197.87",
@@ -1573,62 +2058,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T06:58:31.516340+00:00"
     },
-    "a15da36f": {
-      "protocol": "mtproto",
-      "server": "check.lotfan.ir.yplkmbcyu.info",
-      "port": 8443,
-      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516337+00:00"
-    },
-    "84cdedd3": {
-      "protocol": "mtproto",
-      "server": "85.17.89.193",
-      "port": 443,
-      "secret": "ee76f6583e6b509d946c56287a9ca59dc362726f7773696e672e79616e6465782e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516333+00:00"
-    },
-    "d4a8fc98": {
-      "protocol": "mtproto",
-      "server": "akenai.top",
-      "port": 853,
-      "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s`",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-17T06:58:31.516330+00:00"
-    },
-    "a24103f9": {
-      "protocol": "mtproto",
-      "server": "109.248.160.115",
-      "port": 443,
-      "secret": "eeb98c4468ede108c68dd40139ba31e8d57777772e636c6f7564666c6172652e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T06:58:31.516326+00:00"
-    },
-    "26f037b6": {
-      "protocol": "mtproto",
-      "server": "208.87.242.223",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T06:58:31.516322+00:00"
-    },
-    "398c18fd": {
-      "protocol": "mtproto",
-      "server": "max.yard-tg-bot.online",
-      "port": 443,
-      "secret": "ee526372c4f8c8ade6146df721f700c06663646e2e796172642d74672d626f742e6f6e6c696e65",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T06:58:31.516319+00:00"
-    },
-    "a1add16a": {
-      "protocol": "mtproto",
-      "server": "172.65.119.133",
-      "port": 25565,
-      "secret": "ee104462821249bd7ac519130220c25d0963646e2e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T06:58:31.516314+00:00"
-    },
     "76b88ad2": {
       "protocol": "mtproto",
       "server": "redflag.yazaebalsyadelatproxy.co.uk",
@@ -1636,14 +2065,6 @@
       "secret": "7mnomdiexo4iDKF3VXMisn9yZWRmbGFnLnlhemFlYmFsc3lhZGVsYXRwcm94eS5jYw`",
       "source": "Prihs RU curated",
       "last_seen": "2026-10-17T06:58:31.516308+00:00"
-    },
-    "37f782b7": {
-      "protocol": "mtproto",
-      "server": "m.aysghfkzcxg.info",
-      "port": 8443,
-      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
-      "source": "white-list",
-      "last_seen": "2026-10-17T06:58:31.516288+00:00"
     },
     "fbb243c4": {
       "protocol": "socks5",
@@ -1714,14 +2135,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T00:30:15.611857+00:00"
     },
-    "c990ec78": {
-      "protocol": "mtproto",
-      "server": "dns.vdl.lat",
-      "port": 443,
-      "secret": "eece59031f1109f05387b7155534c7ac87646e732e76646c2e6c6174",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T00:30:15.611849+00:00"
-    },
     "8f7dbb63": {
       "protocol": "mtproto",
       "server": "abo-ali-sina.basalam.info",
@@ -1745,14 +2158,6 @@
       "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T00:30:15.611810+00:00"
-    },
-    "0de64eca": {
-      "protocol": "mtproto",
-      "server": "gold.flarevpn.top",
-      "port": 443,
-      "secret": "ee3dd1018840a3488d2571092614a5ca44706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-17T00:30:15.611805+00:00"
     },
     "f64786e3": {
       "protocol": "mtproto",
@@ -1785,14 +2190,6 @@
       "secret": "ee73fde7d2db16c799e6a8e203c12e97a2647a656e2e7275",
       "source": "zakky RU resilient",
       "last_seen": "2026-10-17T00:30:15.611722+00:00"
-    },
-    "a1c08ed7": {
-      "protocol": "mtproto",
-      "server": "boob.plutonium.saturator.teleseryeepisodes.com",
-      "port": 443,
-      "secret": "ee79f494e4de87dea2dd5e7fc9cee0e4df647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-17T00:30:15.611714+00:00"
     },
     "52b3f6be": {
       "protocol": "mtproto",
@@ -1906,14 +2303,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-17T00:30:15.611568+00:00"
     },
-    "1019a02f": {
-      "protocol": "mtproto",
-      "server": "ir-ir.grumpyoldmen.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T00:30:15.611563+00:00"
-    },
     "a45ca65a": {
       "protocol": "mtproto",
       "server": "haven.driftquill.click",
@@ -1962,14 +2351,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-17T00:30:15.611456+00:00"
     },
-    "daa8df1a": {
-      "protocol": "mtproto",
-      "server": "87.248.129.137",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T00:30:15.611450+00:00"
-    },
     "1a671f72": {
       "protocol": "mtproto",
       "server": "px.cryptocurency.wiki",
@@ -1977,22 +2358,6 @@
       "secret": "eec7f1e2b45228a67eba9ab343a13ec17f70782e63727970746f637572656e63792e77696b69",
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-17T00:30:15.611441+00:00"
-    },
-    "7a0725cc": {
-      "protocol": "mtproto",
-      "server": "87.248.129.101",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-17T00:30:15.611438+00:00"
-    },
-    "157e74a8": {
-      "protocol": "mtproto",
-      "server": "65.21.222.229",
-      "port": 443,
-      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-17T00:30:15.611421+00:00"
     },
     "a5de37b6": {
       "protocol": "mtproto",
@@ -2086,38 +2451,6 @@
       "source": "zakky RU resilient",
       "last_seen": "2026-10-16T21:10:11.802250+00:00"
     },
-    "e8313163": {
-      "protocol": "mtproto",
-      "server": "bonsoir.palmyra.recklessly.wowteleserye.com",
-      "port": 443,
-      "secret": "ee32d124a367d9981c0dc205513dc9f949647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-16T21:10:11.802210+00:00"
-    },
-    "7f5b9a3c": {
-      "protocol": "mtproto",
-      "server": "lith.paddle.sank.compinoy.com",
-      "port": 443,
-      "secret": "ee155f6a42cc14eb162c7720986706d583647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-16T21:10:11.802201+00:00"
-    },
-    "65e88c55": {
-      "protocol": "mtproto",
-      "server": "s1.smetanka.click",
-      "port": 443,
-      "secret": "ee80229c70b86eb8ec094dae3d69c00914736d6574616e6b612e636c69636b",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-16T21:10:11.802167+00:00"
-    },
-    "72941d88": {
-      "protocol": "mtproto",
-      "server": "naturalistic.receptacle.sternutator.teleseryetvreplay.com",
-      "port": 443,
-      "secret": "eeb66c9ff483d807e9f811a41f31dd0b59647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-16T21:10:11.802164+00:00"
-    },
     "71262c99": {
       "protocol": "mtproto",
       "server": "raven.lanternmoss.top",
@@ -2158,14 +2491,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-16T21:10:11.802122+00:00"
     },
-    "168e0d67": {
-      "protocol": "mtproto",
-      "server": "pub.ultra-fast.cc",
-      "port": 443,
-      "secret": "ee481ab49363e8a17d25393a1cce3d0ced7075622e756c7472612d666173742e6363",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-16T21:10:11.802118+00:00"
-    },
     "bb37a7e1": {
       "protocol": "mtproto",
       "server": "forest.lite64.top",
@@ -2173,14 +2498,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T21:10:11.802115+00:00"
-    },
-    "69ea222f": {
-      "protocol": "mtproto",
-      "server": "cheyenne.overwrap.phthisic.teleseryeme.com",
-      "port": 443,
-      "secret": "ee3f9438591f486e2672a133a8e4f06e92647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-16T21:10:11.802112+00:00"
     },
     "1e4a316c": {
       "protocol": "mtproto",
@@ -2198,22 +2515,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T21:10:11.802079+00:00"
     },
-    "708977ab": {
-      "protocol": "mtproto",
-      "server": "ir-ir.my-pv.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T21:10:11.802073+00:00"
-    },
-    "5a89dc55": {
-      "protocol": "mtproto",
-      "server": "ir.genesbyjohn.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T21:10:11.802061+00:00"
-    },
     "effb0d1b": {
       "protocol": "mtproto",
       "server": "333.itpokfares.info",
@@ -2229,14 +2530,6 @@
       "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T21:10:11.801969+00:00"
-    },
-    "151021b4": {
-      "protocol": "mtproto",
-      "server": "ir.gnutella2.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T21:10:11.801963+00:00"
     },
     "f9fac5ab": {
       "protocol": "mtproto",
@@ -2277,14 +2570,6 @@
       "secret": "eecd7b5204a28b47f7cc34c67357433608726564666c61672e79617a616562616c73796164656c617470726f78792e746f70",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-16T21:10:11.801888+00:00"
-    },
-    "17c57e40": {
-      "protocol": "mtproto",
-      "server": "3.mtprotonewrunningproxasia.info",
-      "port": 8443,
-      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T21:10:11.801875+00:00"
     },
     "c08b7f31": {
       "protocol": "mtproto",
@@ -2342,14 +2627,6 @@
       "source": "Prihs RU curated",
       "last_seen": "2026-10-16T21:10:11.801747+00:00"
     },
-    "aaffccb1": {
-      "protocol": "mtproto",
-      "server": "edge.tidalcache.com",
-      "port": 443,
-      "secret": "7lyJqyAmbOdZ-WoHRbY9fN9lZGdlLnRpZGFsY2FjaGUuY29t)",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-16T21:10:11.801714+00:00"
-    },
     "3adcf3b3": {
       "protocol": "mtproto",
       "server": "194.120.230.120",
@@ -2358,14 +2635,6 @@
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-16T21:10:11.801708+00:00"
     },
-    "50a674b5": {
-      "protocol": "mtproto",
-      "server": "redflag.yazaebalsyadelatproxy.uk",
-      "port": 443,
-      "secret": "7mnomdiexo4iDKF3VXMisn9yZWRmbGFnLnlhemFlYmFsc3lhZGVsYXRwcm94eS5jYw)",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-16T21:10:11.801698+00:00"
-    },
     "cf7e8f35": {
       "protocol": "mtproto",
       "server": "194.120.230.37",
@@ -2373,22 +2642,6 @@
       "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
       "source": "aviamasters RU verified",
       "last_seen": "2026-10-16T21:10:11.801692+00:00"
-    },
-    "2b6994de": {
-      "protocol": "mtproto",
-      "server": "ir.flipme.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T21:10:11.801676+00:00"
-    },
-    "7023aaf5": {
-      "protocol": "mtproto",
-      "server": "predator-artist.top",
-      "port": 853,
-      "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s`",
-      "source": "Prihs RU curated",
-      "last_seen": "2026-10-16T21:10:11.801645+00:00"
     },
     "32449dc1": {
       "protocol": "socks5",
@@ -2475,22 +2728,6 @@
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-16T18:04:39.413438+00:00"
     },
-    "3530d894": {
-      "protocol": "mtproto",
-      "server": "aghaye.aseman.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-16T18:04:39.413425+00:00"
-    },
-    "ce8e792f": {
-      "protocol": "mtproto",
-      "server": "intercom.mope.stoppage.teleseryestv.com",
-      "port": 443,
-      "secret": "eee9b3d6538064741ec64e9611e309065a647a656e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-16T18:04:39.413399+00:00"
-    },
     "42b62815": {
       "protocol": "mtproto",
       "server": "pub.ultra-fast.cc",
@@ -2507,14 +2744,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T18:04:39.413384+00:00"
     },
-    "784017f9": {
-      "protocol": "mtproto",
-      "server": "ir-ir.naganuma.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T18:04:39.413364+00:00"
-    },
     "e2554158": {
       "protocol": "mtproto",
       "server": "redflag.yazaebalsyadelatproxy.cc",
@@ -2530,14 +2759,6 @@
       "secret": "ee69e899d89ec68e220ca177557322b27f726564666c61672e79617a616562616c73796164656c617470726f78792e6363",
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-16T18:04:39.413346+00:00"
-    },
-    "d6d218b6": {
-      "protocol": "mtproto",
-      "server": "ir.radio-zvez.info",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMjdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T18:04:39.413324+00:00"
     },
     "7ea35e92": {
       "protocol": "mtproto",
@@ -2735,14 +2956,6 @@
       "source": "ProxyScrape live",
       "last_seen": "2026-10-16T13:16:34.826924+00:00"
     },
-    "de8a6a35": {
-      "protocol": "mtproto",
-      "server": "nasaji.estakhr.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-16T13:16:34.826899+00:00"
-    },
     "9eec1656": {
       "protocol": "mtproto",
       "server": "edge.turboass.live",
@@ -2750,14 +2963,6 @@
       "secret": "ee51116f4018a2b3dfc9bda286c52afe9f656467652e747572626f6173732e6c697665",
       "source": "dubblebyte handshake",
       "last_seen": "2026-10-16T13:16:34.826895+00:00"
-    },
-    "247a08ad": {
-      "protocol": "mtproto",
-      "server": "sherkat.noavaran.novin.gostare.kosha.tashkilat.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-16T13:16:34.826875+00:00"
     },
     "d888361b": {
       "protocol": "mtproto",
@@ -2956,14 +3161,6 @@
       "source": "ProxyScrape live",
       "last_seen": "2026-10-16T07:11:00.640676+00:00"
     },
-    "9d9364f7": {
-      "protocol": "mtproto",
-      "server": "diuresis.gents.undereducated.teleseryegroup.com",
-      "port": 443,
-      "secret": "eebf59d99c1d5dae0a80d25eaa6f0af5c2647a656e2e7275",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-16T07:11:00.640604+00:00"
-    },
     "b00cd551": {
       "protocol": "mtproto",
       "server": "cabbala.spqr.triapsidal.wowteleserye.com",
@@ -3044,14 +3241,6 @@
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T07:11:00.640347+00:00"
     },
-    "31cd0e6e": {
-      "protocol": "mtproto",
-      "server": "dh1.masi.ir.he6fhd.ru",
-      "port": 8443,
-      "secret": "dd104462821249bd7ac519130220c25d09",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T07:11:00.640269+00:00"
-    },
     "1a4cb7ce": {
       "protocol": "mtproto",
       "server": "rimany75.pebblewisp.xyz",
@@ -3107,14 +3296,6 @@
       "secret": "7lTOMw5GkMwpfSsDH_PyiLBtdC5ha2VuYWkuY2xpY2s`",
       "source": "Prihs RU curated",
       "last_seen": "2026-10-16T07:11:00.640140+00:00"
-    },
-    "9b969e9c": {
-      "protocol": "mtproto",
-      "server": "star.talebi.co.uk",
-      "port": 2096,
-      "secret": "eeNEgYdJvXrFGRMCIMJdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-16T07:11:00.640084+00:00"
     },
     "36e0ba86": {
       "protocol": "socks5",
@@ -3198,14 +3379,6 @@
       "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-16T00:25:19.630616+00:00"
-    },
-    "eccea6a0": {
-      "protocol": "mtproto",
-      "server": "bo.cryptocurency.wiki",
-      "port": 443,
-      "secret": "eeafff8ed2b758741b6872fb8b00f1230270782e63727970746f637572656e63792e77696b69",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-16T00:25:19.630501+00:00"
     },
     "b46cb0da": {
       "protocol": "mtproto",
@@ -3877,177 +4050,6 @@
       "secret": "ee2111222233334444555566667777888862726f777365722e79616e6465782e636f6d",
       "source": "tgmtproxy handshake",
       "last_seen": "2026-10-15T04:40:35.042922+00:00"
-    },
-    "46415c64": {
-      "protocol": "mtproto",
-      "server": "magma.driftquill.click",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-15T04:40:35.042909+00:00"
-    },
-    "60b52b9f": {
-      "protocol": "mtproto",
-      "server": "pintrest-cool.browncolor.info",
-      "port": 8443,
-      "secret": "1603010200010001fc030386e24c3add",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-15T04:40:35.042865+00:00"
-    },
-    "40f9b42c": {
-      "protocol": "mtproto",
-      "server": "87.248.129.196",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-15T04:40:35.042822+00:00"
-    },
-    "1729d8cf": {
-      "protocol": "mtproto",
-      "server": "94.130.15.206",
-      "port": 443,
-      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-15T04:40:35.042779+00:00"
-    },
-    "84827bd8": {
-      "protocol": "mtproto",
-      "server": "91.107.160.196",
-      "port": 443,
-      "secret": "3XnnAQIAAQAH8AMDhuJMOt0",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-15T04:40:35.042763+00:00"
-    },
-    "73d3e427": {
-      "protocol": "mtproto",
-      "server": "panir.begir.co.uk",
-      "port": 8443,
-      "secret": "EERighJJvXrFGRMCIMJdCQ",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-15T04:40:35.042697+00:00"
-    },
-    "6a4a2383": {
-      "protocol": "socks5",
-      "server": "198.8.84.3",
-      "port": 4145,
-      "user": "",
-      "pass": "",
-      "source": "ProxyScrape live",
-      "last_seen": "2026-10-14T23:15:33.398168+00:00"
-    },
-    "8887298f": {
-      "protocol": "socks5",
-      "server": "192.252.220.89",
-      "port": 4145,
-      "user": "",
-      "pass": "",
-      "source": "ProxyScrape live",
-      "last_seen": "2026-10-14T23:15:33.398160+00:00"
-    },
-    "1c4d3482": {
-      "protocol": "socks5",
-      "server": "67.201.35.145",
-      "port": 4145,
-      "user": "",
-      "pass": "",
-      "source": "ProxyScrape live",
-      "last_seen": "2026-10-14T23:15:33.398156+00:00"
-    },
-    "cb8034a7": {
-      "protocol": "mtproto",
-      "server": "bala.hastim.co.uk",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add6d656469612e737465616d706f77657265642e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.398148+00:00"
-    },
-    "36ae5909": {
-      "protocol": "mtproto",
-      "server": "manavi.masnavi.info",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "zakky RU resilient",
-      "last_seen": "2026-10-14T23:15:33.398135+00:00"
-    },
-    "f26bd2a1": {
-      "protocol": "mtproto",
-      "server": "night.vtoroe-dyhanie.space",
-      "port": 443,
-      "secret": "ee712aff3bb7aa86eefc4eda95d8aef21f6e696768742e76746f726f652d647968616e69652e7370616365",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-14T23:15:33.398110+00:00"
-    },
-    "ab7599e7": {
-      "protocol": "mtproto",
-      "server": "star.flarevpn.top",
-      "port": 443,
-      "secret": "ee901b873e1c29a0d13b0d6b83f56a401e706c617932676f2e636c6f7564",
-      "source": "dubblebyte handshake",
-      "last_seen": "2026-10-14T23:15:33.398104+00:00"
-    },
-    "fdeac401": {
-      "protocol": "mtproto",
-      "server": "sv5.hajhossein.observer",
-      "port": 443,
-      "secret": "ee1603010200010001fc030386e24c3add626973636f7474692e79656b74616e65742e636f6d",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.398046+00:00"
-    },
-    "0345a50d": {
-      "protocol": "mtproto",
-      "server": "interwind.jailhouse.warmly.teleseryepinoytv.com",
-      "port": 443,
-      "secret": "eeec94711031177847fe7d1a42efdd5fd1647a656e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.398028+00:00"
-    },
-    "cd46d443": {
-      "protocol": "mtproto",
-      "server": "granite.hollowfern.sbs",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.397991+00:00"
-    },
-    "dc805d90": {
-      "protocol": "mtproto",
-      "server": "bloom.pebblewisp.xyz",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.397964+00:00"
-    },
-    "65452ffc": {
-      "protocol": "mtproto",
-      "server": "karma.driftquill.click",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.397955+00:00"
-    },
-    "af607064": {
-      "protocol": "mtproto",
-      "server": "horizon.lite64.top",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.397906+00:00"
-    },
-    "f4ed3f37": {
-      "protocol": "mtproto",
-      "server": "wolf.velvetoak.work",
-      "port": 443,
-      "secret": "ee2b6eb790d613a1725557ce33b9a87b30786170692e6f7a6f6e2e7275",
-      "source": "tgmtproxy handshake",
-      "last_seen": "2026-10-14T23:15:33.397796+00:00"
-    },
-    "c41498f2": {
-      "protocol": "mtproto",
-      "server": "17fh.masi.ir.he6fhd.ru",
-      "port": 8443,
-      "secret": "dd104462821249bd7ac519130220c25d09",
-      "source": "aviamasters RU verified",
-      "last_seen": "2026-10-14T23:15:33.397712+00:00"
     }
   }
 }

@@ -8,6 +8,7 @@ on:
       - "test_ui.py"
       - "test_socks5.py"
       - "test_proxymtproto.py"
+      - "test_tgwsproxy.py"
       - "learning.js"
       - "test_learning.mjs"
       - ".github/workflows/update-page.yml"
@@ -27,6 +28,9 @@ jobs:
 
       - name: Test ProxyMTProto parser
         run: python3 test_proxymtproto.py
+
+      - name: Test TgWsProxy release resolver
+        run: python3 test_tgwsproxy.py
 
       - name: Build page
         run: python3 update_page.py

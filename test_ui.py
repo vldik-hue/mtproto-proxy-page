@@ -78,3 +78,19 @@ priority_count = html.count('data-priority-source="proxymtproto"')
 assert 1 <= priority_count <= 6, f"must show up to 6 fresh channel posts, got {priority_count}"
 assert html.index('Последние из @ProxyMTProto') < html.index('data-protocol="socks5"'), "ProxyMTProto section must appear before SOCKS5 reserve cards"
 print("ProxyMTProto fresh-feed UI OK")
+
+
+# TgWsProxy must never pin an obsolete APK. The generated page should expose the
+# latest resolved version and a stable fallback to GitHub Releases.
+assert 'v1.11.0' not in html, "obsolete TgWsProxy v1.11.0 must not be pinned"
+assert 'data-tgwsproxy-version=' in html, "resolved TgWsProxy version must be visible in markup"
+assert '/Regstar2/tg-ws-proxy-android/releases/latest' in html, "latest-release fallback link must exist"
+assert 'Если Telegram завис на «Подключение…»' in html, "stuck-connection guidance must be visible"
+assert 'Сначала обнови TgWsProxy' in html, "update-first recovery step must be visible"
+
+# Keep the complete fallback ladder: app update -> fresh channel proxies ->
+# new pool -> MTProto/SOCKS5 reserve.
+for label in ('Последние из @ProxyMTProto', '🔄 Новый пул', 'MTProto', 'SOCKS5'):
+    assert label in html, f"missing fallback option: {label}"
+assert html.index('Сначала обнови TgWsProxy') < html.index('Последние из @ProxyMTProto'), "app update must be the first recovery step"
+print("TgWsProxy update + proxy fallback ladder OK")

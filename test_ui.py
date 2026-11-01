@@ -66,7 +66,7 @@ print("diagnostic decision UI OK")
 assert 'Telegram — рабочий доступ' in html, "access hub heading must exist"
 assert 'Основной маршрут: TgWsProxy → Cloudflare/WebSocket' in html, "TgWsProxy route must remain the primary status"
 assert 'arm64-v8a.apk' in html or '/releases/latest' in html, "latest ARM64 APK or releases/latest fallback must be present"
-assert 'Скачать TgWsProxy для Samsung / Android' in html, "download CTA must be obvious"
+assert 'Samsung / Android ARM64' in html, "download CTA must clearly target Android ARM64"
 assert 'MTProto / SOCKS5 — диагностика и резерв' in html, "legacy radar must be demoted to diagnostics"
 assert html.index('Telegram — рабочий доступ') < html.index('data-transport="mtproto"'), "working WSS route must appear before legacy proxy tabs"
 print("Telegram access hub UI OK")

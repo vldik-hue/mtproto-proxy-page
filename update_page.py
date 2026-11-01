@@ -41,6 +41,28 @@ def get(url,timeout=25):
     req=urllib.request.Request(url,headers={"User-Agent":UA,"Cache-Control":"no-cache"})
     with urllib.request.urlopen(req,timeout=timeout) as r:return r.read().decode("utf-8",errors="replace")
 
+TGWSPROXY_LATEST_API="https://api.github.com/repos/Regstar2/tg-ws-proxy-android/releases/latest"
+TGWSPROXY_LATEST_PAGE="https://github.com/Regstar2/tg-ws-proxy-android/releases/latest"
+
+def resolve_tgwsproxy_release(fetch=get):
+    """Return the latest official ARM64 APK, with a safe non-versioned fallback."""
+    fallback={"version":"latest","apk_url":TGWSPROXY_LATEST_PAGE,"release_url":TGWSPROXY_LATEST_PAGE}
+    try:
+        data=json.loads(fetch(TGWSPROXY_LATEST_API))
+        version=str(data.get("tag_name") or "").strip()
+        release_url=str(data.get("html_url") or TGWSPROXY_LATEST_PAGE).strip()
+        apk_url=""
+        for asset in data.get("assets") or []:
+            name=str(asset.get("name") or "")
+            if name.endswith("-arm64-v8a.apk"):
+                apk_url=str(asset.get("browser_download_url") or "").strip()
+                if apk_url:break
+        if version and apk_url:
+            return {"version":version,"apk_url":apk_url,"release_url":release_url}
+    except Exception as e:
+        print("TgWsProxy latest release lookup failed",e)
+    return fallback
+
 def norm(server,port,secret,source):
     server=str(server or "").strip().rstrip(".");secret=str(secret or "").strip()
     try:port=int(port)
@@ -298,6 +320,7 @@ def pid(p):
     return hashlib.sha256(raw.encode()).hexdigest()[:8]
 
 def main():
+    tgws=resolve_tgwsproxy_release()
     chosen=choose(verify(collect()),COUNT)
     socks5=verify_socks5()
 
@@ -412,6 +435,8 @@ def main():
     .access-ok{{font-size:13px;font-weight:800;margin:8px 0;color:#1f7a43}}
     .access-steps{{font-size:12px;line-height:1.45;margin:8px 0;color:#444}}
     .download{{display:block;background:#229ed9;color:#fff;text-decoration:none;font-weight:900;text-align:center;border-radius:10px;padding:11px 10px;margin:10px 0 7px}}
+    .release-link{{display:block;text-align:center;font-size:11px;margin:5px 0 9px}}
+    .recovery{{background:#f7f9fb;border-radius:10px;padding:9px 10px;margin:9px 0;font-size:11px;line-height:1.45}}
     .access-note{{font-size:10px;line-height:1.35;color:#666}}
     .diag-title{{font-size:15px;font-weight:900;margin:15px 0 5px}}
     @media(max-width:520px){{
@@ -423,17 +448,23 @@ def main():
       .controls-inner{{grid-template-columns:repeat(3,1fr)}}
     }}
     </style></head><body>
-    <section class="access-hero">
+    <section class="access-hero" data-tgwsproxy-version="{html.escape(tgws["version"],quote=True)}">
       <div class="access-title">Telegram — рабочий доступ</div>
-      <div class="access-ok">✅ Рабочий маршрут: TgWsProxy → Cloudflare/WebSocket</div>
+      <div class="access-ok">✅ Основной маршрут: TgWsProxy → Cloudflare/WebSocket</div>
       <div class="access-steps">
-        1. Установи TgWsProxy на Android.<br>
+        1. Установи или обнови TgWsProxy на Android.<br>
         2. Оставь основной маршрут <b>cf_proxy_ws</b>; свой Cloudflare Worker не обязателен.<br>
-        3. Запусти локальный прокси и примени его в Telegram.<br>
-        4. Если всё уже установлено и работает — просто запускай TgWsProxy перед Telegram.
+        3. Запусти локальный прокси и примени его в Telegram.
       </div>
-      <a class="download" href="https://github.com/Regstar2/tg-ws-proxy-android/releases/download/v1.11.0/TgWsProxy-Android-v1.11.0-arm64-v8a.apk">⬇ Скачать TgWsProxy для Samsung / Android</a>
-      <div class="access-note">ARM64 · TgWsProxy v1.11.0 · официальный APK из GitHub Releases. Этот маршрут использует WebSocket/Cloudflare наружу; MTProto на странице ниже оставлен только как диагностика и резерв.</div>
+      <a class="download" href="{html.escape(tgws["apk_url"],quote=True)}">⬇ TgWsProxy {html.escape(tgws["version"])} · Samsung / Android ARM64</a>
+      <a class="release-link" href="{TGWSPROXY_LATEST_PAGE}" target="_blank" rel="noopener">Проверить последний официальный релиз</a>
+      <div class="recovery"><b>Если Telegram завис на «Подключение…»:</b><br>
+        1. <b>Сначала обнови TgWsProxy</b> поверх установленной версии и перезапусти TgWsProxy + Telegram.<br>
+        2. Если не помогло — попробуй самые свежие варианты из <b>@ProxyMTProto</b> ниже.<br>
+        3. Если свежая шестёрка не подошла — нажми <b>🔄 Новый пул</b> и проверь следующую подборку.<br>
+        4. Затем переключай транспорт: <b>MTProto → SOCKS5</b>. Старые рабочие варианты доступны через <b>⭐ Рабочие</b>.
+      </div>
+      <div class="access-note">Версия приложения может быть причиной сбоя даже при том же названии маршрута <b>cf_proxy_ws</b>. Кнопка выше обновляется по последнему официальному GitHub Release; если проверка версии временно недоступна, откроется страница Releases/latest.</div>
     </section>
 
     <div class="diag-title">MTProto / SOCKS5 — диагностика и резерв</div>
